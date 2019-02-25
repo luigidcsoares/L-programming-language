@@ -32,7 +32,6 @@ caracteres. Maiúsculas e minúsculas não são diferenciadas.
 As seguintes palavras e suas variações com maiúsculas e minúsculas são reservadas:
 
 
-|       |         |         |        |        |       |
 |:-----:|:-------:|:-------:|:------:|:------:|:-----:|
 | const | var     | integer | char   | for    | if    | 
 | else  | and     | or      |  not   |  =     | to    |
