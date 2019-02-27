@@ -1,13 +1,18 @@
 #ifndef LC_TOKEN_H_
 #define LC_TOKEN_H_
 
-namespace lc::core {
+namespace lc::core::token {
 
     enum class Token {
-        IfKw,
-        ElseKw,
-        ForKw,
-        AssignKw
+        // Reserved words.
+        If,
+        Then,
+        Else,
+        For,
+
+        // Other tokens.
+        Id,
+        Const
     };
 
 }
