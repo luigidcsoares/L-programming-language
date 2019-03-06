@@ -9,6 +9,26 @@ namespace lc::core::token {
         Then,
         Else,
         For,
+        To,
+        Step,
+        Do,
+        Var,
+        Integer,
+        Char,
+        And,
+        Or,
+        Not,
+        Equals, // Same as assign token?
+        LParen, 
+        RParen,
+        LBraces,
+        RBraces,
+        LBrackt,
+        RBrackt,
+        LSS, // Less than.
+        GTR, // Greater than.
+        LEQ, // Less than or equal.
+        GEQ, // Greater than or equal.
 
         // Other tokens.
         Id,
