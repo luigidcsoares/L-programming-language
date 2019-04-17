@@ -1,7 +1,7 @@
 #ifndef LC_TOKEN_H_
 #define LC_TOKEN_H_
 
-namespace lc::core::token {
+namespace lc::lexer::token {
 
     enum class Token {
         // Reserved words.
@@ -38,4 +38,3 @@ namespace lc::core::token {
 }
 
 #endif
-
