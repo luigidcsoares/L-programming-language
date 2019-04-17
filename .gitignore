@@ -8,6 +8,8 @@
 # Unignore all with extensions.
 !*/
 
+# Vscode files.
+.vscode/
 
 # Prerequisites
 *.d
