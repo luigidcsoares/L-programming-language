@@ -28,7 +28,8 @@ namespace lexer {
         std::regex other(other_str);
 
         std::stringstream valid_char_ss(letter_str);
-        valid_char_ss << '|' << digit_str << '|' << other_str << "| |&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=";
+        valid_char_ss << '|' << digit_str << '|' 
+            << other_str << "| |&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=";
         std::regex valid_char(valid_char_ss.str());
 
         // Looping through chars looking for the next token.
