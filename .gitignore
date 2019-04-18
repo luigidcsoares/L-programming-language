@@ -4,9 +4,11 @@
 # Unignore all with extensions.
 !*.*
 
-
-# Unignore all with extensions.
+# Unignore all with folders.
 !*/
+
+# Unignore Makefile.
+!Makefile
 
 # Vscode files.
 .vscode/
