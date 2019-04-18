@@ -10,9 +10,9 @@ using namespace lexer;
 
 namespace lexer {
 
-    void next(std::ifstream &source, int &curr_line) {
+    void next(Source &source) {
         int state = 0;
-        std::stringstream lexeme;
+        std::stringstream lexeme; 
         
         // Looping through chars looking for the next token.
         while (state != 15) {
@@ -20,27 +20,27 @@ namespace lexer {
 
             // If we didn't reach EOF yet, we need to check
             // whether the next character is a valid one or not.
-            if (source.peek() != EOF) {
-                c = source.get();
-                std::cout << c << std::endl;
+            if (source.file.peek() != EOF) {
+                c = source.file.get();
 
                 // Handling the current line number.
-                if (c == '\n') curr_line++;
+                if (c == '\n') source.curr_line++;
 
                 // If it isn't a valid char, throw error and exit program.
                 if (!utils::regex::is_valid_char(c)) {
                     std::stringstream err;
-                    err << curr_line << ": caractere invalido.";
+                std::cout << c << std::endl;
+                    err << source.curr_line << ": caractere invalido.";
                     throw std::runtime_error(err.str());
                 }
             } else c = EOF;
            
             switch(state) {
                 case 0:
-                    state = dfa::state0(c, lexeme, curr_line);
+                    state = dfa::state0(c, lexeme, source);
                     break;
                 case 1:
-                    state = dfa::state1(c, lexeme, curr_line, source);
+                    state = dfa::state1(c, lexeme, source);
                     break;
                 case 2:
                     if (utils::regex::is_letter(c) || 

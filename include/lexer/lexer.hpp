@@ -3,17 +3,21 @@
 
 #include <fstream>
 
+#include "utils/source.hpp"
+
+using namespace utils::source;
+
 namespace lexer {
 
     /**
      * Read and return the next valid token or the first error found.
      *
-     * @param ifstream& source Source file.
-     * @param int& curr_line Current line number.
+     * @param utils::source::Source source file.
+     * @param core::token::TokenReg token register.
      *
      * @return TokenReg.
      */
-    void next(std::ifstream &source, int &curr_line);
+    void next(Source &source);
 }
 
 #endif

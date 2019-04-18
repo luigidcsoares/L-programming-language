@@ -2,17 +2,28 @@
 #include <string>
 
 #include "lexer/lexer.hpp"
+#include "utils/source.hpp"
+#include "core/lc.hpp"
+
+using namespace utils::source;
+using namespace core::lc;
 
 int main(int argc, char *argv[]) {
     int exit_code = EXIT_SUCCESS;
 
     // RegistroToken: (Lexema, Token, Classe, Tipo, Tamanho);
     std::string input = argv[1];
-    std::ifstream source(input);
-    int curr_line = 0;
+    Source source(input);
+  
+    // Declaring global token register.
+    // This should only be declared here.
+    TokenReg token_reg;
 
+    // !!!!!!!!!!! EXEMPLO !!!!!!!!!!!!
+    token_reg.token = Token::Comma;
+    
     try {
-        lexer::next(source, curr_line);
+        lexer::next(source);
         
         // Token token = lexer::next();
         // Procedimento simbolo inicial, 
@@ -22,6 +33,6 @@ int main(int argc, char *argv[]) {
         exit_code = EXIT_FAILURE;
     }
 
-    source.close();
+    source.file.close();
     return exit_code;
 }

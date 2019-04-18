@@ -29,7 +29,7 @@ namespace utils::regex {
             + unit_symbol_str
             + "|"
             + whitespace_str
-            + "|&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=|$";
+            + "|&|_|:|\"|'|\\/|\\^|@|!|\\?|<|>|=|$";
         std::regex valid_char(valid_char_str);
     }
 

@@ -1,11 +1,11 @@
 #include <iostream>
+#include <sstream>
 
 #include "lexer/dfa.hpp"
 #include "utils/regex.hpp"
 
 namespace lexer::dfa {
-
-    int state0(char c, std::stringstream &lexeme, int curr_line) {
+    int state0(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 0;
 
         // Whitespace or newline (skip).
@@ -63,7 +63,7 @@ namespace lexer::dfa {
         // Lexeme unidentified.
         else { 
             std::stringstream err;
-            err << curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
             throw std::runtime_error(err.str());
         }
@@ -71,9 +71,8 @@ namespace lexer::dfa {
         return next_state;
     }
 
-    int state1(char c, std::stringstream &lexeme, int curr_line, 
-            std::ifstream &source) {
-       
+    int state1(char c, std::stringstream &lexeme, Source &source) {
+
         int next_state = 1;
 
         if (utils::regex::is_letter(c) ||
@@ -87,7 +86,7 @@ namespace lexer::dfa {
             next_state = 15;
 
             // Put character back to be read again.
-            source.putback(c);
+            source.file.putback(c);
         }
        
         return next_state;

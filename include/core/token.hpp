@@ -5,18 +5,26 @@ namespace core::token {
 
     enum class Token {
         // Reserved words:
-        Const,
-        Var,
-        Integer,
-        Char,
-        For,
-        If,
-        Else,
-        And,
-        Or,
-        Not,
+        ConstKW,
+        VarKW,
+        IntegerKW,
+        CharKW,
+        ForKW,
+        IfKW,
+        ElseKW,
+        AndKW,
+        OrKW,
+        NotKW,
+        ToKW,
+        ThenKW,
+        ReadlnKW,
+        StepKW,
+        WriteKW,
+        WritelnKW,
+        DoKW,
+
+        // Others.
         EQ, // Comparison or assignment.
-        To,
         LParen, // '('.
         RParen, // ')'.
         LT, // Less than.
@@ -32,21 +40,13 @@ namespace core::token {
         Semicolon,
         LBrace, // '{'.
         RBrace, // '}'.
-        Then,
-        Readln,
-        Step,
-        Write,
-        Writeln,
         Percent,
         LBracket, // '['.
         RBracket, // ']'.
-        Do,
 
-        // Other tokens:
         Id,
-        Constant // String, char (including hexa) or integer.
+        Const // String, char (including hexa) or integer.
     };
-
 }
 
 #endif
