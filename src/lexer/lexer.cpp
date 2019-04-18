@@ -27,9 +27,12 @@ namespace lexer {
         std::string other_str(",|%|\\+|-|\\*|=|\\[|\\]|\\(|\\)|\\{|\\}|;");
         std::regex other(other_str);
 
-        std::stringstream valid_char_ss(letter_str);
-        valid_char_ss << '|' << digit_str << '|' 
-            << other_str << "| |&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=";
+        std::stringstream valid_char_ss;
+        valid_char_ss << letter_str
+                      << '|' << digit_str
+                      << '|'
+                      << other_str
+                      << "| |&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=|$|\r|\n";
         std::regex valid_char(valid_char_ss.str());
 
         // Looping through chars looking for the next token.
@@ -38,15 +41,21 @@ namespace lexer {
             // std::regex_match.
             std::string c;
 
+            // If we didn't reach EOF yet, we need to check
+            // whether the next character is a valid one or not.
             if (source.peek() != EOF) {
                 c = std::string(1, source.get());
 
                 // Handling the current line number.
                 if (c == "\n") curr_line++;
 
-                std::cout << "CHAR: " << c << std::endl;
-                // Se C inválido, erro.
-            } else { state = final_state; };
+                // If it isn't a valid char, throw error and exit program.
+                if (! std::regex_match(c, valid_char)) {
+                    std::cout << c << std::endl;
+                    std::cerr << curr_line << ": caractere invalido." << std::endl;
+                    exit(EXIT_FAILURE);
+                }
+            } else c = EOF;
            
             switch(state) {
                 case 0:
