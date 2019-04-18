@@ -8,7 +8,7 @@
 
 namespace lexer {
 
-    void next(std::ifstream &source) {
+    void next(std::ifstream &source, int &curr_line) {
         int state = 0;
         int final_state = 15;
         
@@ -34,19 +34,26 @@ namespace lexer {
 
         // Looping through chars looking for the next token.
         while (state != final_state) {
-            char aux;
-            if (source >> aux) {
-                std::cout << "Error char";
-                // Se C inválido, erro.
-            }
-           
-            // Turn to string for using with regex.
-            std::string c(aux, 1);
+            // We're using string instead of char to make it work with
+            // std::regex_match.
+            std::string c;
 
+            if (source.peek() != EOF) {
+                c = std::string(1, source.get());
+
+                // Handling the current line number.
+                if (c == "\n") curr_line++;
+
+                std::cout << "CHAR: " << c << std::endl;
+                // Se C inválido, erro.
+            } else { state = final_state; };
+           
             switch(state) {
                 case 0:
+                    // Whitespace or newline.
+                    if (c == " " || c == "\n");
+
                     // Identifier and reserved words.
-                    if (c == " ");
                     else if (std::regex_match(c, letter)) {
                         lexeme << c;
                         state = 1;
@@ -97,6 +104,8 @@ namespace lexer {
                         std::cout << "Error 0";
                         // exit
                     }
+
+                    break;
                 case 1:
                     if(std::regex_match(c, letter) || std::regex_match(c, digit) ||
                        c == "_" || c == ".") {
@@ -106,6 +115,7 @@ namespace lexer {
                         // TOK = pesquisarToken
                         state = final_state;
                     }
+                    
                     break;
                 case 2:
                     if(std::regex_match(c, letter) || std::regex_match(c, digit)) {

@@ -8,8 +8,10 @@ int main(int argc, char *argv[]) {
     
     std::string input = argv[1];
     std::ifstream source(input);
-
-    lexer::next(source);
+    
+    int curr_line = 0;
+    lexer::next(source, curr_line);
+    std::cout << "Stopped at line: " << curr_line << std::endl;
 
     // Token token = lexer::next();
     // Procedimento simbolo inicial;
