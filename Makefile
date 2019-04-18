@@ -1,9 +1,8 @@
 # Defining exec file extension.
-ifeq ($(OS, Windows_NT)
+ifeq ($(OS), Windows_NT)
     export EXEC = lc.exe
 else
     export EXEC = lc
-endif
 
 # Directories.
 export INC_DIR   = $(CURDIR)/include
