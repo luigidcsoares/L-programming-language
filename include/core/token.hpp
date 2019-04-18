@@ -1,30 +1,24 @@
 #ifndef CORE_TOKEN_HPP_
 #define CORE_TOKEN_HPP_
 
+#include <string>
+
 namespace core::token {
 
     enum class Token {
         // Reserved words:
-        ConstKW,
-        VarKW,
-        IntegerKW,
-        CharKW,
-        ForKW,
-        IfKW,
-        ElseKW,
-        AndKW,
-        OrKW,
-        NotKW,
-        ToKW,
-        ThenKW,
-        ReadlnKW,
-        StepKW,
-        WriteKW,
-        WritelnKW,
-        DoKW,
-
-        // Others.
+        ConstKW, // KW to diff from constants.
+        Var,
+        Integer,
+        Char,
+        For,
+        If,
+        Else,
+        And,
+        Or,
+        Not,
         EQ, // Comparison or assignment.
+        To,
         LParen, // '('.
         RParen, // ')'.
         LT, // Less than.
@@ -40,12 +34,27 @@ namespace core::token {
         Semicolon,
         LBrace, // '{'.
         RBrace, // '}'.
+        Then,
+        Readln,
+        Step,
+        Do,
+        Write,
+        Writeln,
         Percent,
         LBracket, // '['.
         RBracket, // ']'.
 
+        // Other tokens (defined in runtime).
         Id,
         Const // String, char (including hexa) or integer.
+    };
+
+
+    struct TokenReg {
+        Token token;  
+        std::string lexeme;
+        std::string type;
+        int length;
     };
 }
 
