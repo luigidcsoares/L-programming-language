@@ -1,7 +1,7 @@
 #ifndef LEXER_TOKEN_HPP_
 #define LEXER_TOKEN_HPP_
 
-namespace lexer::token {
+namespace core::token {
 
     enum class Token {
         // Reserved words:

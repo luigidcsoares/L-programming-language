@@ -3,8 +3,8 @@
 #include <string>
 #include <sstream>
 
-#include "lexer.hpp"
-#include "token.hpp"
+#include "lexer/lexer.hpp"
+#include "core/token.hpp"
 
 namespace lexer {
 
