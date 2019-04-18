@@ -1,14 +1,22 @@
-# Defining exec file extension.
+# Defining OS specific configs.
 ifeq ($(OS), Windows_NT)
+    # Executable.
     export EXEC = lc.exe
-else
+
+    # Path separator.
+    export PATH_SEP = \\
+else 
+    # Executable.
     export EXEC = lc
+
+    # Path separator.
+    export PATH_SEP = /
 endif
 
 # Directories.
-export INC_DIR   = $(CURDIR)/include
-export SRC_DIR   = $(CURDIR)/src
-export BUILD_DIR = $(CURDIR)/build
+export INC_DIR   = $(CURDIR)$(PATH_SEP)include
+export SRC_DIR   = $(CURDIR)$(PATH_SEP)src
+export BUILD_DIR = $(CURDIR)$(PATH_SEP)build
 
 # Compiler options.
 export CXXFLAGS = -std=c++17 -I $(INC_DIR)
