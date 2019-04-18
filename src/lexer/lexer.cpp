@@ -37,21 +37,13 @@ namespace lexer {
            
             switch(state) {
                 case 0:
-                    state = dfa::state0(c, lexeme, source);
+                    state = dfa::state0(c, lexeme, source.curr_line);
                     break;
                 case 1:
                     state = dfa::state1(c, lexeme, source);
                     break;
                 case 2:
-                    if (utils::regex::is_letter(c) || 
-                            utils::regex::is_digit(c)) {
-
-                        lexeme << c;
-                        state = 1;
-                    } else {
-                        std::cout << "Error 2";
-                        // exit
-                    }
+                    state = dfa::state2(c, lexeme, source.curr_line);
                     break;
                 case 3:
                     if (c == '*') {

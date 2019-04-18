@@ -5,65 +5,44 @@
 #include "utils/regex.hpp"
 
 namespace lexer::dfa {
-    int state0(char c, std::stringstream &lexeme, Source &source) {
+    int state0(char c, std::stringstream &lexeme, int curr_line) {
         int next_state = 0;
 
-        // Whitespace or newline (skip).
-        if (utils::regex::is_whitespace(c));
+        // Skipping whitespace.
+        if (utils::regex::is_whitespace(c)) return next_state;
+
+        // Concatenate char to the lexeme.
+        lexeme << c;
 
         // Identifier and reserved words.
-        else if (utils::regex::is_letter(c)) {
-            lexeme << c;
-            next_state = 1;
-        } else if (c == '_' || c == '.') {
-            lexeme << c;
-            next_state = 2;
-        }
+        if (utils::regex::is_letter(c)) next_state = 1;
+        else if (c == '_' || c == '.') next_state = 2;
 
         // Comment or division.
-        else if (c == '/') {
-            lexeme << c;
-            next_state = 3;
-        }
+        else if (c == '/') next_state = 3;
 
         // Greater (than or equal).
-        else if (c == '>') {
-            lexeme << c;
-            next_state = 6;
-        }
+        else if (c == '>') next_state = 6;
 
         // Less (than or equal) or not equal.
-        else if (c == '<') {
-            lexeme << c;
-            next_state = 7;
-        }
+        else if (c == '<') next_state = 7;
 
+        // Const.
+        else if (c == '"') next_state = 14;
+        else if (c == '\'') next_state = 9;
+        else if (utils::regex::is_digit_not_zero(c)) next_state = 8;
+        else if (c == '0') next_state = 11;
+        
         // Unit symbols.
         else if (utils::regex::is_unit_symbol(c)) {
-            lexeme << c;
             // TODO: TOK = pesquisarToken
             next_state = 15;
         }
 
-        // Const.
-        else if (c == '"') { // String.
-            lexeme << c;
-            next_state = 14;
-        } else if (c == '\'') { // Char (alphanum).
-            lexeme << c;
-            next_state = 9;
-        } else if (utils::regex::is_digit_not_zero(c)) { // Digit.
-            lexeme << c;
-            next_state = 8;
-        } else if (c == '0') { // Digit or hexa.
-            lexeme << c;
-            next_state = 11;
-        }
-        
         // Lexeme unidentified.
-        else { 
+        else {
             std::stringstream err;
-            err << source.curr_line << ": lexema nao identificado ["
+            err << curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
             throw std::runtime_error(err.str());
         }
@@ -89,6 +68,23 @@ namespace lexer::dfa {
             source.file.putback(c);
         }
        
+        return next_state;
+    }
+
+    int state2(char c, std::stringstream &lexeme, int curr_line) {
+        int next_state = 2;
+        lexeme << c;
+
+        if (c == '_' || c == '.');
+        else if (utils::regex::is_letter(c) || utils::regex::is_digit(c))
+            next_state = 1;
+        else {
+            std::stringstream err;
+            err << curr_line << ": lexema nao identificado ["
+                << lexeme.str() << "].";
+            throw std::runtime_error(err.str());
+        }
+
         return next_state;
     }
 }

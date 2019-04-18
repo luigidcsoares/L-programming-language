@@ -9,8 +9,9 @@
 using namespace utils::source;
 
 namespace lexer::dfa {
-    int state0(char c, std::stringstream &lexeme, Source &source);
+    int state0(char c, std::stringstream &lexeme, int curr_line);
     int state1(char c, std::stringstream &lexeme, Source &source);
+    int state2(char c, std::stringstream &lexeme, int curr_line);
 }
 
 #endif
