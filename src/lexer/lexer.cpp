@@ -50,10 +50,13 @@ namespace lexer {
                 if (c == "\n") curr_line++;
 
                 // If it isn't a valid char, throw error and exit program.
-                if (! std::regex_match(c, valid_char)) {
+                if (!std::regex_match(c, valid_char)) {
                     std::cout << c << std::endl;
-                    std::cerr << curr_line << ": caractere invalido." << std::endl;
-                    exit(EXIT_FAILURE);
+                    std::stringstream err;
+                    err << curr_line 
+                        << ": caractere invalido." 
+                        << std::endl;
+                    throw std::runtime_error(err.str());
                 }
             } else c = EOF;
            
