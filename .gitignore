@@ -11,6 +11,9 @@
 # Vscode files.
 .vscode/
 
+# Vim config files.
+.clang_complete
+
 # Prerequisites
 *.d
 
