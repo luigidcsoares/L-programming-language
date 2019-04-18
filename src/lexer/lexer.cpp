@@ -59,13 +59,7 @@ namespace lexer {
                     state = dfa::state6(c, lexeme, source);
                     break;
                 case 7:
-                    if (c == '>'  || c == '=') {
-                        lexeme << c;
-                    } else {
-                        // voltar 1
-                    }
-                    // pesquisar token
-                    state = 15;
+                    state = dfa::state7(c, lexeme, source);
                     break;
                 case 8:
                     if (utils::regex::is_digit(c)) {
