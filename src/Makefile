@@ -11,4 +11,5 @@ OBJ = $(SRC:.cpp=.o)
 	$(CXX) $< $(CXXFLAGS) -c -o $@
 
 all: $(OBJ)
-	$(CXX) $(OBJ) -o $(BUILD_DIR)$(PATH_SEP)$(EXEC)
+	@echo "========== Starting compilation =========="
+	$(CXX) $(OBJ) -o "$(BUILD_DIR)$(EXEC)"
