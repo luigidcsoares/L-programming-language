@@ -1,6 +1,6 @@
 # Source files.
-SRC = $(wildcard core$(PATH_SEP)*.cpp) \
-      $(wildcard lexer$(PATH_SEP)*.cpp)
+SRC = $(wildcard core/*.cpp) \
+      $(wildcard lexer/*.cpp)
 
 # Object files.
 OBJ = $(SRC:.cpp=.o)
@@ -10,5 +10,4 @@ OBJ = $(SRC:.cpp=.o)
 	$(CXX) $< $(CXXFLAGS) -c -o $@
 
 all: $(OBJ)
-	@echo $(OBJ)
-	$(CXX) $(OBJ) -o $(BUILD_DIR)$(PATH_SEP)$(EXEC)
+	$(CXX) $(OBJ) -o $(BUILD_DIR)/$(EXEC)

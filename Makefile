@@ -3,24 +3,31 @@ ifeq ($(OS), Windows_NT)
     # Executable.
     export EXEC = lc.exe
 
-    # Path separator.
-    export PATH_SEP = \\
+    # Function for fixing path separator.
+    FixPath = $(subst /,\\,$1)
+
+    # Function for create directories.
+    MakeDir = md
 else 
     # Executable.
     export EXEC = lc
 
-    # Path separator.
-    export PATH_SEP = /
+    # Function for fixing path separator.
+    FixPath = $1
+
+    # Function for create directories.
+    MakeDir = mkdir -p
 endif
 
 # Directories.
-export INC_DIR   = $(CURDIR)$(PATH_SEP)include
-export SRC_DIR   = $(CURDIR)$(PATH_SEP)src
-export BUILD_DIR = $(CURDIR)$(PATH_SEP)build
+export INC_DIR   = $(call FixPath, $(CURDIR)/include)
+export SRC_DIR   = $(call FixPath, $(CURDIR)/src)
+export BUILD_DIR = $(call FixPath, $(CURDIR)/build)
+
 
 # Compiler options.
 export CXXFLAGS = -std=c++17 -I $(INC_DIR)
 
 all:
-	mkdir -p $(BUILD_DIR)
+	$(MakeDir) $(BUILD_DIR)
 	cd $(SRC_DIR) && $(MAKE) all
