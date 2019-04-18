@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include "../include/lexer.hpp"
+
+#include "lexer.hpp"
 
 int main(int argc, char *argv[]) {
     // RegistroToken: (Lexema, Token, Classe, Tipo, Tamanho);

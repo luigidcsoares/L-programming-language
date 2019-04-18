@@ -3,8 +3,8 @@
 #include <string>
 #include <sstream>
 
-#include "../../include/lexer.hpp"
-#include "../../include/token.hpp"
+#include "lexer.hpp"
+#include "token.hpp"
 
 namespace lexer {
 
@@ -13,15 +13,25 @@ namespace lexer {
         int final_state = 15;
         
         std::stringstream lexeme;
+        
+        // Regex for later tests.
+        std::string letter_str = "[a-zA-Z]";
+        std::regex letter(letter_str);
 
-        std::regex letter("[a-zA-Z]");
-        std::regex digit("[0-9]");
-        std::regex digit_non_zero("[1-9]");
+        std::string digit_str = "[0-9]";
+        std::regex digit(digit_str);
+
+        std::regex digit_not_zero("[1-9]");
         std::regex hexadecimal("[0-9a-fA-F]");
-        std::regex other(",|%|\\+|-|\\*|=|\\[|\\]|\\(|\\)|\\{|\\}|;");
-        // Olhar o \n
-        std::regex valid_char("[a-zA-Z]|[0-9]|,|%|\\+|-|\\*|=|\\[|\\]|\\(|\\)|\\{|\\}|;| |&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=");
 
+        std::string other_str(",|%|\\+|-|\\*|=|\\[|\\]|\\(|\\)|\\{|\\}|;");
+        std::regex other(other_str);
+
+        std::stringstream valid_char_ss(letter_str);
+        valid_char_ss << '|' << digit_str << '|' << other_str << "| |&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=";
+        std::regex valid_char(valid_char_ss.str());
+
+        // Looping through chars looking for the next token.
         while (state != final_state) {
             char aux;
             if (source >> aux) {
@@ -76,7 +86,7 @@ namespace lexer {
                     } else if(c == "'") {
                         lexeme << c;
                         state = 9;
-                    } else if(std::regex_match(c, digit_non_zero)) {
+                    } else if(std::regex_match(c, digit_not_zero)) {
                         lexeme << c;
                         state = 8;
                     } else if (c == "0") {
