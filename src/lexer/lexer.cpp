@@ -53,11 +53,7 @@ namespace lexer {
                     state = dfa::state4(c, lexeme, source);
                     break;
                 case 5:
-                    if (c == '/') {
-                        state = 0;
-                    } else if (c != '*') {
-                        state = 4;
-                    }
+                    state = dfa::state5(c, lexeme, source);
                     break;
                 case 6:
                     if (c == '=') {

@@ -102,8 +102,8 @@ namespace lexer::dfa {
             lexeme.str("");
             next_state = 4;
         } else {
-            // Set token as slash (div operator).
-            token_reg.token = Token::Slash;
+            // Set token as div operator.
+            token_reg.token = Token::Div;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -117,6 +117,13 @@ namespace lexer::dfa {
     int state4(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 4;
         if (c == '*') next_state = 5;
+        return next_state;
+    }
+
+    int state5(char c, std::stringstream &lexeme, Source &source) {
+        int next_state = 5;
+        if (c == '/') next_state = 0;
+        else if (c != '*') next_state = 4;
         return next_state;
     }
 }

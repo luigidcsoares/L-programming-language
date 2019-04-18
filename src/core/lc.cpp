@@ -19,7 +19,9 @@ int main(int argc, char *argv[]) {
     token_reg.token = Token::Comma;
     
     try {
-        lexer::next(source);
+        while (source.file.peek() != EOF) {
+            lexer::next(source);
+        }
         
         // Token token = lexer::next();
         // Procedimento simbolo inicial, 

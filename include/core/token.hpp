@@ -27,10 +27,10 @@ namespace core::token {
         GE, // Greater than or equal.
         LE, // Less than or equal.
         Comma,
-        Plus,
-        Minus,
-        Times,
-        Slash, // Used for division or comments.
+        Add,
+        Sub,
+        Mult,
+        Div, // Used for division or comments.
         Semicolon,
         LBrace, // '{'.
         RBrace, // '}'.
