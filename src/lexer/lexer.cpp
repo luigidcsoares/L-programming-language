@@ -56,13 +56,7 @@ namespace lexer {
                     state = dfa::state5(c, lexeme, source);
                     break;
                 case 6:
-                    if (c == '=') {
-                        lexeme << c;
-                    } else {
-                        // voltar 1
-                    }
-                    // TOK = pesquisarToken
-                    state = 15;
+                    state = dfa::state6(c, lexeme, source);
                     break;
                 case 7:
                     if (c == '>'  || c == '=') {

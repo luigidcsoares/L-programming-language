@@ -126,4 +126,20 @@ namespace lexer::dfa {
         else if (c != '*') next_state = 4;
         return next_state;
     }
+
+    int state6(char c, std::stringstream &lexeme, Source &source) {
+        int next_state = 15;
+
+        if (c == '=') {
+            lexeme << c;
+            token_reg.token = Token::GE;
+        } else {
+            token_reg.token = Token::GT;
+
+            // Put character back to be read again.
+            source.file.putback(c);
+        }
+
+        return next_state;
+    }
 }
