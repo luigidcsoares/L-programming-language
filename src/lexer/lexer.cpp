@@ -22,6 +22,7 @@ namespace lexer {
             // whether the next character is a valid one or not.
             if (source.file.peek() != EOF) {
                 c = source.file.get();
+                c = toupper(c); // Since L is case insensitive.
 
                 // Handling the current line number.
                 if (c == '\n') source.curr_line++;
@@ -37,28 +38,19 @@ namespace lexer {
            
             switch(state) {
                 case 0:
-                    state = dfa::state0(c, lexeme, source.curr_line);
+                    state = dfa::state0(c, lexeme, source);
                     break;
                 case 1:
                     state = dfa::state1(c, lexeme, source);
                     break;
                 case 2:
-                    state = dfa::state2(c, lexeme, source.curr_line);
+                    state = dfa::state2(c, lexeme, source);
                     break;
                 case 3:
-                    if (c == '*') {
-                        lexeme.clear();
-                        state = 4;
-                    } else {
-                        // voltar 1
-                        // TOK = divisão
-                        state = 15;
-                    }
+                    state = dfa::state3(c, lexeme, source);
                     break;
                 case 4:
-                    if (c == '*') {
-                        state = 5;
-                    }
+                    state = dfa::state4(c, lexeme, source);
                     break;
                 case 5:
                     if (c == '/') {
@@ -151,5 +143,7 @@ namespace lexer {
                     break;
             }
         }
+
+        std::cout << lexeme.str() << std::endl;
     }
 }

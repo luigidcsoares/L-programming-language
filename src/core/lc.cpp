@@ -3,10 +3,10 @@
 
 #include "lexer/lexer.hpp"
 #include "utils/source.hpp"
-#include "core/lc.hpp"
+#include "core/global.hpp"
 
 using namespace utils::source;
-using namespace core::lc;
+using namespace core::global;
 
 int main(int argc, char *argv[]) {
     int exit_code = EXIT_SUCCESS;
@@ -15,10 +15,6 @@ int main(int argc, char *argv[]) {
     std::string input = argv[1];
     Source source(input);
   
-    // Declaring global token register.
-    // This should only be declared here.
-    TokenReg token_reg;
-
     // !!!!!!!!!!! EXEMPLO !!!!!!!!!!!!
     token_reg.token = Token::Comma;
     

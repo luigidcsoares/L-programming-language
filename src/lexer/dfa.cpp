@@ -1,11 +1,16 @@
 #include <iostream>
 #include <sstream>
 
+#include "core/global.hpp"
+#include "core/token.hpp"
 #include "lexer/dfa.hpp"
 #include "utils/regex.hpp"
 
+using namespace core::token;
+using namespace core::global;
+
 namespace lexer::dfa {
-    int state0(char c, std::stringstream &lexeme, int curr_line) {
+    int state0(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 0;
 
         // Skipping whitespace.
@@ -42,7 +47,7 @@ namespace lexer::dfa {
         // Lexeme unidentified.
         else {
             std::stringstream err;
-            err << curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
             throw std::runtime_error(err.str());
         }
@@ -68,10 +73,11 @@ namespace lexer::dfa {
             source.file.putback(c);
         }
        
+
         return next_state;
     }
 
-    int state2(char c, std::stringstream &lexeme, int curr_line) {
+    int state2(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 2;
         lexeme << c;
 
@@ -80,11 +86,37 @@ namespace lexer::dfa {
             next_state = 1;
         else {
             std::stringstream err;
-            err << curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
             throw std::runtime_error(err.str());
         }
 
+        return next_state;
+    }
+
+
+    int state3(char c, std::stringstream &lexeme, Source &source) {
+        int next_state;
+
+        if (c == '*') {
+            lexeme.str("");
+            next_state = 4;
+        } else {
+            // Set token as slash (div operator).
+            token_reg.token = Token::Slash;
+
+            // Put character back to be read again.
+            source.file.putback(c);
+
+            next_state = 15;
+        }
+
+        return next_state;
+    }
+
+    int state4(char c, std::stringstream &lexeme, Source &source) {
+        int next_state = 4;
+        if (c == '*') next_state = 5;
         return next_state;
     }
 }
