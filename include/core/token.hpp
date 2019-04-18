@@ -1,5 +1,5 @@
-#ifndef LEXER_TOKEN_HPP_
-#define LEXER_TOKEN_HPP_
+#ifndef CORE_TOKEN_HPP_
+#define CORE_TOKEN_HPP_
 
 namespace core::token {
 

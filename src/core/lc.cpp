@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         // Procedimento simbolo inicial, 
         // Se não EOF: erro;
     } catch (const std::runtime_error &err) {
-        std::cerr << err.what();
+        std::cerr << err.what() << std::endl;
         exit_code = EXIT_FAILURE;
     }
 
