@@ -15,7 +15,7 @@ namespace utils::regex {
         std::regex hexa("[0-9a-fA-F]");
 
         std::string
-            unit_symbol_str(",|%|\\+|-|\\*|=|\\[|\\]|\\(|\\)|\\{|\\}|;|_|.");
+            unit_symbol_str(",|%|\\+|-|\\*|=|\\[|\\]|\\(|\\)|\\{|\\}|;|_|\\.");
         std::regex unit_symbol(unit_symbol_str);
 
         std::string whitespace_str = " |\r|\n";
@@ -29,7 +29,7 @@ namespace utils::regex {
             + unit_symbol_str
             + "|"
             + whitespace_str
-            + "|&|_|:|\"|'|\\/|\\^|@|!|\\?|<|>|=|$";
+            + "|&|_|:|\"|'|\\/|\\^|@|!|\\?|<|>|=|\\$";
         std::regex valid_char(valid_char_str);
     }
 
