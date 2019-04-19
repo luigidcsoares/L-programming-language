@@ -90,6 +90,7 @@ namespace lexer::dfa {
         int next_state = 2;
         lexeme << c;
 
+        // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
             err << source.curr_line << ": fim de arquivo nao esperado.";
@@ -138,14 +139,32 @@ namespace lexer::dfa {
 
     int state4(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 4;
-        if (c == '*') next_state = 5;
+        
+        // Handling unexpected EOF.
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
+        
+        else if (c == '*') next_state = 5;
+
         return next_state;
     }
 
     int state5(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 5;
-        if (c == '/') next_state = 0;
+        
+        // Handling unexpected EOF.
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
+        
+        else if (c == '/') next_state = 0;
         else if (c != '*') next_state = 4;
+
         return next_state;
     }
 
@@ -201,18 +220,31 @@ namespace lexer::dfa {
     int state9(char c, std::stringstream &lexeme, Source &source) {
         lexeme << c;
         
+        // Handling unexpected EOF.
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
+        
         // Since this state represents a alphanum char, we know
         // that every valid char will be accepted, so no need
         // for checking this. 
-        //
-        // TODO: handle EOF (?)
         return 10;
     }
     
     int state10(char c, std::stringstream &lexeme, Source &source) {
         lexeme << c;
 
-        if (c != '\'') {
+        // Handling unexpected EOF.
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
+       
+        // Handling unidentified lexeme.
+        else if (c != '\'') {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
@@ -257,8 +289,16 @@ namespace lexer::dfa {
 
     int state12(char c, std::stringstream &lexeme, Source &source) {
         lexeme << c;
+        
+        // Handling unexpected EOF.
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
 
-        if (!utils::regex::is_hexa(c)) {
+        // Handling unidentified lexeme.
+        else if (!utils::regex::is_hexa(c)) {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
@@ -278,7 +318,15 @@ namespace lexer::dfa {
     int state13(char c, std::stringstream &lexeme, Source &source) {
         lexeme << c;
        
-        if (!utils::regex::is_hexa(c)) {
+        // Handling unexpected EOF.
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
+        
+        // Handling unidentified lexeme.
+        else if (!utils::regex::is_hexa(c)) {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
@@ -302,7 +350,15 @@ namespace lexer::dfa {
         int next_state = 14;
         lexeme << c;
 
-        if (c == '$' || c == '\r' || c == '\n') {
+        // Handling unexpected EOF.
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
+        
+        // Handling unidentified lexeme.
+        else if (c == '$' || c == '\r' || c == '\n') {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
@@ -313,7 +369,10 @@ namespace lexer::dfa {
             s = std::regex_replace(s, std::regex("\n"), "\\n");
 
             throw std::runtime_error(s);
-        } else if (c == '"') {
+        } 
+        
+        // If we read a second quote, it is a valid string.
+        else if (c == '"') {
             global::token_reg.token = Token::Const;
             global::token_reg.type = "string";
             global::token_reg.length = 0;

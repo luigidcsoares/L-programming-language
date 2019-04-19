@@ -14,15 +14,11 @@ int main(int argc, char *argv[]) {
     // RegistroToken: (Lexema, Token, Classe, Tipo, Tamanho);
     std::string input = argv[1];
     Source source(input);
-  
-    // !!!!!!!!!!! EXEMPLO !!!!!!!!!!!!
-    token_reg.token = Token::Comma;
     
     try {
         while (source.file.peek() != EOF)
             lexer::next(source);
         
-        // Token token = lexer::next();
         // Procedimento simbolo inicial, 
         // Se não EOF: erro;
     } catch (const std::runtime_error &err) {
