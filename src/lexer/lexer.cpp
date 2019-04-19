@@ -70,17 +70,7 @@ namespace lexer {
                     state = dfa::state10(c, lexeme, source);
                     break;
                 case 11:
-                    if (utils::regex::is_digit(c)) {
-                        lexeme << c;
-                        state = 8;
-                    } else if (c == 'X' || c == 'x') {
-                        lexeme << c;
-                        state = 12;
-                    } else {
-                        // voltar 1
-                        // TOK = const
-                        state = 15;
-                    }
+                    state = dfa::state11(c, lexeme, source);
                     break;
                 case 12:
                     if (utils::regex::is_hexa(c)) {

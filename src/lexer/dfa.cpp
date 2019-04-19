@@ -208,5 +208,28 @@ namespace lexer::dfa {
         }
 
         return next_state;
-    }       
+    }
+
+    int state11(char c, std::stringstream &lexeme, Source &source) {
+        int next_state;
+
+        if (utils::regex::is_digit(c)) {
+            lexeme << c;
+            next_state = 8;
+        } else if (c == 'X' || c == 'x') {
+            lexeme << c;
+            next_state = 12;
+        } else {
+            global::token_reg.token = Token::Const;
+            global::token_reg.type = "integer";
+            global::token_reg.length = 0;
+
+            // Put character back to be read again.
+            source.file.putback(c);
+
+            next_state = 15;
+        }
+
+        return next_state;
+    }
 }
