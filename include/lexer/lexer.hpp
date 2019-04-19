@@ -4,7 +4,11 @@
 #include <fstream>
 
 #include "utils/source.hpp"
+#include "core/token.hpp"
+#include "core/type.hpp"
 
+using namespace core::type;
+using namespace core::token;
 using namespace utils::source;
 
 namespace lexer {
@@ -13,11 +17,18 @@ namespace lexer {
      * Read and return the next valid token or the first error found.
      *
      * @param utils::source::Source source file.
-     * @param core::token::TokenReg token register.
+     * @param lexer::LexerReg token register.
      *
-     * @return TokenReg.
+     * @return LxerReg.
      */
     void next(Source &source);
+
+    struct LexerReg {
+        Token token;  
+        std::string lexeme;
+        Type type;
+        int length;
+    };
 }
 
 #endif

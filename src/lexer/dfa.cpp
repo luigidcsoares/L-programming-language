@@ -3,12 +3,15 @@
 #include <sstream>
 
 #include "core/global.hpp"
+#include "core/type.hpp"
 #include "core/token.hpp"
 #include "lexer/dfa.hpp"
+#include "lexer/lexer.hpp"
 #include "utils/regex.hpp"
 
 using namespace core;
 using namespace core::token;
+using namespace core::type;
 
 namespace lexer::dfa {
     int state0(char c, std::stringstream &lexeme, Source &source) {
@@ -126,7 +129,7 @@ namespace lexer::dfa {
             next_state = 4;
         } else {
             // Set token as div operator.
-            global::token_reg.token = Token::Div;
+            global::lexer_reg.token = Token::Div;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -171,9 +174,9 @@ namespace lexer::dfa {
     int state6(char c, std::stringstream &lexeme, Source &source) {
         if (c == '=') {
             lexeme << c;
-            global::token_reg.token = Token::GE;
+            global::lexer_reg.token = Token::GE;
         } else {
-            global::token_reg.token = Token::GT;
+            global::lexer_reg.token = Token::GT;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -185,12 +188,12 @@ namespace lexer::dfa {
     int state7(char c, std::stringstream &lexeme, Source &source) {
         if (c == '>') {
             lexeme << c;
-            global::token_reg.token = Token::NE;
+            global::lexer_reg.token = Token::NE;
         } else if (c == '=') {
             lexeme << c;
-            global::token_reg.token = Token::LE;
+            global::lexer_reg.token = Token::LE;
         } else {
-            global::token_reg.token = Token::LT;
+            global::lexer_reg.token = Token::LT;
             
             // Put character back to be read again.
             source.file.putback(c);
@@ -204,9 +207,9 @@ namespace lexer::dfa {
 
         if (utils::regex::is_digit(c)) lexeme << c;
         else {
-            global::token_reg.token = Token::Const;
-            global::token_reg.type = "integer";
-            global::token_reg.length = 0;
+            global::lexer_reg.token = Token::Const;
+            global::lexer_reg.type = Type::Integer;
+            global::lexer_reg.length = 0;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -257,9 +260,9 @@ namespace lexer::dfa {
             throw std::runtime_error(s);
         }
 
-        global::token_reg.token = Token::Const;
-        global::token_reg.type = "char";
-        global::token_reg.length = 0;
+        global::lexer_reg.token = Token::Const;
+        global::lexer_reg.type = Type::Char;
+        global::lexer_reg.length = 0;
 
         return 15;
     }
@@ -274,9 +277,9 @@ namespace lexer::dfa {
             lexeme << c;
             next_state = 12;
         } else {
-            global::token_reg.token = Token::Const;
-            global::token_reg.type = "integer";
-            global::token_reg.length = 0;
+            global::lexer_reg.token = Token::Const;
+            global::lexer_reg.type = Type::Integer; 
+            global::lexer_reg.length = 0;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -339,9 +342,9 @@ namespace lexer::dfa {
             throw std::runtime_error(s);
         }
 
-        global::token_reg.token = Token::Const;
-        global::token_reg.type = "char";
-        global::token_reg.length = 0;
+        global::lexer_reg.token = Token::Const;
+        global::lexer_reg.type = Type::Char;
+        global::lexer_reg.length = 0;
 
         return 15;
     }
@@ -373,9 +376,9 @@ namespace lexer::dfa {
         
         // If we read a second quote, it is a valid string.
         else if (c == '"') {
-            global::token_reg.token = Token::Const;
-            global::token_reg.type = "string";
-            global::token_reg.length = 0;
+            global::lexer_reg.token = Token::Const;
+            global::lexer_reg.type = Type::String;
+            global::lexer_reg.length = 0;
 
             next_state = 15;
         }

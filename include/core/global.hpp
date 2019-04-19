@@ -1,12 +1,12 @@
 #ifndef CORE_LC_HPP_
 #define CORE_LC_HPP_
 
-#include "core/token.hpp"
+#include "lexer/lexer.hpp"
 
-using namespace core::token;
+using namespace lexer;
 
 namespace core::global {
-    extern TokenReg token_reg;
+    extern LexerReg lexer_reg;
 }
 
 #endif
