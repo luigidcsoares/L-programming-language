@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include <sstream>
 
 #include "core/global.hpp"
@@ -44,12 +45,20 @@ namespace lexer::dfa {
             next_state = 15;
         }
 
+        // End of file: if we reach it, just accept since it isn't an
+        // unexpected EOF.
+        else if (c == EOF) next_state = 15;
+
         // Lexeme unidentified.
         else {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
-            throw std::runtime_error(err.str());
+            
+            // Showing breakline properly.
+            std::string s = err.str();
+            s = std::regex_replace(s, std::regex("\r"), "\\r");
+            s = std::regex_replace(s, std::regex("\n"), "\\n");
         }
 
         return next_state;
@@ -66,10 +75,11 @@ namespace lexer::dfa {
             lexeme << c;
         } else {
             // TODO: TOK = pesquisarToken
-            next_state = 15;
 
             // Put character back to be read again.
             source.file.putback(c);
+
+            next_state = 15;
         }
        
 
@@ -80,14 +90,27 @@ namespace lexer::dfa {
         int next_state = 2;
         lexeme << c;
 
-        if (utils::regex::is_letter(c) || utils::regex::is_digit(c))
+        if (c == EOF) {
+            std::stringstream err;
+            err << source.curr_line << ": fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } 
+        
+        // Since we didn't reach EOF, we can go on.
+        else if (utils::regex::is_letter(c) || utils::regex::is_digit(c))
             next_state = 1;
 
         else if (c != '.' && c != '_') {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
-            throw std::runtime_error(err.str());
+
+            // Showing breakline properly.
+            std::string s = err.str();
+            s = std::regex_replace(s, std::regex("\r"), "\\r");
+            s = std::regex_replace(s, std::regex("\n"), "\\n");
+
+            throw std::runtime_error(s);
         }
 
         return next_state;
@@ -193,7 +216,13 @@ namespace lexer::dfa {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
-            throw std::runtime_error(err.str());
+            
+            // Showing breakline properly.
+            std::string s = err.str();
+            s = std::regex_replace(s, std::regex("\r"), "\\r");
+            s = std::regex_replace(s, std::regex("\n"), "\\n");
+
+            throw std::runtime_error(s);
         }
 
         global::token_reg.token = Token::Const;
@@ -233,7 +262,13 @@ namespace lexer::dfa {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
-            throw std::runtime_error(err.str());
+
+            // Showing breakline properly.
+            std::string s = err.str();
+            s = std::regex_replace(s, std::regex("\r"), "\\r");
+            s = std::regex_replace(s, std::regex("\n"), "\\n");
+
+            throw std::runtime_error(s);
         }
 
         return 13;
@@ -247,7 +282,13 @@ namespace lexer::dfa {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
-            throw std::runtime_error(err.str());
+            
+            // Showing breakline properly.
+            std::string s = err.str();
+            s = std::regex_replace(s, std::regex("\r"), "\\r");
+            s = std::regex_replace(s, std::regex("\n"), "\\n");
+
+            throw std::runtime_error(s);
         }
 
         global::token_reg.token = Token::Const;
@@ -265,7 +306,13 @@ namespace lexer::dfa {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
-            throw std::runtime_error(err.str());
+            
+            // Showing breakline properly.
+            std::string s = err.str();
+            s = std::regex_replace(s, std::regex("\r"), "\\r");
+            s = std::regex_replace(s, std::regex("\n"), "\\n");
+
+            throw std::runtime_error(s);
         } else if (c == '"') {
             global::token_reg.token = Token::Const;
             global::token_reg.type = "string";
