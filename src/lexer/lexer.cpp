@@ -67,14 +67,7 @@ namespace lexer {
                     state = dfa::state9(c, lexeme, source);
                     break;
                 case 10:
-                    if (c == '\'') {
-                        lexeme << c;
-                        // TOK = const
-                        state = 15;
-                    } else {
-                        std::cout << "Error 10";
-                        // exit
-                    }
+                    state = dfa::state10(c, lexeme, source);
                     break;
                 case 11:
                     if (utils::regex::is_digit(c)) {

@@ -182,12 +182,31 @@ namespace lexer::dfa {
 
     int state9(char c, std::stringstream &lexeme, Source &source) {
         lexeme << c;
-
+        
         // Since this state represents a alphanum char, we know
         // that every valid char will be accepted, so no need
         // for checking this. 
         //
         // TODO: handle EOF (?)
-        return 9;
+        return 10;
     }
+    
+    int state10(char c, std::stringstream &lexeme, Source &source) {
+        int next_state = 15;
+
+        if (c == '\'') {
+            lexeme << c;
+
+            global::token_reg.token = Token::Const;
+            global::token_reg.type = "char";
+            global::token_reg.length = 0;
+        } else {
+            std::stringstream err;
+            err << source.curr_line << ": lexema nao identificado ["
+                << lexeme.str() << "].";
+            throw std::runtime_error(err.str());
+        }
+
+        return next_state;
+    }       
 }
