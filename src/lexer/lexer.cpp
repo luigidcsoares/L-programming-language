@@ -30,7 +30,6 @@ namespace lexer {
                 // If it isn't a valid char, throw error and exit program.
                 if (!utils::regex::is_valid_char(c)) {
                     std::stringstream err;
-                std::cout << c << std::endl;
                     err << source.curr_line << ": caractere invalido.";
                     throw std::runtime_error(err.str());
                 }
@@ -62,13 +61,7 @@ namespace lexer {
                     state = dfa::state7(c, lexeme, source);
                     break;
                 case 8:
-                    if (utils::regex::is_digit(c)) {
-                        lexeme << c;
-                    } else {
-                        // voltar 1
-                        // TOK = const
-                        state = 15;
-                    }
+                    state = dfa::state8(c, lexeme, source);
                     break;
                 case 9:
                     if (utils::regex::is_valid_char(c)) {

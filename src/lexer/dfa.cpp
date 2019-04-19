@@ -6,8 +6,8 @@
 #include "lexer/dfa.hpp"
 #include "utils/regex.hpp"
 
+using namespace core;
 using namespace core::token;
-using namespace core::global;
 
 namespace lexer::dfa {
     int state0(char c, std::stringstream &lexeme, Source &source) {
@@ -103,7 +103,7 @@ namespace lexer::dfa {
             next_state = 4;
         } else {
             // Set token as div operator.
-            token_reg.token = Token::Div;
+            global::token_reg.token = Token::Div;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -132,9 +132,9 @@ namespace lexer::dfa {
 
         if (c == '=') {
             lexeme << c;
-            token_reg.token = Token::GE;
+            global::token_reg.token = Token::GE;
         } else {
-            token_reg.token = Token::GT;
+            global::token_reg.token = Token::GT;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -148,16 +148,35 @@ namespace lexer::dfa {
 
         if (c == '>') {
             lexeme << c;
-            token_reg.token = Token::NE;
+            global::token_reg.token = Token::NE;
         } else if (c == '=') {
             lexeme << c;
-            token_reg.token = Token::LE;
+            global::token_reg.token = Token::LE;
         } else {
-            token_reg.token = Token::LT;
+            global::token_reg.token = Token::LT;
             
             // Put character back to be read again.
             source.file.putback(c);
         }
+
+        return next_state;
+    }
+
+    int state8(char c, std::stringstream &lexeme, Source &source) {
+        int next_state = 8;
+
+        if (utils::regex::is_digit(c)) lexeme << c;
+        else {
+            global::token_reg.token = Token::Const;
+            global::token_reg.type = "integer";
+            global::token_reg.length = 0;
+
+            // Put character back to be read again.
+            source.file.putback(c);
+
+            next_state = 15;
+        }
+
         return next_state;
     }
 }
