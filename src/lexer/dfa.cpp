@@ -251,9 +251,29 @@ namespace lexer::dfa {
         }
 
         global::token_reg.token = Token::Const;
-        global::token_reg.type = "integer";
+        global::token_reg.type = "char";
         global::token_reg.length = 0;
 
         return 15;
+    }
+
+    int state14(char c, std::stringstream &lexeme, Source &source) {
+        int next_state = 14;
+        lexeme << c;
+
+        if (c == '$' || c == '\r' || c == '\n') {
+            std::stringstream err;
+            err << source.curr_line << ": lexema nao identificado ["
+                << lexeme.str() << "].";
+            throw std::runtime_error(err.str());
+        } else if (c == '"') {
+            global::token_reg.token = Token::Const;
+            global::token_reg.type = "string";
+            global::token_reg.length = 0;
+
+            next_state = 15;
+        }
+
+        return next_state;
     }
 }

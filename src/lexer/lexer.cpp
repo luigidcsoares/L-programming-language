@@ -79,9 +79,7 @@ namespace lexer {
                     state = dfa::state13(c, lexeme, source);
                     break;
                 case 14:
-                    break;
-                default:
-                    break;
+                    state = dfa::state14(c, lexeme, source);
             }
         }
 
