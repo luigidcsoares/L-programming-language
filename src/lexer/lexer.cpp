@@ -64,13 +64,7 @@ namespace lexer {
                     state = dfa::state8(c, lexeme, source);
                     break;
                 case 9:
-                    if (utils::regex::is_valid_char(c)) {
-                        lexeme << c;
-                        state = 10;
-                    } else {
-                        std::cout << "Error 9";
-                        // exit
-                    }
+                    state = dfa::state9(c, lexeme, source);
                     break;
                 case 10:
                     if (c == '\'') {

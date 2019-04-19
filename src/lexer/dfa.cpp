@@ -81,10 +81,10 @@ namespace lexer::dfa {
         int next_state = 2;
         lexeme << c;
 
-        if (c == '_' || c == '.');
-        else if (utils::regex::is_letter(c) || utils::regex::is_digit(c))
+        if (utils::regex::is_letter(c) || utils::regex::is_digit(c))
             next_state = 1;
-        else {
+
+        else if (c != '.' && c != '_') {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
@@ -178,5 +178,16 @@ namespace lexer::dfa {
         }
 
         return next_state;
+    }
+
+    int state9(char c, std::stringstream &lexeme, Source &source) {
+        lexeme << c;
+
+        // Since this state represents a alphanum char, we know
+        // that every valid char will be accepted, so no need
+        // for checking this. 
+        //
+        // TODO: handle EOF (?)
+        return 9;
     }
 }
