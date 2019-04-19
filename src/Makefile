@@ -13,3 +13,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(OBJ)
 	@echo "========== Starting compilation =========="
 	$(CXX) $(OBJ) -o "$(BUILD_DIR)$(EXEC)"
+
+clean:
+	@rm -f $(OBJ)
+	@rm -f "$(BUILD_DIR)$(EXEC)"

@@ -20,3 +20,6 @@ all:
 	-mkdir "$(BUILD_DIR)"
 	cd "$(SRC_DIR)" && $(MAKE) all
 	@echo "========== Compilation finished =========="
+
+clean:
+	cd $(SRC_DIR) && $(MAKE) clean
