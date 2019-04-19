@@ -6,8 +6,6 @@
 #include "lexer/lexer.hpp"
 #include "utils/regex.hpp"
 
-using namespace lexer;
-
 namespace lexer {
 
     void next(Source &source) {
@@ -28,7 +26,7 @@ namespace lexer {
                 if (c == '\n') source.curr_line++;
 
                 // If it isn't a valid char, throw error and exit program.
-                if (!utils::regex::is_valid_char(c)) {
+                if (!utils::is_valid_char(c)) {
                     std::stringstream err;
                     err << source.curr_line << ":caractere invalido.";
                     throw std::runtime_error(err.str());
@@ -37,49 +35,49 @@ namespace lexer {
            
             switch(state) {
                 case 0:
-                    state = dfa::state0(c, lexeme, source);
+                    state = state0(c, lexeme, source);
                     break;
                 case 1:
-                    state = dfa::state1(c, lexeme, source);
+                    state = state1(c, lexeme, source);
                     break;
                 case 2:
-                    state = dfa::state2(c, lexeme, source);
+                    state = state2(c, lexeme, source);
                     break;
                 case 3:
-                    state = dfa::state3(c, lexeme, source);
+                    state = state3(c, lexeme, source);
                     break;
                 case 4:
-                    state = dfa::state4(c, lexeme, source);
+                    state = state4(c, lexeme, source);
                     break;
                 case 5:
-                    state = dfa::state5(c, lexeme, source);
+                    state = state5(c, lexeme, source);
                     break;
                 case 6:
-                    state = dfa::state6(c, lexeme, source);
+                    state = state6(c, lexeme, source);
                     break;
                 case 7:
-                    state = dfa::state7(c, lexeme, source);
+                    state = state7(c, lexeme, source);
                     break;
                 case 8:
-                    state = dfa::state8(c, lexeme, source);
+                    state = state8(c, lexeme, source);
                     break;
                 case 9:
-                    state = dfa::state9(c, lexeme, source);
+                    state = state9(c, lexeme, source);
                     break;
                 case 10:
-                    state = dfa::state10(c, lexeme, source);
+                    state = state10(c, lexeme, source);
                     break;
                 case 11:
-                    state = dfa::state11(c, lexeme, source);
+                    state = state11(c, lexeme, source);
                     break;
                 case 12:
-                    state = dfa::state12(c, lexeme, source);
+                    state = state12(c, lexeme, source);
                     break;
                 case 13:
-                    state = dfa::state13(c, lexeme, source);
+                    state = state13(c, lexeme, source);
                     break;
                 case 14:
-                    state = dfa::state14(c, lexeme, source);
+                    state = state14(c, lexeme, source);
             }
         }
 

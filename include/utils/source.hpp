@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 
-namespace utils::source {
+namespace utils {
     struct Source {
         std::ifstream file;
         int curr_line;

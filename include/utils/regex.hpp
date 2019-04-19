@@ -1,7 +1,7 @@
 #ifndef UTILS_REGEX_HPP_
 #define UTILS_REGEX_HPP_
 
-namespace utils::regex {
+namespace utils {
     /**
      * Return whether the character is a letter or not.
      * A letter is defined as [a-zA-Z].
