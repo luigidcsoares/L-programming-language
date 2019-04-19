@@ -1,7 +1,8 @@
 #include "core/global.hpp"
 
 namespace core {
-    // Declaring global lexer register.
+    // Declaring global variables.
     // This should only be declared here.
-    LexerReg g_lexer_reg;
+    LexerReg g_lex_reg;
+    TSymbol g_tab_symbol;
 }

@@ -11,6 +11,8 @@ using namespace core;
 int main(int argc, char *argv[]) {
     int exit_code = EXIT_SUCCESS;
 
+    // TODO; Fill Table of Symbols with all the reserved keywords.
+
     std::string input = argv[1];
     Source source(input);
     

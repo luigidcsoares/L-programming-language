@@ -1,12 +1,20 @@
 #ifndef CORE_GLOBAL_HPP_
 #define CORE_GLOBAL_HPP_
 
+#include <string>
+
+#include "core/table_symbol.hpp"
 #include "lexer/lexer.hpp"
 
+using namespace core;
 using namespace lexer;
 
 namespace core {
-    extern LexerReg g_lexer_reg;
+    // Lexical register.
+    extern LexerReg g_lex_reg;
+
+    // Table of symbols.
+    extern TSymbol g_tab_symbol;
 }
 
 #endif

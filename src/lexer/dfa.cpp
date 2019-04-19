@@ -127,7 +127,7 @@ namespace lexer {
             next_state = 4;
         } else {
             // Set token as div operator.
-            g_lexer_reg.token = Token::Div;
+            g_lex_reg.token = Token::Div;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -172,9 +172,9 @@ namespace lexer {
     int state6(char c, std::stringstream &lexeme, Source &source) {
         if (c == '=') {
             lexeme << c;
-            g_lexer_reg.token = Token::GE;
+            g_lex_reg.token = Token::GE;
         } else {
-            g_lexer_reg.token = Token::GT;
+            g_lex_reg.token = Token::GT;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -186,12 +186,12 @@ namespace lexer {
     int state7(char c, std::stringstream &lexeme, Source &source) {
         if (c == '>') {
             lexeme << c;
-            g_lexer_reg.token = Token::NE;
+            g_lex_reg.token = Token::NE;
         } else if (c == '=') {
             lexeme << c;
-            g_lexer_reg.token = Token::LE;
+            g_lex_reg.token = Token::LE;
         } else {
-            g_lexer_reg.token = Token::LT;
+            g_lex_reg.token = Token::LT;
             
             // Put character back to be read again.
             source.file.putback(c);
@@ -205,9 +205,9 @@ namespace lexer {
 
         if (utils::is_digit(c)) lexeme << c;
         else {
-            g_lexer_reg.token = Token::Const;
-            g_lexer_reg.type = Type::Integer;
-            g_lexer_reg.length = 0;
+            g_lex_reg.token = Token::Const;
+            g_lex_reg.type = Type::Integer;
+            g_lex_reg.length = 0;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -258,9 +258,9 @@ namespace lexer {
             throw std::runtime_error(s);
         }
 
-        g_lexer_reg.token = Token::Const;
-        g_lexer_reg.type = Type::Char;
-        g_lexer_reg.length = 0;
+        g_lex_reg.token = Token::Const;
+        g_lex_reg.type = Type::Char;
+        g_lex_reg.length = 0;
 
         return 15;
     }
@@ -275,9 +275,9 @@ namespace lexer {
             lexeme << c;
             next_state = 12;
         } else {
-            g_lexer_reg.token = Token::Const;
-            g_lexer_reg.type = Type::Integer; 
-            g_lexer_reg.length = 0;
+            g_lex_reg.token = Token::Const;
+            g_lex_reg.type = Type::Integer; 
+            g_lex_reg.length = 0;
 
             // Put character back to be read again.
             source.file.putback(c);
@@ -340,9 +340,9 @@ namespace lexer {
             throw std::runtime_error(s);
         }
 
-        g_lexer_reg.token = Token::Const;
-        g_lexer_reg.type = Type::Char;
-        g_lexer_reg.length = 0;
+        g_lex_reg.token = Token::Const;
+        g_lex_reg.type = Type::Char;
+        g_lex_reg.length = 0;
 
         return 15;
     }
@@ -374,9 +374,9 @@ namespace lexer {
         
         // If we read a second quote, it is a valid string.
         else if (c == '"') {
-            g_lexer_reg.token = Token::Const;
-            g_lexer_reg.type = Type::String;
-            g_lexer_reg.length = 0;
+            g_lex_reg.token = Token::Const;
+            g_lex_reg.type = Type::String;
+            g_lex_reg.length = 0;
 
             next_state = 15;
         }
