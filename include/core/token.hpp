@@ -2,6 +2,9 @@
 #define CORE_TOKEN_HPP_
 
 #include <string>
+#include "core/type.hpp"
+
+using namespace core::type;
 
 namespace core::token {
 
@@ -53,7 +56,7 @@ namespace core::token {
     struct TokenReg {
         Token token;  
         std::string lexeme;
-        std::string type;
+        Type type;
         int length;
     };
 }
