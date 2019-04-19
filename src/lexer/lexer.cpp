@@ -22,7 +22,7 @@ namespace lexer {
             // whether the next character is a valid one or not.
             if (source.file.peek() != EOF) {
                 c = source.file.get();
-                c = toupper(c); // Since L is case insensitive.
+                c = tolower(c); // Since L is case insensitive.
 
                 // Handling the current line number.
                 if (c == '\n') source.curr_line++;
@@ -73,23 +73,10 @@ namespace lexer {
                     state = dfa::state11(c, lexeme, source);
                     break;
                 case 12:
-                    if (utils::regex::is_hexa(c)) {
-                        lexeme << c;
-                        state = 13;
-                    } else {
-                        std::cout << "Error 12";
-                        // exit
-                    }
+                    state = dfa::state12(c, lexeme, source);
                     break;
                 case 13:
-                    if (utils::regex::is_hexa(c)) {
-                        lexeme << c;
-                        // TOK = const
-                        state = 15;
-                    } else {
-                        std::cout << "Error 13";
-                        // exit
-                    }
+                    state = dfa::state13(c, lexeme, source);
                     break;
                 case 14:
                     break;

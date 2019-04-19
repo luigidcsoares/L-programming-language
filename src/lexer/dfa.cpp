@@ -56,7 +56,6 @@ namespace lexer::dfa {
     }
 
     int state1(char c, std::stringstream &lexeme, Source &source) {
-
         int next_state = 1;
 
         if (utils::regex::is_letter(c) ||
@@ -128,8 +127,6 @@ namespace lexer::dfa {
     }
 
     int state6(char c, std::stringstream &lexeme, Source &source) {
-        int next_state = 15;
-
         if (c == '=') {
             lexeme << c;
             global::token_reg.token = Token::GE;
@@ -140,12 +137,10 @@ namespace lexer::dfa {
             source.file.putback(c);
         }
 
-        return next_state;
+        return 15;
     }
 
     int state7(char c, std::stringstream &lexeme, Source &source) {
-        int next_state = 15;
-
         if (c == '>') {
             lexeme << c;
             global::token_reg.token = Token::NE;
@@ -159,7 +154,7 @@ namespace lexer::dfa {
             source.file.putback(c);
         }
 
-        return next_state;
+        return 15;
     }
 
     int state8(char c, std::stringstream &lexeme, Source &source) {
@@ -192,22 +187,20 @@ namespace lexer::dfa {
     }
     
     int state10(char c, std::stringstream &lexeme, Source &source) {
-        int next_state = 15;
+        lexeme << c;
 
-        if (c == '\'') {
-            lexeme << c;
-
-            global::token_reg.token = Token::Const;
-            global::token_reg.type = "char";
-            global::token_reg.length = 0;
-        } else {
+        if (c != '\'') {
             std::stringstream err;
             err << source.curr_line << ": lexema nao identificado ["
                 << lexeme.str() << "].";
             throw std::runtime_error(err.str());
         }
 
-        return next_state;
+        global::token_reg.token = Token::Const;
+        global::token_reg.type = "char";
+        global::token_reg.length = 0;
+
+        return 15;
     }
 
     int state11(char c, std::stringstream &lexeme, Source &source) {
@@ -231,5 +224,36 @@ namespace lexer::dfa {
         }
 
         return next_state;
+    }
+
+    int state12(char c, std::stringstream &lexeme, Source &source) {
+        lexeme << c;
+
+        if (!utils::regex::is_hexa(c)) {
+            std::stringstream err;
+            err << source.curr_line << ": lexema nao identificado ["
+                << lexeme.str() << "].";
+            throw std::runtime_error(err.str());
+        }
+
+        return 13;
+    }
+
+    
+    int state13(char c, std::stringstream &lexeme, Source &source) {
+        lexeme << c;
+       
+        if (!utils::regex::is_hexa(c)) {
+            std::stringstream err;
+            err << source.curr_line << ": lexema nao identificado ["
+                << lexeme.str() << "].";
+            throw std::runtime_error(err.str());
+        }
+
+        global::token_reg.token = Token::Const;
+        global::token_reg.type = "integer";
+        global::token_reg.length = 0;
+
+        return 15;
     }
 }
