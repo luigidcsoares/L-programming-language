@@ -7,9 +7,8 @@
 #include "core/token.hpp"
 #include "core/type.hpp"
 
-using namespace core::type;
-using namespace core::token;
-using namespace utils::source;
+using namespace core;
+using namespace utils;
 
 namespace lexer {
 

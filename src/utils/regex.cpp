@@ -1,7 +1,7 @@
 #include <regex>
 #include <string>
 
-namespace utils::regex {
+namespace utils {
     
     // Anonymous namespace for private members.
     namespace {

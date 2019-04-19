@@ -1,7 +1,7 @@
 #ifndef CORE_TYPE_HPP_
 #define CORE_TYPE_HPP_
 
-namespace core::type {
+namespace core {
    
     // List of types (implicit and explicit).
     enum class Type {

@@ -4,9 +4,7 @@
 #include <string>
 #include "core/type.hpp"
 
-using namespace core::type;
-
-namespace core::token {
+namespace core {
 
     enum class Token {
         // Reserved words:
@@ -51,7 +49,6 @@ namespace core::token {
         Id,
         Const // String, char (including hexa) or integer.
     };
-
 }
 
 #endif

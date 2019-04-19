@@ -5,13 +5,12 @@
 #include "utils/source.hpp"
 #include "core/global.hpp"
 
-using namespace utils::source;
-using namespace core::global;
+using namespace utils;
+using namespace core;
 
 int main(int argc, char *argv[]) {
     int exit_code = EXIT_SUCCESS;
 
-    // RegistroToken: (Lexema, Token, Classe, Tipo, Tamanho);
     std::string input = argv[1];
     Source source(input);
     
