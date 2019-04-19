@@ -52,7 +52,7 @@ namespace lexer::dfa {
         // Lexeme unidentified.
         else {
             std::stringstream err;
-            err << source.curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing breakline properly.
@@ -93,7 +93,7 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -103,7 +103,7 @@ namespace lexer::dfa {
 
         else if (c != '.' && c != '_') {
             std::stringstream err;
-            err << source.curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
 
             // Showing breakline properly.
@@ -143,7 +143,7 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -158,7 +158,7 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -223,7 +223,7 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -239,14 +239,14 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
        
         // Handling unidentified lexeme.
         else if (c != '\'') {
             std::stringstream err;
-            err << source.curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing breakline properly.
@@ -293,14 +293,14 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
 
         // Handling unidentified lexeme.
         else if (!utils::regex::is_hexa(c)) {
             std::stringstream err;
-            err << source.curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
 
             // Showing breakline properly.
@@ -321,14 +321,14 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
         // Handling unidentified lexeme.
         else if (!utils::regex::is_hexa(c)) {
             std::stringstream err;
-            err << source.curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing breakline properly.
@@ -353,14 +353,14 @@ namespace lexer::dfa {
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ": fim de arquivo nao esperado.";
+            err << source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
         // Handling unidentified lexeme.
         else if (c == '$' || c == '\r' || c == '\n') {
             std::stringstream err;
-            err << source.curr_line << ": lexema nao identificado ["
+            err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing breakline properly.

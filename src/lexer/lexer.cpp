@@ -29,9 +29,8 @@ namespace lexer {
 
                 // If it isn't a valid char, throw error and exit program.
                 if (!utils::regex::is_valid_char(c)) {
-                    std::cout << "INVÁLIDO: " << c << std::endl;
                     std::stringstream err;
-                    err << source.curr_line << ": caractere invalido.";
+                    err << source.curr_line << ":caractere invalido.";
                     throw std::runtime_error(err.str());
                 }
             } else c = EOF;
