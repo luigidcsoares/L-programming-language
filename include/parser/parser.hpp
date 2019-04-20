@@ -42,11 +42,23 @@ namespace parser {
     void DV();
 
     /**
+     * The optional part of declaring a variable.
+     */
+    void DVO();
+
+    /**
      * Command.
      * Should begin with an identifier or with the following keywords:
      * for, if, ; (nullable command), readln, write, writeln.
      */
     void C();
+
+    /**
+     * List of commands.
+     * Could be either a single command or a list of
+     * zero or more commands between curly braces.
+     */
+    void LC();
 
     /**
      * Exp is the first non-terminal symbol that refers to an expression.
