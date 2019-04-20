@@ -9,8 +9,8 @@ namespace core {
     TSymbolElem * TSymbol::search(std::string lexeme) {
         auto it = this->tab_symbol.find(lexeme);
 
-        // it->first: key (string).
-        // it->second: element (TSymbolElem).
+        // it->first: key <string> (this is the lexeme).
+        // it->second: element <TSymbolElem>.
         return it != this->tab_symbol.end() ? &it->second : NULL;
     }
 

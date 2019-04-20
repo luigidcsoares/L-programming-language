@@ -40,15 +40,23 @@ namespace lexer {
         else if (utils::is_digit_not_zero(c)) next_state = 8;
         else if (c == '0') next_state = 11;
         
-        // Unit symbols.
+        // Unit symbols are symbols made by only one char and have
+        // a direct transition from initial state (0) to final
+        // state (15).
         else if (utils::is_unit_symbol(c)) {
-            // TODO: TOK = pesquisarToken
+            // We guarantee that these symbols are in the table since
+            // they have to be inserted in the beginning of the program.
+            // Thus, no need to check for null case.
+            g_lex_reg.token = g_tab_symbol.search(lexeme.str())->token;
+        
             next_state = 15;
         }
 
-        // End of file: if we reach it, just accept since it isn't an
-        // unexpected EOF.
-        else if (c == EOF) next_state = 15;
+        // End of file.
+        else if (c == EOF) {
+            g_lex_reg.token = Token::EOFL;
+            next_state = 15;
+        }
 
         // Lexeme unidentified.
         else {
@@ -56,7 +64,7 @@ namespace lexer {
             err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
-            // Showing breakline properly.
+            // Showing newline properly.
             std::string s = err.str();
             s = std::regex_replace(s, std::regex("\r"), "\\r");
             s = std::regex_replace(s, std::regex("\n"), "\\n");
@@ -68,18 +76,31 @@ namespace lexer {
     int state1(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 1;
 
-        if (utils::is_letter(c) ||
-                utils::is_digit(c) ||
-                c == '_' || 
-                c == '.') {
-
+        if (utils::is_letter(c) || utils::is_digit(c) ||
+                c == '_' || c == '.') {
             lexeme << c;
         } else {
-            // TODO: TOK = pesquisarToken
+            // Search for the lexeme.
+            TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+            Token tok;
 
-            // Put character back to be read again.
+            // If the search returns null this is a new identifier
+            // and thus must be inserted in the table.
+            if (p == NULL) {
+                tok = Token::Id;
+                TSymbolElem elem(lexeme.str(), tok);
+                g_tab_symbol.insert(lexeme.str(), elem);
+            } 
+            
+            // Else we just need to get that token to pass to
+            // the lexical register.
+            else tok = p->token;
+
+            g_lex_reg.token = tok;
+
+            // Put character back to be read again and go to the
+            // final state.
             source.file.putback(c);
-
             next_state = 15;
         }
        
@@ -107,7 +128,7 @@ namespace lexer {
             err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
 
-            // Showing breakline properly.
+            // Showing newline properly.
             std::string s = err.str();
             s = std::regex_replace(s, std::regex("\r"), "\\r");
             s = std::regex_replace(s, std::regex("\n"), "\\n");
@@ -250,7 +271,7 @@ namespace lexer {
             err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
-            // Showing breakline properly.
+            // Showing newline properly.
             std::string s = err.str();
             s = std::regex_replace(s, std::regex("\r"), "\\r");
             s = std::regex_replace(s, std::regex("\n"), "\\n");
@@ -304,7 +325,7 @@ namespace lexer {
             err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
 
-            // Showing breakline properly.
+            // Showing newline properly.
             std::string s = err.str();
             s = std::regex_replace(s, std::regex("\r"), "\\r");
             s = std::regex_replace(s, std::regex("\n"), "\\n");
@@ -332,7 +353,7 @@ namespace lexer {
             err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
-            // Showing breakline properly.
+            // Showing newline properly.
             std::string s = err.str();
             s = std::regex_replace(s, std::regex("\r"), "\\r");
             s = std::regex_replace(s, std::regex("\n"), "\\n");
@@ -364,7 +385,7 @@ namespace lexer {
             err << source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
-            // Showing breakline properly.
+            // Showing newline properly.
             std::string s = err.str();
             s = std::regex_replace(s, std::regex("\r"), "\\r");
             s = std::regex_replace(s, std::regex("\n"), "\\n");

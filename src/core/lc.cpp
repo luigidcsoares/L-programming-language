@@ -52,8 +52,15 @@ int main(int argc, char *argv[]) {
     Source source(input);
     
     try {
-        while (source.file.peek() != EOF)
+        while (source.file.peek() != EOF) {
             lexer::next(source);
+
+            // !!!!!!! TESTING !!!!!!!!!!
+            std::cout 
+                << "Lexema: "  << g_lex_reg.lexeme
+                << "\tToken: " << static_cast<int>(g_lex_reg.token)
+                << std::endl;
+        }
         
         // Procedimento simbolo inicial, 
         // Se não EOF: erro;
