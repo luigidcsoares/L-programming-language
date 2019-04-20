@@ -17,12 +17,6 @@ namespace utils {
     struct Source {
         std::ifstream file;
         int curr_line;
-
-        /**
-         * Constructor
-         * @param: string, file_path -> source code file path.
-         */
-        Source(std::string file_path);
     };
 }
 

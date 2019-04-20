@@ -66,11 +66,12 @@ int main(int argc, char *argv[]) {
     g_tab_symbol.insert("eofl", TSymbolElem("eofl", Token::EOFL));
 
     std::string input = argv[1];
-    Source source(input);
+    g_source.file.open(input);
+
     
     try {
-        while (source.file.peek() != EOF) {
-            lexer::next(source);
+        while (g_source.file.peek() != EOF) {
+            lexer::next();
 
             // !!!!!!! TESTING !!!!!!!!!!
             std::cout 
@@ -85,6 +86,6 @@ int main(int argc, char *argv[]) {
         std::cerr << err.what() << std::endl;
     }
 
-    source.file.close();
+    g_source.file.close();
     return 0;
 }

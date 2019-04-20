@@ -11,4 +11,5 @@ namespace core {
     // This should only be declared here.
     LexReg g_lex_reg;
     TSymbol g_tab_symbol;
+    Source g_source;
 }

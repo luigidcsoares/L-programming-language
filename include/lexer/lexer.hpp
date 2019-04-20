@@ -20,13 +20,8 @@ namespace lexer {
 
     /**
      * Read and return the next valid token or the first error found.
-     *
-     * @param: utils::source::Source, source -> source file.
-     * @param: lexer::LexReg, token -> register.
-     *
-     * @return LxerReg.
      */
-    void next(Source &source);
+    void next();
 
     /**
      * A tagged union used to represent the lexical register.
