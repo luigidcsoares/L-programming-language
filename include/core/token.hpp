@@ -56,7 +56,7 @@ namespace core {
         // Lexer: EOFL appears in the initial state, being used to
         // help ending the lexical analysis.
         //
-        // Parser: EOLF appears as the last token in the rule of 
+        // Parser: EOLF appears as the last token in the rule of
         // initial non-terminal symbol. In that case, it helps
         // handling errors correctly.
         EOFL

@@ -11,8 +11,6 @@ using namespace utils;
 using namespace core;
 
 int main(int argc, char *argv[]) {
-    int exit_code = EXIT_SUCCESS;
-
     // Fill Table of Symbols with all reserved keywords.
     // Comparison operators (excluding equals) and div operator don't need
     // to be inserted since their tokens are set by the lexer without any need
@@ -73,9 +71,8 @@ int main(int argc, char *argv[]) {
         // Se não EOF: erro;
     } catch (const std::runtime_error &err) {
         std::cerr << err.what() << std::endl;
-        exit_code = EXIT_FAILURE;
     }
 
     source.file.close();
-    return exit_code;
+    return 0;
 }

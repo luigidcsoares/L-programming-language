@@ -18,7 +18,7 @@ namespace utils {
             unit_symbol_str(",|%|\\+|-|\\*|=|\\[|\\]|\\(|\\)|\\{|\\}|;|_|\\.");
         std::regex unit_symbol(unit_symbol_str);
 
-        std::string whitespace_str = " |\r|\n";
+        std::string whitespace_str = " |\t|\r|\n";
         std::regex whitespace(whitespace_str);
 
         std::string valid_char_str

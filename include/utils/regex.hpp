@@ -56,7 +56,7 @@ namespace utils {
      * Return whether the character is a valid char or not.
      * A valid char is the combination of the above symbols plus (whitespace
      * |&|_|\"|'|\\/|\\^|@|!|\\?|<|>|=|$), where whitespace is defined as a
-     * single whitespace or a (piece of) breakline.
+     * single whitespace, a tab or a (piece of) breakline.
      *
      * @param char c.
      *
@@ -66,7 +66,7 @@ namespace utils {
 
     /**
      * Return whether the character is a whitespace or not, where whitespace is
-     * defined as a single whitespace or a (piece of) breakline.
+     * defined as a single whitespace, a tab or a (piece of) breakline.
      *
      * @param char c.
      *
