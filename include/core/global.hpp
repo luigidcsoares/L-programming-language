@@ -11,7 +11,7 @@ using namespace lexer;
 
 namespace core {
     // Lexical register.
-    extern LexerReg g_lex_reg;
+    extern LexReg g_lex_reg;
 
     // Table of symbols.
     extern TSymbol g_tab_symbol;

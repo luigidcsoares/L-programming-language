@@ -11,6 +11,25 @@ using namespace core;
 
 namespace lexer {
 
+    void LexReg::fill(Token token, std::string lexeme, 
+            Type type, int length) {
+
+        this->tag = LexReg::Const;
+        this->token = token;
+        this->lexeme = lexeme;
+        this->type = type;
+        this->length = length;
+    }
+    
+    void LexReg::fill(Token token, std::string lexeme, 
+            TSymbolElem * p_tab_elem) {
+
+        this->tag = LexReg::Id_Kw;
+        this->token = token;
+        this->lexeme = lexeme;
+        this->p_tab_elem = p_tab_elem;
+    }
+
     void next(Source &source) {
         int state = 0;
         std::stringstream lexeme; 
@@ -83,9 +102,5 @@ namespace lexer {
                     state = state14(c, lexeme, source);
             }
         }
-
-        // Since we pass by the loop whitout errors, we have
-        // a valid token and thus we can set the lexeme.
-        g_lex_reg.lexeme = lexeme.str();
     }
 }

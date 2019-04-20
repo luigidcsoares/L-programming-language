@@ -31,10 +31,16 @@ int main(int argc, char *argv[]) {
     g_tab_symbol.insert("to", TSymbolElem("to", Token::To));
     g_tab_symbol.insert("(", TSymbolElem("(", Token::LParen));
     g_tab_symbol.insert(")", TSymbolElem(")", Token::RParen));
+    g_tab_symbol.insert("<", TSymbolElem("<", Token::LT));
+    g_tab_symbol.insert(">", TSymbolElem(">", Token::GT));
+    g_tab_symbol.insert("<>", TSymbolElem("<>", Token::NE));
+    g_tab_symbol.insert(">=", TSymbolElem(">=", Token::GE));
+    g_tab_symbol.insert("<=", TSymbolElem("<=", Token::LE));
     g_tab_symbol.insert(",", TSymbolElem(",", Token::Comma));
     g_tab_symbol.insert("+", TSymbolElem("+", Token::Add));
     g_tab_symbol.insert("-", TSymbolElem("-", Token::Sub));
     g_tab_symbol.insert("*", TSymbolElem("*", Token::Mult));
+    g_tab_symbol.insert("/", TSymbolElem("/", Token::Div));
     g_tab_symbol.insert(";", TSymbolElem(";", Token::Semicolon));
     g_tab_symbol.insert("{", TSymbolElem("{", Token::LBrace));
     g_tab_symbol.insert("}", TSymbolElem("}", Token::RBrace));
@@ -47,7 +53,8 @@ int main(int argc, char *argv[]) {
     g_tab_symbol.insert("%", TSymbolElem("%", Token::Percent));
     g_tab_symbol.insert("[", TSymbolElem("[", Token::LBracket));
     g_tab_symbol.insert("]", TSymbolElem("]", Token::RBracket));
-    
+    g_tab_symbol.insert("eofl", TSymbolElem("eofl", Token::EOFL));
+
     std::string input = argv[1];
     Source source(input);
     

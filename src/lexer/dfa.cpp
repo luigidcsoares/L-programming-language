@@ -47,14 +47,18 @@ namespace lexer {
             // We guarantee that these symbols are in the table since
             // they have to be inserted in the beginning of the program.
             // Thus, no need to check for null case.
-            g_lex_reg.token = g_tab_symbol.search(lexeme.str())->token;
+            TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+            g_lex_reg.fill(p->token, lexeme.str(), p);
         
             next_state = 15;
         }
-
-        // End of file.
+       
+        // Handle EOF in separate since it does'nt have a defined
+        // lexeme but we're taking it as a token.
         else if (c == EOF) {
-            g_lex_reg.token = Token::EOFL;
+            TSymbolElem *p = g_tab_symbol.search("eofl");
+            g_lex_reg.fill(p->token, p->lexeme, p);
+
             next_state = 15;
         }
 
@@ -96,14 +100,13 @@ namespace lexer {
             // the lexical register.
             else tok = p->token;
 
-            g_lex_reg.token = tok;
+            g_lex_reg.fill(tok, lexeme.str(), p);
 
             // Put character back to be read again and go to the
             // final state.
             source.file.putback(c);
             next_state = 15;
         }
-       
 
         return next_state;
     }
@@ -147,12 +150,11 @@ namespace lexer {
             lexeme.str("");
             next_state = 4;
         } else {
-            // Set token as div operator.
-            g_lex_reg.token = Token::Div;
+            TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+            g_lex_reg.fill(p->token, lexeme.str(), p);
 
             // Put character back to be read again.
             source.file.putback(c);
-
             next_state = 15;
         }
 
@@ -191,32 +193,29 @@ namespace lexer {
     }
 
     int state6(char c, std::stringstream &lexeme, Source &source) {
-        if (c == '=') {
-            lexeme << c;
-            g_lex_reg.token = Token::GE;
-        } else {
-            g_lex_reg.token = Token::GT;
+        // Token: >=
+        if (c == '=') lexeme << c;
+        
+        // Token: >
+        // Put character back to be read again.
+        else source.file.putback(c);
 
-            // Put character back to be read again.
-            source.file.putback(c);
-        }
+        TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+        g_lex_reg.fill(p->token, lexeme.str(), p);
 
         return 15;
     }
 
     int state7(char c, std::stringstream &lexeme, Source &source) {
-        if (c == '>') {
-            lexeme << c;
-            g_lex_reg.token = Token::NE;
-        } else if (c == '=') {
-            lexeme << c;
-            g_lex_reg.token = Token::LE;
-        } else {
-            g_lex_reg.token = Token::LT;
-            
-            // Put character back to be read again.
-            source.file.putback(c);
-        }
+        // Token: <= or <>
+        if (c == '>' || c == '=') lexeme << c;
+        
+        // Token: <
+        // Put character back to be read again.
+        else source.file.putback(c);
+
+        TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+        g_lex_reg.fill(p->token, lexeme.str(), p);
 
         return 15;
     }
@@ -226,13 +225,11 @@ namespace lexer {
 
         if (utils::is_digit(c)) lexeme << c;
         else {
-            g_lex_reg.token = Token::Const;
-            g_lex_reg.type = Type::Integer;
-            g_lex_reg.length = 0;
-
+            TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+            g_lex_reg.fill(Token::Const, lexeme.str(), Type::Integer, 0);
+           
             // Put character back to be read again.
             source.file.putback(c);
-
             next_state = 15;
         }
 
@@ -279,9 +276,8 @@ namespace lexer {
             throw std::runtime_error(s);
         }
 
-        g_lex_reg.token = Token::Const;
-        g_lex_reg.type = Type::Char;
-        g_lex_reg.length = 0;
+        TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+        g_lex_reg.fill(Token::Const, lexeme.str(), Type::Char, 0);
 
         return 15;
     }
@@ -296,13 +292,11 @@ namespace lexer {
             lexeme << c;
             next_state = 12;
         } else {
-            g_lex_reg.token = Token::Const;
-            g_lex_reg.type = Type::Integer; 
-            g_lex_reg.length = 0;
-
+            TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+            g_lex_reg.fill(Token::Const, lexeme.str(), Type::Integer, 0);
+            
             // Put character back to be read again.
             source.file.putback(c);
-
             next_state = 15;
         }
 
@@ -361,9 +355,8 @@ namespace lexer {
             throw std::runtime_error(s);
         }
 
-        g_lex_reg.token = Token::Const;
-        g_lex_reg.type = Type::Char;
-        g_lex_reg.length = 0;
+        TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+        g_lex_reg.fill(Token::Const, lexeme.str(), Type::Char, 0);
 
         return 15;
     }
@@ -395,9 +388,8 @@ namespace lexer {
         
         // If we read a second quote, it is a valid string.
         else if (c == '"') {
-            g_lex_reg.token = Token::Const;
-            g_lex_reg.type = Type::String;
-            g_lex_reg.length = 0;
+            TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+            g_lex_reg.fill(Token::Const, lexeme.str(), Type::String, 0);
 
             next_state = 15;
         }
