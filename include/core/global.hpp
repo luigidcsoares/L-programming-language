@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #ifndef CORE_GLOBAL_HPP_
 #define CORE_GLOBAL_HPP_
 
@@ -9,6 +15,7 @@
 using namespace core;
 using namespace lexer;
 
+// Global declarations
 namespace core {
     // Lexical register.
     extern LexReg g_lex_reg;

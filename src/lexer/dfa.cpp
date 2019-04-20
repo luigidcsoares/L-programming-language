@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #include <iostream>
 #include <regex>
 #include <sstream>
@@ -12,6 +18,10 @@
 using namespace core;
 
 namespace lexer {
+    
+    /**
+     *  Implementations of all language machine states
+     */
     int state0(char c, std::stringstream &lexeme, Source &source) {
         int next_state = 0;
 

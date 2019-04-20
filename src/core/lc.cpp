@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #include <iostream>
 #include <string>
 
@@ -9,6 +15,12 @@
 
 using namespace utils;
 using namespace core;
+
+/**
+ * ********************************************
+ * *************** MAIN PROGRAM ***************
+ * ********************************************
+ */
 
 int main(int argc, char *argv[]) {
     // Fill Table of Symbols with all reserved keywords.

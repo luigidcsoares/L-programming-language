@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #ifndef LEXER_DFA_HPP
 #define LEXER_DFA_HPP
 
@@ -9,6 +15,12 @@
 using namespace utils;
 
 namespace lexer {
+    /**
+     * Declarate all language machine states.
+     * @param: char, c -> current char
+     * @param: stringstream, lexeme -> lexeme
+     * @param: utils::Source, source -> Linked file to current line
+     */ 
     int state0(char c, std::stringstream &lexeme, Source &source);
     int state1(char c, std::stringstream &lexeme, Source &source);
     int state2(char c, std::stringstream &lexeme, Source &source);

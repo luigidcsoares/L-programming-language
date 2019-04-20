@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #include <iostream>
 #include <sstream>
 
@@ -10,6 +16,10 @@
 using namespace core;
 
 namespace lexer {
+
+    /**
+     * lexer.hpp implementations 
+     */ 
 
     void LexReg::fill(Token token, std::string lexeme, 
             Type type, int length) {
