@@ -1,8 +1,8 @@
 # Source files.
-SRC = $(wildcard core/*.cpp) \
-      $(wildcard lexer/*.cpp) \
-      $(wildcard parser/*.cpp) \
-      $(wildcard utils/*.cpp)
+SRC = $(wildcard core$(PathSep)*.cpp) \
+      $(wildcard lexer$(PathSep)*.cpp) \
+      $(wildcard parser$(PathSep)*.cpp) \
+      $(wildcard utils$(PathSep)*.cpp)
 
 # Object files.
 OBJ = $(SRC:.cpp=.o)
@@ -16,5 +16,5 @@ all: $(OBJ)
 	$(CXX) $(OBJ) -o "$(BUILD_DIR)$(EXEC)"
 
 clean:
-	@rm -f $(OBJ)
-	@rm -f "$(BUILD_DIR)$(EXEC)"
+	-$(RM) $(OBJ)
+	-$(RM) "$(BUILD_DIR)$(EXEC)"
