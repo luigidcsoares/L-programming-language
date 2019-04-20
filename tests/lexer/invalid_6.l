@@ -1,0 +1,1 @@
+CONST A = 0x0G

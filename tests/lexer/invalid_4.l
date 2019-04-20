@@ -1,0 +1,1 @@
+const TESTE = 0xA
