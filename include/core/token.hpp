@@ -48,7 +48,7 @@ namespace core {
         Do,
         Write,
         Writeln,
-        Percent,
+        Mod, // Mod operator (%).
         LBracket, // '['.
         RBracket, // ']'.
 
