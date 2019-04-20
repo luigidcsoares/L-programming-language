@@ -68,7 +68,6 @@ int main(int argc, char *argv[]) {
     std::string input = argv[1];
     g_source.file.open(input);
 
-    
     try {
         while (g_source.file.peek() != EOF) {
             lexer::next();
