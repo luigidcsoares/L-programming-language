@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #ifndef UTILS_SOURCE_HPP_
 #define UTILS_SOURCE_HPP_
 
@@ -5,11 +11,12 @@
 #include <fstream>
 
 namespace utils {
+    /**
+     * Link source code to its current line number.
+     */ 
     struct Source {
         std::ifstream file;
         int curr_line;
-
-        Source(std::string file_path);
     };
 }
 

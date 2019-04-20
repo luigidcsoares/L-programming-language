@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #ifndef LEXER_LEXER_HPP_
 #define LEXER_LEXER_HPP_
 
@@ -14,13 +20,8 @@ namespace lexer {
 
     /**
      * Read and return the next valid token or the first error found.
-     *
-     * @param utils::source::Source source file.
-     * @param lexer::LexReg token register.
-     *
-     * @return LxerReg.
      */
-    void next(Source &source);
+    void next();
 
     /**
      * A tagged union used to represent the lexical register.
@@ -55,10 +56,10 @@ namespace lexer {
          * This function assumes (from the type of params it receives)
          * that you'll be using the const piece of the union.
          *
-         * @param core::Token token.
-         * @param std::string lexeme.
-         * @param core::Type type.
-         * @param int length.
+         * @param: core::Token, token -> token
+         * @param: string, lexeme -> lexeme
+         * @param: core::Type, type -> type
+         * @param: int, length -> length
          *
          */
         void fill(Token token, std::string lexeme,
@@ -70,9 +71,9 @@ namespace lexer {
          * This function assumes (from the type of params it receives)
          * that you'll be using the id or keyword piece of the union.
          *
-         * @param core::Token token.
-         * @param std::string lexeme.
-         * @param TSymbolEleme * p_tab_elem.
+         * @param: core::Token token -> token
+         * @param: string lexeme -> lexeme
+         * @param: TSymbolEleme * p_tab_elem -> pointer to tyble of symbols position
          *
          */
         void fill(Token token, std::string lexeme,

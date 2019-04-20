@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #ifndef CORE_TOKEN_HPP_
 #define CORE_TOKEN_HPP_
 
@@ -6,6 +12,7 @@
 
 namespace core {
 
+    // Enum containing all language reserved words
     enum class Token {
         // Reserved words:
         ConstKW, // KW to diff from constants.

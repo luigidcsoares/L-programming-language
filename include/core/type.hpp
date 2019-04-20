@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #ifndef CORE_TYPE_HPP_
 #define CORE_TYPE_HPP_
 

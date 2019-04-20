@@ -1,3 +1,9 @@
+/**
+ *  @author: Gabriel Luciano 
+ *  @author: Geovane Fonseca 
+ *  @author: Luigi Domenico
+ */ 
+
 #include <iostream>
 #include <regex>
 #include <sstream>
@@ -12,7 +18,11 @@
 using namespace core;
 
 namespace lexer {
-    int state0(char c, std::stringstream &lexeme, Source &source) {
+    
+    /**
+     *  Implementations of all language machine states
+     */
+    int state0(char c, std::stringstream &lexeme) {
         int next_state = 0;
 
         // Skipping whitespace.
@@ -65,19 +75,20 @@ namespace lexer {
         // Lexeme unidentified.
         else {
             std::stringstream err;
-            err << source.curr_line << ":lexema nao identificado ["
+            err << g_source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing newline properly.
             std::string s = err.str();
             s = std::regex_replace(s, std::regex("\r"), "\\r");
             s = std::regex_replace(s, std::regex("\n"), "\\n");
+            throw std::runtime_error(s);
         }
 
         return next_state;
     }
 
-    int state1(char c, std::stringstream &lexeme, Source &source) {
+    int state1(char c, std::stringstream &lexeme) {
         int next_state = 1;
 
         if (utils::is_letter(c) || utils::is_digit(c) ||
@@ -104,21 +115,21 @@ namespace lexer {
 
             // Put character back to be read again and go to the
             // final state.
-            source.file.putback(c);
+            g_source.file.putback(c);
             next_state = 15;
         }
 
         return next_state;
     }
 
-    int state2(char c, std::stringstream &lexeme, Source &source) {
+    int state2(char c, std::stringstream &lexeme) {
         int next_state = 2;
         lexeme << c;
 
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -128,7 +139,7 @@ namespace lexer {
 
         else if (c != '.' && c != '_') {
             std::stringstream err;
-            err << source.curr_line << ":lexema nao identificado ["
+            err << g_source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
 
             // Showing newline properly.
@@ -143,7 +154,7 @@ namespace lexer {
     }
 
 
-    int state3(char c, std::stringstream &lexeme, Source &source) {
+    int state3(char c, std::stringstream &lexeme) {
         int next_state;
 
         if (c == '*') {
@@ -154,20 +165,20 @@ namespace lexer {
             g_lex_reg.fill(p->token, lexeme.str(), p);
 
             // Put character back to be read again.
-            source.file.putback(c);
+            g_source.file.putback(c);
             next_state = 15;
         }
 
         return next_state;
     }
 
-    int state4(char c, std::stringstream &lexeme, Source &source) {
+    int state4(char c, std::stringstream &lexeme) {
         int next_state = 4;
         
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -176,13 +187,13 @@ namespace lexer {
         return next_state;
     }
 
-    int state5(char c, std::stringstream &lexeme, Source &source) {
+    int state5(char c, std::stringstream &lexeme) {
         int next_state = 5;
         
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -192,13 +203,13 @@ namespace lexer {
         return next_state;
     }
 
-    int state6(char c, std::stringstream &lexeme, Source &source) {
+    int state6(char c, std::stringstream &lexeme) {
         // Token: >=
         if (c == '=') lexeme << c;
         
         // Token: >
         // Put character back to be read again.
-        else source.file.putback(c);
+        else g_source.file.putback(c);
 
         TSymbolElem *p = g_tab_symbol.search(lexeme.str());
         g_lex_reg.fill(p->token, lexeme.str(), p);
@@ -206,13 +217,13 @@ namespace lexer {
         return 15;
     }
 
-    int state7(char c, std::stringstream &lexeme, Source &source) {
+    int state7(char c, std::stringstream &lexeme) {
         // Token: <= or <>
         if (c == '>' || c == '=') lexeme << c;
         
         // Token: <
         // Put character back to be read again.
-        else source.file.putback(c);
+        else g_source.file.putback(c);
 
         TSymbolElem *p = g_tab_symbol.search(lexeme.str());
         g_lex_reg.fill(p->token, lexeme.str(), p);
@@ -220,7 +231,7 @@ namespace lexer {
         return 15;
     }
 
-    int state8(char c, std::stringstream &lexeme, Source &source) {
+    int state8(char c, std::stringstream &lexeme) {
         int next_state = 8;
 
         if (utils::is_digit(c)) lexeme << c;
@@ -229,20 +240,20 @@ namespace lexer {
             g_lex_reg.fill(Token::Const, lexeme.str(), Type::Integer, 0);
            
             // Put character back to be read again.
-            source.file.putback(c);
+            g_source.file.putback(c);
             next_state = 15;
         }
 
         return next_state;
     }
 
-    int state9(char c, std::stringstream &lexeme, Source &source) {
+    int state9(char c, std::stringstream &lexeme) {
         lexeme << c;
         
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
@@ -252,20 +263,20 @@ namespace lexer {
         return 10;
     }
     
-    int state10(char c, std::stringstream &lexeme, Source &source) {
+    int state10(char c, std::stringstream &lexeme) {
         lexeme << c;
 
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
        
         // Handling unidentified lexeme.
         else if (c != '\'') {
             std::stringstream err;
-            err << source.curr_line << ":lexema nao identificado ["
+            err << g_source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing newline properly.
@@ -282,7 +293,7 @@ namespace lexer {
         return 15;
     }
 
-    int state11(char c, std::stringstream &lexeme, Source &source) {
+    int state11(char c, std::stringstream &lexeme) {
         int next_state;
 
         if (utils::is_digit(c)) {
@@ -296,27 +307,27 @@ namespace lexer {
             g_lex_reg.fill(Token::Const, lexeme.str(), Type::Integer, 0);
             
             // Put character back to be read again.
-            source.file.putback(c);
+            g_source.file.putback(c);
             next_state = 15;
         }
 
         return next_state;
     }
 
-    int state12(char c, std::stringstream &lexeme, Source &source) {
+    int state12(char c, std::stringstream &lexeme) {
         lexeme << c;
         
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
 
         // Handling unidentified lexeme.
         else if (!utils::is_hexa(c)) {
             std::stringstream err;
-            err << source.curr_line << ":lexema nao identificado ["
+            err << g_source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
 
             // Showing newline properly.
@@ -331,20 +342,20 @@ namespace lexer {
     }
 
     
-    int state13(char c, std::stringstream &lexeme, Source &source) {
+    int state13(char c, std::stringstream &lexeme) {
         lexeme << c;
        
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
         // Handling unidentified lexeme.
         else if (!utils::is_hexa(c)) {
             std::stringstream err;
-            err << source.curr_line << ":lexema nao identificado ["
+            err << g_source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing newline properly.
@@ -361,21 +372,21 @@ namespace lexer {
         return 15;
     }
 
-    int state14(char c, std::stringstream &lexeme, Source &source) {
+    int state14(char c, std::stringstream &lexeme) {
         int next_state = 14;
         lexeme << c;
 
         // Handling unexpected EOF.
         if (c == EOF) {
             std::stringstream err;
-            err << source.curr_line << ":fim de arquivo nao esperado.";
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
             throw std::runtime_error(err.str());
         } 
         
         // Handling unidentified lexeme.
         else if (c == '$' || c == '\r' || c == '\n') {
             std::stringstream err;
-            err << source.curr_line << ":lexema nao identificado ["
+            err << g_source.curr_line << ":lexema nao identificado ["
                 << lexeme.str() << "].";
             
             // Showing newline properly.
