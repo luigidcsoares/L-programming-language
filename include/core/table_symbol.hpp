@@ -12,6 +12,8 @@ namespace core {
         Token token;
 
         // TODO: other fields (class, type, length...).
+        
+        TSymbolElem(std::string lexeme, Token token);
     };
 
     class TSymbol {

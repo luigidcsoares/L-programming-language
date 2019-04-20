@@ -1,6 +1,11 @@
 #include "core/table_symbol.hpp"
 
 namespace core {
+    TSymbolElem::TSymbolElem(std::string lexeme, Token token) {
+        this->lexeme = lexeme;
+        this->token = token;
+    }
+
     TSymbolElem * TSymbol::search(std::string lexeme) {
         auto it = this->tab_symbol.find(lexeme);
 
