@@ -1,11 +1,18 @@
 # Source files.
-SRC = $(wildcard core$(PathSep)*.cpp) \
-      $(wildcard lexer$(PathSep)*.cpp) \
-      $(wildcard parser$(PathSep)*.cpp) \
-      $(wildcard utils$(PathSep)*.cpp)
+SRC = $(wildcard core/*.cpp) \
+      $(wildcard lexer/*.cpp) \
+      $(wildcard parser/*.cpp) \
+      $(wildcard utils/*.cpp)
 
 # Object files.
 OBJ = $(SRC:.cpp=.o)
+
+# Fixing path separator on windows.
+ifeq ($(OS), Windows_NT)
+	FixPath = $(subst /,\,$1)
+else
+	FixPath = $1
+endif
 
 # Build object files from cpp source.
 %.o: %.cpp
@@ -16,5 +23,5 @@ all: $(OBJ)
 	$(CXX) $(OBJ) -o "$(BUILD_DIR)$(EXEC)"
 
 clean:
-	-$(RM) $(OBJ)
+	-$(RM) $(call FixPath,$(OBJ))
 	-$(RM) "$(BUILD_DIR)$(EXEC)"

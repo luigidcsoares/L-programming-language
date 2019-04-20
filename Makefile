@@ -3,17 +3,11 @@ ifeq ($(OS), Windows_NT)
     # Executable.
     export EXEC = lc.exe
 
-    # Path separator.
-    export PathSep = \\
-
     # Remove function.
     export RM = del
 else 
     # Executable.
     export EXEC = lc
-
-    # Path separator.
-    export PathSep = /
 
     # Remove function.
     export RM = rm
