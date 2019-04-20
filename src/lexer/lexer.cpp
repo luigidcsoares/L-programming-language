@@ -1,10 +1,13 @@
 #include <iostream>
 #include <sstream>
 
+#include "core/global.hpp"
 #include "core/token.hpp"
 #include "lexer/dfa.hpp"
 #include "lexer/lexer.hpp"
 #include "utils/regex.hpp"
+
+using namespace core;
 
 namespace lexer {
 
@@ -81,6 +84,8 @@ namespace lexer {
             }
         }
 
-        std::cout << lexeme.str() << std::endl;
+        // Since we pass by the loop whitout errors, we have
+        // a valid token and thus we can set the lexeme.
+        g_lex_reg.lexeme = lexeme.str();
     }
 }

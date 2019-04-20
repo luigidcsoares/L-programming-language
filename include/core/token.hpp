@@ -47,7 +47,19 @@ namespace core {
 
         // Other tokens (defined in runtime).
         Id,
-        Const // String, char (including hexa) or integer.
+        Const, // String, char (including hexa) or integer.
+
+        // EOFL (End of file) is a special token used in both lexer
+        // and parser. Every program written in L have the following
+        // structure: Declarations Commands EOFL.
+        //
+        // Lexer: EOFL appears in the initial state, being used to
+        // help ending the lexical analysis.
+        //
+        // Parser: EOLF appears as the last token in the rule of 
+        // initial non-terminal symbol. In that case, it helps
+        // handling errors correctly.
+        EOFL
     };
 }
 
