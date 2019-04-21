@@ -62,15 +62,12 @@ namespace lexer {
         
             next_state = 15;
         }
-       
-        // Handle EOF in separate since it does'nt have a defined
-        // lexeme but we're taking it as a token.
-        else if (c == EOF) {
-            TSymbolElem *p = g_tab_symbol.search("eofl");
-            g_lex_reg.fill(p->token, p->lexeme, p);
-
-            next_state = 15;
-        }
+     
+        // EOF is not treated as a token but this is the most proper state 
+        // to accept it. This is situation is reached when in some other
+        // transition to the final state we put back in file the character
+        // read and it happens to be an EOF.
+        else if (c == EOF) next_state = 15;
 
         // Lexeme unidentified.
         else {

@@ -41,10 +41,6 @@ namespace parser {
                 || g_lex_reg.token == Token::Write
                 || g_lex_reg.token == Token::Writeln)
             C();
-
-        // Match the current token with the next.
-        // The next token is expected to be EOFL.
-        match_token(Token::EOFL);
     }
 
     void D() {

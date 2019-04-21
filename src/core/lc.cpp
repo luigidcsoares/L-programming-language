@@ -65,7 +65,6 @@ int main(int argc, char *argv[]) {
     g_tab_symbol.insert("%", TSymbolElem("%", Token::Mod));
     g_tab_symbol.insert("[", TSymbolElem("[", Token::LBracket));
     g_tab_symbol.insert("]", TSymbolElem("]", Token::RBracket));
-    g_tab_symbol.insert("eofl", TSymbolElem("eofl", Token::EOFL));
 
     std::string input = argv[1];
     g_source.file.open(input);
