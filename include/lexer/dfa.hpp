@@ -16,7 +16,7 @@ using namespace utils;
 
 namespace lexer {
     /**
-     * Declarate all language machine states.
+     * Declarate all states of the DFA that represents our lexer.
      * @param: char, c -> current char
      * @param: stringstream, lexeme -> lexeme
      */ 

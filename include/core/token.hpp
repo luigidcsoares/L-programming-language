@@ -12,7 +12,7 @@
 
 namespace core {
 
-    // Enum containing all language reserved words
+    // Enum containing all tokens of the language
     enum class Token {
         // Reserved words:
         ConstKW, // KW to diff from constants.

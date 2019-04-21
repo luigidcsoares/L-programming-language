@@ -14,7 +14,7 @@ using namespace core;
 namespace parser {
 
     /**
-     * Call lexer to match the current token with the next.
+     * Call lexer to match the current token with the expected.
      *
      * @param: core::Token, expected_tok -> The next expected token
      */
