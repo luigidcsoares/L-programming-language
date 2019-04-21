@@ -19,7 +19,7 @@ namespace parser {
         else {
             std::stringstream err;
             err << g_source.curr_line << ":token nao esperado ["
-                << g_lex_reg_lexeme << "].";
+                << g_lex_reg.lexeme << "].";
             throw std::runtime_error(err.str());
         }
     }
@@ -28,7 +28,7 @@ namespace parser {
         // While token belongs to First of {D},
         // call D.
         while (g_lex_reg.token == Token::Var
-                || g_lex_reg.token == Token::Const)
+                || g_lex_reg.token == Token::ConstKW)
             D();
 
         // While token belongs to First of {C},
@@ -53,7 +53,6 @@ namespace parser {
 
             // Repeat until token isn't integer nor char.
             do {
-
                 if (g_lex_reg.token == Token::Integer) 
                     match_token(Token::Integer);
                 else match_token(Token::Char);
@@ -75,6 +74,7 @@ namespace parser {
                 match_token(Token::Sub);
 
             match_token(Token::Const);
+            match_token(Token::Semicolon);
         }
     }
 
@@ -84,6 +84,7 @@ namespace parser {
 
         while (g_lex_reg.token == Token::Comma) {
             match_token(Token::Comma);
+            match_token(Token::Id);
             DVO();
         }
     }
@@ -150,6 +151,7 @@ namespace parser {
             match_token(Token::LParen);
             match_token(Token::Id);
             match_token(Token::RParen);
+            match_token(Token::Semicolon);
         } else {
             if (g_lex_reg.token == Token::Write)
                 match_token(Token::Write);
@@ -164,6 +166,7 @@ namespace parser {
             }
 
             match_token(Token::RParen);
+            match_token(Token::Semicolon);
         }
     }
 
@@ -243,18 +246,18 @@ namespace parser {
     }
 
     void F() {
-        if (g.lex_reg.token == Token::Not) {
+        if (g_lex_reg.token == Token::Not) {
             match_token(Token::Not);
             F();
-        } else if (g.lex_reg.token == Token::LParen) {
+        } else if (g_lex_reg.token == Token::LParen) {
             match_token(Token::LParen);
             Exp();
             match_token(Token::RParen);
-        } else if (g.lex_reg.token == Token:: ConstKW) {
-            match_token(Token::ConstKW);
+        } else if (g_lex_reg.token == Token::Const) {
+            match_token(Token::Const);
         } else {
             match_token(Token::Id);
-            if (g.lex_reg.token == Token::LBracket) {
+            if (g_lex_reg.token == Token::LBracket) {
                 match_token(Token::LBracket);
                 Exp();
                 match_token(Token::RBracket);

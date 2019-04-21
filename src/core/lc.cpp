@@ -11,10 +11,12 @@
 #include "core/table_symbol.hpp"
 #include "core/token.hpp"
 #include "lexer/lexer.hpp"
+#include "parser/parser.hpp"
 #include "utils/source.hpp"
 
 using namespace utils;
 using namespace core;
+using namespace parser;
 
 /**
  * ********************************************
@@ -60,27 +62,26 @@ int main(int argc, char *argv[]) {
     g_tab_symbol.insert("do", TSymbolElem("do", Token::Do));
     g_tab_symbol.insert("write", TSymbolElem("write", Token::Write));
     g_tab_symbol.insert("writeln", TSymbolElem("writeln", Token::Writeln));
-    g_tab_symbol.insert("%", TSymbolElem("%", Token::Percent));
+    g_tab_symbol.insert("%", TSymbolElem("%", Token::Mod));
     g_tab_symbol.insert("[", TSymbolElem("[", Token::LBracket));
     g_tab_symbol.insert("]", TSymbolElem("]", Token::RBracket));
     g_tab_symbol.insert("eofl", TSymbolElem("eofl", Token::EOFL));
 
     std::string input = argv[1];
     g_source.file.open(input);
+    g_source.curr_line = 1;
 
     try {
-        while (g_source.file.peek() != EOF) {
-            lexer::next();
-
-            // !!!!!!! TESTING !!!!!!!!!!
-            std::cout 
-                << "Lexema: "  << g_lex_reg.lexeme
-                << "\tToken: " << static_cast<int>(g_lex_reg.token)
-                << std::endl;
-        }
+        lexer::next();
+        S();
         
-        // Procedimento simbolo inicial, 
-        // Se não EOF: erro;
+        // ????.
+        if (g_source.file.peek() != EOF) {
+            std::cerr 
+                << g_source.curr_line
+                << ":"
+                << "ERRO (?)" << std::endl;
+        }
     } catch (const std::runtime_error &err) {
         std::cerr << err.what() << std::endl;
     }

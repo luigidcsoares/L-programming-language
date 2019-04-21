@@ -19,7 +19,6 @@ endif
 	$(CXX) $< $(CXXFLAGS) -c -o $@
 
 all: $(OBJ)
-	@echo "========== Starting compilation =========="
 	$(CXX) $(OBJ) -o "$(BUILD_DIR)$(EXEC)"
 
 clean:
