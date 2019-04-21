@@ -77,9 +77,10 @@ int main(int argc, char *argv[]) {
         // ????.
         if (g_source.file.peek() != EOF) {
             std::cerr 
-                << g_source.curr_line
-                << ":"
-                << "ERRO (?)" << std::endl;
+                << g_source.curr_line << ":"
+                << "token nao esperado ["
+                << g_lex_reg.lexeme
+                << "]." << std::endl;
         }
     } catch (const std::runtime_error &err) {
         std::cerr << err.what() << std::endl;

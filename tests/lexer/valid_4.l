@@ -19,5 +19,5 @@ if value1 <> value2 then writeln("diferente");
 
 for i = 2 to 5 step 2 do {
   write("OI");
-  writeln("Valor: $", value1);
+  writeln("Valor: ", value1);
 }

@@ -16,7 +16,11 @@ namespace parser {
 
     void match_token(Token expected_tok) {
         if (g_lex_reg.token == expected_tok) lexer::next();
-        else {
+        else if (g_source.file.peek() == EOF) {
+            std::stringstream err;
+            err << g_source.curr_line << ":fim de arquivo nao esperado.";
+            throw std::runtime_error(err.str());
+        } else {
             std::stringstream err;
             err << g_source.curr_line << ":token nao esperado ["
                 << g_lex_reg.lexeme << "].";

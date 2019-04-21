@@ -55,6 +55,10 @@ namespace core {
         // Other tokens (defined in runtime).
         Id,
         Const, // String, char (including hexa) or integer.
+
+        // EOFL (End of file) is a special token with the only
+        // purpose of handling the end of parser.
+        EOFL
     };
 }
 

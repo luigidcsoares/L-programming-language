@@ -4,7 +4,6 @@
  *  @author: Luigi Domenico
  */ 
 
-#include <iostream>
 #include <regex>
 #include <sstream>
 
@@ -63,11 +62,16 @@ namespace lexer {
             next_state = 15;
         }
      
-        // EOF is not treated as a token but this is the most proper state 
-        // to accept it. This is situation is reached when in some other
-        // transition to the final state we put back in file the character
-        // read and it happens to be an EOF.
-        else if (c == EOF) next_state = 15;
+        // If the character read was EOF we can safely assume
+        // that our compilation process ended correctly. We're setting
+        // the global lexical register token field as EOFL for handling
+        // the end of parser and thus the end of program. There's no
+        // need to save EOF in table of symbols so we're setting addr
+        // field as NULL.
+        else if (c == EOF) {
+            g_lex_reg.fill(Token::EOFL, "eof", NULL);
+            next_state = 15;
+        }
 
         // Lexeme unidentified.
         else {
