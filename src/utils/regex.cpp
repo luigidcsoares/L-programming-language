@@ -7,6 +7,8 @@
 #include <regex>
 #include <string>
 
+#include "utils/regex.hpp"
+
 namespace utils {
     
     // Anonymous namespace for private members.
