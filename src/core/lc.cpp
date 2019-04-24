@@ -26,9 +26,6 @@ using namespace parser;
 
 int main(int argc, char *argv[]) {
     // Fill Table of Symbols with all reserved keywords.
-    // Comparison operators (excluding equals) and div operator don't need
-    // to be inserted since their tokens are set by the lexer without any need
-    // of searching the table.
     g_tab_symbol.insert("const", TSymbolElem("const", Token::ConstKW));
     g_tab_symbol.insert("var", TSymbolElem("var", Token::Var));
     g_tab_symbol.insert("integer", TSymbolElem("integer", Token::Integer));

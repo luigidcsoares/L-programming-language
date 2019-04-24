@@ -50,8 +50,7 @@ namespace lexer {
 
             // If we didn't reach EOF yet, we need to check
             // whether the next character is a valid one or not.
-            if (g_source.file.peek() != EOF) {
-                c = g_source.file.get();
+            if (g_source.file >> c) {
                 c = tolower(c); // Since L is case insensitive.
 
                 // Handling the current line number.
