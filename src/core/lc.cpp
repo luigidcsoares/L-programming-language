@@ -71,7 +71,6 @@ int main(int argc, char *argv[]) {
         lexer::next();
         S();
         
-        // ????.
         if (g_source.file.peek() != EOF) {
             std::cerr 
                 << g_source.curr_line << ":"

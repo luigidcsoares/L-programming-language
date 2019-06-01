@@ -43,14 +43,13 @@ namespace lexer {
     void next() {
         int state = 0;
         std::stringstream lexeme; 
-        
+        char c;
+
         // Looping through chars looking for the next token.
         while (state != 15) {
-            char c;
-
             // If we didn't reach EOF yet, we need to check
             // whether the next character is a valid one or not.
-            if (g_source.file >> c) {
+            if (g_source.file.get(c)) {
                 c = tolower(c); // Since L is case insensitive.
 
                 // Handling the current line number.
