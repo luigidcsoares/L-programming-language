@@ -8,6 +8,7 @@
 #include <sstream>
 #include "core/class.hpp"
 #include "core/global.hpp"
+#include "core/operator.hpp"
 #include "core/token.hpp"
 #include "lexer/lexer.hpp"
 #include "parser/parser.hpp"
@@ -81,19 +82,20 @@ namespace parser {
         } else {
             match_token(Token::ConstKW);
 
+            id = g_lex_reg.p_tab_elem;
+            match_token(Token::Id);
+
             // Error if ID was already declared.
-            if (g_lex_reg.p_tab_elem->cl != Class::Empty) {
+            if (id->cl != Class::Empty) {
                 std::stringstream err;
                 err << g_source.curr_line << ":identificador ja declarado ["
-                    << g_lex_reg.lexeme << "].";
+                    << id->lexeme << "].";
                 throw std::runtime_error(err.str());
             }
 
-            id = g_lex_reg.p_tab_elem;
-            match_token(Token::Id);
             match_token(Token::EQ);
-            
             cond = false;
+
             if (g_lex_reg.token == Token::Add) {
                 cond = true;
                 signal = 1;
@@ -130,8 +132,11 @@ namespace parser {
         TSymbolElem *DVO_id;
         TSymbolElem *DVO1_id;
 
+        TSymbolElem *id = g_lex_reg.p_tab_elem;
+        match_token(Token::Id);
+
         // Error if ID was already declared.
-        if (g_lex_reg.p_tab_elem->cl != Class::Empty) {
+        if (id->cl != Class::Empty) {
             std::stringstream err;
             err << g_source.curr_line << ":identificador ja declarado ["
                 << g_lex_reg.lexeme << "].";
@@ -140,34 +145,34 @@ namespace parser {
 
         // Else set variable class and type.
         else {
-            g_lex_reg.p_tab_elem->cl = Class::Var;
-            g_lex_reg.p_tab_elem->type = DV_type;
+            id->cl = Class::Var;
+            id->type = DV_type;
         }
 
-        DVO_id = g_lex_reg.p_tab_elem;
-        match_token(Token::Id);
-
+        DVO_id = id;
         DVO(DVO_id);
 
         while (g_lex_reg.token == Token::Comma) {
             match_token(Token::Comma);
 
+            id = g_lex_reg.p_tab_elem;
+            match_token(Token::Id);
+
             // Error if ID was already declared.
-            if (g_lex_reg.p_tab_elem->cl != Class::Empty) {
+            if (id->cl != Class::Empty) {
                 std::stringstream err;
                 err << g_source.curr_line << ":identificador ja declarado ["
-                    << g_lex_reg.lexeme << "].";
+                    << id->lexeme << "].";
                 throw std::runtime_error(err.str());
             }
 
             // Else set variable class and type.
             else {
-                g_lex_reg.p_tab_elem->cl = Class::Var;
-                g_lex_reg.p_tab_elem->type = DV_type;
-                DVO1_id = g_lex_reg.p_tab_elem;
+                id->cl = Class::Var;
+                id->type = DV_type;
+                DVO1_id = id;
             }
 
-            match_token(Token::Id);
             DVO(DVO1_id);
         }
     }
@@ -205,7 +210,7 @@ namespace parser {
 
             if (g_lex_reg.length != 0) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << g_source.curr_line 
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
@@ -225,13 +230,13 @@ namespace parser {
                 if (std::stoi(g_lex_reg.lexeme) > 2048) {
                     std::stringstream err;
                     err << g_source.curr_line
-                        << ":tamanho do vetor excede.";
+                        << ":tamanho do vetor excede o máximo permitido.";
                     throw std::runtime_error(err.str());
                 }       
             } else if (std::stoi(g_lex_reg.lexeme) > 4096) {
                 std::stringstream err;
                 err << g_source.curr_line
-                    << ":tamanho do vetor excede.";
+                    << ":tamanho do vetor excede o máximo permitido.";
                 throw std::runtime_error(err.str());
             } else {
                 DVO_id->length = std::stoi(g_lex_reg.lexeme);
@@ -243,30 +248,139 @@ namespace parser {
     }
 
     void C() {
+        TSymbolElem* id;
         bool cond;
 
+        Type Exp_type;
+        int Exp_length;
+        Type Exp1_type;
+        int Exp1_length;
+
         if (g_lex_reg.token == Token::Id) {
+            id = g_lex_reg.p_tab_elem;
             match_token(Token::Id);
 
+            if (id->cl == Class::Empty) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":identificador nao declarado ["
+                    << id->lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
+            if (id->cl == Class::Const) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":classe de identificador incompatível ["
+                    << id->lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
+            cond = false;
             if (g_lex_reg.token == Token::RBracket) {
+                cond = true;
+                
                 match_token(Token::RBracket);
-                Exp();
+                Exp(Exp_type, Exp_length);
+
+                bool error = false;
+                if (Exp_type != Type::Integer) {
+                    error = true;
+                } else if (id->length == 0) {
+                    error = true;
+                }
+
+                if (error) {
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tipos incompatíveis.";
+                    throw std::runtime_error(err.str());
+                }
+
                 match_token(Token::LBracket);
             }
 
             match_token(Token::EQ);
-            Exp();
+            Exp(Exp1_type, Exp1_length);
+
+            if (id->type != Exp1_type) {
+
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+
+            } else if (!cond && id->length != 0) {
+
+                if (id->type == Type::Integer) {
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tipos incompatíveis.";
+                    throw std::runtime_error(err.str());
+
+                } else if (Exp1_type == Type::String &&
+                        id->length < Exp1_length + 1) {
+
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tamanho do vetor excede o máximo permitido.";
+                    throw std::runtime_error(err.str());
+
+                } else if (id->length < Exp1_length) {
+
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tamanho do vetor excede o máximo permitido.";
+                    throw std::runtime_error(err.str());
+
+                }
+            }
+
             match_token(Token::Semicolon);
         } else if (g_lex_reg.token == Token::For) {
             match_token(Token::For);
+
+            id = g_lex_reg.p_tab_elem;
             match_token(Token::Id);
+
+            if (id->cl == Class::Empty) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":identificador nao declarado ["
+                    << id->lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
             match_token(Token::EQ);
-            Exp();
+            Exp(Exp_type, Exp_length);
+
+            if (Exp_type != Type::Integer) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
+
             match_token(Token::To);
-            Exp();
+            Exp(Exp1_type, Exp1_length);
+
+            if (Exp1_type != Type::Integer) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
 
             if (g_lex_reg.token == Token::Step) {
                 match_token(Token::Step);
+
+                if (g_lex_reg.type != Type::Integer) {
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tipos incompatíveis.";
+                    throw std::runtime_error(err.str());
+                }
+
                 match_token(Token::Const);
             }
 
@@ -274,7 +388,15 @@ namespace parser {
             LC();
         } else if (g_lex_reg.token == Token::If) {
             match_token(Token::If);
-            Exp();
+            Exp(Exp_type, Exp_length);
+
+            if (Exp_type != Type::Bool) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
+
             match_token(Token::Then);
             LC();
 
@@ -287,7 +409,25 @@ namespace parser {
         } else if (g_lex_reg.token == Token::Readln) {
             match_token(Token::Readln);
             match_token(Token::LParen);
+
+            id = g_lex_reg.p_tab_elem;
             match_token(Token::Id);
+
+            if (id->cl == Class::Empty) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":identificador nao declarado ["
+                    << id->lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
+            if (id->type == Type::Integer && id->length != 0) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
+
             match_token(Token::RParen);
             match_token(Token::Semicolon);
         } else {
@@ -296,11 +436,27 @@ namespace parser {
             else match_token(Token::Writeln);
 
             match_token(Token::LParen);
+            Exp(Exp_type, Exp_length);
 
-            Exp();
+            if (Exp_type == Type::Integer && Exp_length != 0) {
+
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
+            
             while (g_lex_reg.token == Token::Comma) {
                 match_token(Token::Comma);
-                Exp();
+                Exp(Exp1_type, Exp1_length);
+
+                if (Exp1_type == Type::Integer && Exp1_length != 0) {
+
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tipos incompatíveis.";
+                    throw std::runtime_error(err.str());
+                }
             }
 
             match_token(Token::RParen);
@@ -325,79 +481,256 @@ namespace parser {
         } else C();
     }
 
-    void Exp() {
-        ExpS();
+    void Exp(Type &Exp_type, int &Exp_length) {
+        Operator op = Operator::None;
+
+        Type ExpS_type;
+        int ExpS_length;
+        Type ExpS1_type;
+        int ExpS1_length;
+
+        ExpS(ExpS_type, ExpS_length);
+
+        Exp_type = ExpS_type;
+        Exp_length = ExpS_length;
 
         if (g_lex_reg.token == Token::EQ) {
+            op = Operator::Eq;
             match_token(Token::EQ);
-            ExpS();
         } else if (g_lex_reg.token == Token::NE) {
+            op = Operator::Eq;
             match_token(Token::NE);
-            ExpS();
         } else if (g_lex_reg.token == Token::LT){
+            op = Operator::Eq;
             match_token(Token::LT);
-            ExpS();
         } else if (g_lex_reg.token == Token::GT){
+            op = Operator::Eq;
             match_token(Token::GT);
-            ExpS();
         } else if (g_lex_reg.token == Token::LE){
+            op = Operator::Eq;
             match_token(Token::LE);
-            ExpS();
         } else if (g_lex_reg.token == Token::GE){
+            op = Operator::Eq;
             match_token(Token::GE);
-            ExpS();
-        }       
+        }
+
+        if (op != Operator::None) {
+            ExpS(ExpS1_type, ExpS1_length);
+
+            bool error = false;
+
+            if (Exp_type != ExpS1_type) {
+                error = true;
+            } else if (op != Operator::Eq) {
+                if (Exp_length != 0 || ExpS1_length != 0) {
+                    error = true;
+                }
+            } else if ((Exp_length != 0 && ExpS1_length == 0)
+                    || (Exp_length == 0 && ExpS1_length != 0)) {
+
+                error = true;
+            }
+
+            if (error) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
+
+            Exp_type = Type::Bool;
+            Exp_length = 0;
+        }
     }
 
-    void ExpS() {
-        if (g_lex_reg.token == Token::Add) match_token(Token::Add);
-        else if (g_lex_reg.token == Token::Sub) match_token(Token::Sub);
+    void ExpS(Type &ExpS_type, int &ExpS_length) {
+        int signal = 1;
+        Operator op;
 
-        T();
+        Type T_type;
+        int T_length;
+        Type T1_type;
+        int T1_length;
+
+        if (g_lex_reg.token == Token::Add) {
+            match_token(Token::Add);
+        } else if (g_lex_reg.token == Token::Sub) {
+            signal = -1;
+            match_token(Token::Sub);
+        }
+
+        T(T_type, T_length);
+
+        ExpS_type = T_type;
+        ExpS_length = T_length;
+
         while (g_lex_reg.token == Token::Add
                 || g_lex_reg.token == Token::Sub
                 || g_lex_reg.token == Token::Or) {
         
-            if (g_lex_reg.token == Token:: Add) match_token(Token::Add);
-            else if (g_lex_reg.token == Token:: Sub) match_token(Token::Sub);
-            else match_token(Token::Or);
+            if (g_lex_reg.token == Token:: Add) {
+                op = Operator::Add;
+                match_token(Token::Add);
+            } else if (g_lex_reg.token == Token:: Sub) {
+                op = Operator::Sub;
+                match_token(Token::Sub);
+            } else {
+                op = Operator::Or;
+                match_token(Token::Or);
+            }
             
-            T();
+            T(T1_type, T1_length);
+
+            bool error = false;
+            if (op == Operator::Or &&
+                    (ExpS_type != Type::Bool ||
+                     T1_type != Type::Bool)) {
+
+                error = true;
+            } else if (ExpS_length != 0 || T1_length != 0) {
+                error = true;
+            } else if (! ((ExpS_type == Type::Integer && 
+                            T1_type == Type::Integer) ||
+                        (ExpS_type == Type::Char &&
+                         T1_type == Type::Char))) {
+
+                error = true;
+            }
+
+            if (error) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
         } 
     }
 
-    void T() {
-        F();
+    void T(Type &T_type, int &T_length) {
+        Operator op;
+
+        Type F_type;
+        int F_length;
+        Type F1_type;
+        int F1_length;
+
+        F(F_type, F_length);
         
+        T_type = F_type;
+        T_length = F_length;
+
         while (g_lex_reg.token == Token::Mult 
                 || g_lex_reg.token == Token::Div
                 || g_lex_reg.token == Token::And
                 || g_lex_reg.token == Token::Mod) {
 
-            if (g_lex_reg.token == Token::Mult) match_token(Token::Mult);
-            else if (g_lex_reg.token == Token::Div) match_token(Token::Div);
-            else if (g_lex_reg.token == Token::And) match_token(Token::And);
-            else match_token(Token::Mod);
+            if (g_lex_reg.token == Token::Mult) {
+                op = Operator::Mult;
+                match_token(Token::Mult);
+            } else if (g_lex_reg.token == Token::Div) {
+                op = Operator::Div;
+                match_token(Token::Div);
+            } else if (g_lex_reg.token == Token::And) {
+                op = Operator::And;
+                match_token(Token::And);
+            } else { 
+                op = Operator::Mod;
+                match_token(Token::Mod);
+            }
             
-            F();
+            F(F1_type, F1_length);
+
+            bool error = false;
+            if (op == Operator::And &&
+                    (T_type != Type::Bool ||
+                     F1_type != Type::Bool)) {
+
+                error = true;
+            } else if (T_length != 0 || F1_length != 0) {
+                error = true;
+            } else if (! ((T_type == Type::Integer && 
+                            F1_type == Type::Integer) ||
+                        (T_type == Type::Char &&
+                         F1_type == Type::Char))) {
+
+                error = true;
+            }
+
+            if (error) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }        
         }
     }
 
-    void F() {
+    void F(Type &F_type, int &F_length) {
+        Type F1_type;
+        int F1_length;
+
+        Type Exp_type;
+        int Exp_length;
+
         if (g_lex_reg.token == Token::Not) {
             match_token(Token::Not);
-            F();
+            F(F1_type, F1_length);
+        
+            if (F1_type != Type::Bool) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            } else {
+                F_type = F1_type;
+                F_length = F1_length;
+            }
+
         } else if (g_lex_reg.token == Token::LParen) {
             match_token(Token::LParen);
-            Exp();
             match_token(Token::RParen);
+            
+            Exp(Exp_type, Exp_length);
+            F_type = Exp_type;
+            F_length = Exp_length;
         } else if (g_lex_reg.token == Token::Const) {
+            F_type = g_lex_reg.type;
+            F_length = g_lex_reg.length;
+
             match_token(Token::Const);
         } else {
+            
+            if (g_lex_reg.p_tab_elem->cl == Class::Empty) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":identificador nao declarado ["
+                    << g_lex_reg.lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
+            F_type = g_lex_reg.p_tab_elem->type;
+            F_length = g_lex_reg.p_tab_elem->length;
+
             match_token(Token::Id);
+
             if (g_lex_reg.token == Token::LBracket) {
                 match_token(Token::LBracket);
-                Exp();
+                Exp(Exp_type, Exp_length);
+
+                bool error = false;
+                if (Exp_type != Type::Integer) {
+                    error = true;
+                } else if (F_length == 0) {
+                    error = true;
+                }
+
+                if (error) {
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tipos incompatíveis.";
+                    throw std::runtime_error(err.str());
+                }
+
                 match_token(Token::RBracket);
             }
         }

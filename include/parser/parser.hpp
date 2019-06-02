@@ -70,28 +70,44 @@ namespace parser {
      * Should call the ExpS non-terminal symbol.
      * Its rule is responsible to operators of less precedence (comparison
      * operators)
+     *
+     * Attributes:
+     * @param Type&: Exp_type
+     * @param int&: Exp_length
      */
-    void Exp();
+    void Exp(Type &Exp_type, int &Exp_length);
 
     /**
      * ExpS is a non-terminal symbol called by Exp.
      * It is responsible by the add (arithmetic and logical) and sub
      * operators.
+     *
+     * Attributes:
+     * @param Type&: Exp_type
+     * @param int&: Exp_length
      */
-    void ExpS();
+    void ExpS(Type &ExpS_type, int &ExpS_length);
 
     /**
      * T refers to the terms of an expression.
      * It is a non-terminal symbol responsible the the mult (arithmetic and 
      * logical), div and mod (%) operators.
+     *
+     * Attributes:
+     * @param Type&: T_type
+     * @param int&: T_length
      */
-    void T();
+    void T(Type &T_type, int &T_length);
 
     /**
      * F is the last non-terminal symbol that refers to an expression.
      * It is responsible by the operators of greater precedence.
+     *
+     * Attributes:
+     * @param Type&: F_type
+     * @param int&:  F_length
      */
-    void F();
+    void F(Type &F_type, int &F_length);
 
 }
 
