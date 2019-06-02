@@ -1,0 +1,1 @@
+var char string['a'];

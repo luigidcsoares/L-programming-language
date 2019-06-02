@@ -8,6 +8,7 @@
 #define PARSER_PARSER_HPP_
 
 #include "core/token.hpp"
+#include "core/table_symbol.hpp"
 
 using namespace core;
 
@@ -38,13 +39,17 @@ namespace parser {
     /**
      * Variable declaration.
      * Should begin with an identifier.
+     *
+     * @param Type: DV_type -> Char or Integer.
      */
-    void DV();
+    void DV(Type DV_type);
 
     /**
      * The optional part of declaring a variable.
+     *
+     * @param TSymbolElem*: DVO_id -> Position of id in the table of symbols.
      */
-    void DVO();
+    void DVO(TSymbolElem* DVO_id);
 
     /**
      * Command.

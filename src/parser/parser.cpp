@@ -4,14 +4,15 @@
  * @author: luigi domenico
  */
 
+#include <iostream>
 #include <sstream>
+#include "core/class.hpp"
 #include "core/global.hpp"
 #include "core/token.hpp"
 #include "lexer/lexer.hpp"
 #include "parser/parser.hpp"
 
-using namespace core;
-
+using namespace core; 
 namespace parser {
 
     void match_token(Token expected_tok) {
@@ -53,16 +54,25 @@ namespace parser {
     }
 
     void D() {
+        Type DV_type;
+        bool cond;
+        int signal;
+        TSymbolElem* id;
+
         if (g_lex_reg.token == Token::Var) {
             match_token(Token::Var);
 
             // Repeat until token isn't integer nor char.
             do {
-                if (g_lex_reg.token == Token::Integer) 
+                if (g_lex_reg.token == Token::Integer) {
                     match_token(Token::Integer);
-                else match_token(Token::Char);
+                    DV_type = Type::Integer;
+                } else {
+                    match_token(Token::Char);
+                    DV_type = Type::Char;
+                }
 
-                DV();
+                DV(DV_type);
                 match_token(Token::Semicolon);
 
             } while (g_lex_reg.token == Token::Integer
@@ -70,48 +80,171 @@ namespace parser {
 
         } else {
             match_token(Token::ConstKW);
+
+            // Error if ID was already declared.
+            if (g_lex_reg.p_tab_elem->cl != Class::Empty) {
+                std::stringstream err;
+                err << g_source.curr_line << ":identificador ja declarado ["
+                    << g_lex_reg.lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
+            id = g_lex_reg.p_tab_elem;
             match_token(Token::Id);
             match_token(Token::EQ);
             
-            if (g_lex_reg.token == Token::Add) 
-                match_token(Token::Add);
-            else if (g_lex_reg.token == Token::Sub)
-                match_token(Token::Sub);
+            cond = false;
+            if (g_lex_reg.token == Token::Add) {
+                cond = true;
+                signal = 1;
 
+                match_token(Token::Add);
+            } else if (g_lex_reg.token == Token::Sub) {
+                cond = true;
+                signal = -1;
+
+                match_token(Token::Sub);
+            }
+
+            if (cond && g_lex_reg.type != Type::Integer) {
+                std::stringstream err;
+                err << g_source.curr_line << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            } else if (g_lex_reg.type == Type::String) {
+                std::stringstream err;
+                err << g_source.curr_line << ":classe de identificador incompatível ["
+                    << g_lex_reg.lexeme << "].";
+                throw std::runtime_error(err.str());
+            } else {
+                id->type = g_lex_reg.type;
+                id->length = g_lex_reg.length;
+                id->cl = Class::Const;
+            }
+            
             match_token(Token::Const);
             match_token(Token::Semicolon);
         }
     }
 
-    void DV() {
+    void DV(Type DV_type) {
+        TSymbolElem *DVO_id;
+        TSymbolElem *DVO1_id;
+
+        // Error if ID was already declared.
+        if (g_lex_reg.p_tab_elem->cl != Class::Empty) {
+            std::stringstream err;
+            err << g_source.curr_line << ":identificador ja declarado ["
+                << g_lex_reg.lexeme << "].";
+            throw std::runtime_error(err.str());
+        }
+
+        // Else set variable class and type.
+        else {
+            g_lex_reg.p_tab_elem->cl = Class::Var;
+            g_lex_reg.p_tab_elem->type = DV_type;
+        }
+
+        DVO_id = g_lex_reg.p_tab_elem;
         match_token(Token::Id);
-        DVO();
+
+        DVO(DVO_id);
 
         while (g_lex_reg.token == Token::Comma) {
             match_token(Token::Comma);
+
+            // Error if ID was already declared.
+            if (g_lex_reg.p_tab_elem->cl != Class::Empty) {
+                std::stringstream err;
+                err << g_source.curr_line << ":identificador ja declarado ["
+                    << g_lex_reg.lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
+            // Else set variable class and type.
+            else {
+                g_lex_reg.p_tab_elem->cl = Class::Var;
+                g_lex_reg.p_tab_elem->type = DV_type;
+                DVO1_id = g_lex_reg.p_tab_elem;
+            }
+
             match_token(Token::Id);
-            DVO();
+            DVO(DVO1_id);
         }
     }
     
-    void DVO() {
+    void DVO(TSymbolElem* DVO_id) {
+        DVO_id->length = 0;
+        int signal;
+
         if (g_lex_reg.token == Token::EQ) {
             match_token(Token::EQ);
 
-            if (g_lex_reg.token == Token::Add)
+            if (g_lex_reg.token == Token::Add) {
+                signal = 1;
+
+                if (g_lex_reg.type != Type::Integer) {
+                    std::stringstream err;
+                    err << g_source.curr_line 
+                        << ":tipos incompatíveis.";
+                    throw std::runtime_error(err.str());
+                }
+
                 match_token(Token::Add);
-            else if (g_lex_reg.token == Token::Sub)
+            } else if (g_lex_reg.token == Token::Sub) {
+                signal = -1;
+
+                if (g_lex_reg.type != Type::Integer) {
+                    std::stringstream err;
+                    err << g_source.curr_line 
+                        << ":tipos incompatíveis.";
+                    throw std::runtime_error(err.str());
+                }
+
                 match_token(Token::Sub);
+            }
+
+            if (g_lex_reg.length != 0) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
 
             match_token(Token::Const);
         } else if (g_lex_reg.token == Token::LBracket) {
             match_token(Token::LBracket);
+            
+            if (g_lex_reg.type != Type::Integer) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tipos incompatíveis.";
+                throw std::runtime_error(err.str());
+            }
+
+            if (DVO_id->type == Type::Integer) {
+                if (std::stoi(g_lex_reg.lexeme) > 2048) {
+                    std::stringstream err;
+                    err << g_source.curr_line
+                        << ":tamanho do vetor excede.";
+                    throw std::runtime_error(err.str());
+                }       
+            } else if (std::stoi(g_lex_reg.lexeme) > 4096) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tamanho do vetor excede.";
+                throw std::runtime_error(err.str());
+            } else {
+                DVO_id->length = std::stoi(g_lex_reg.lexeme);
+            }
+
             match_token(Token::Const);
             match_token(Token::RBracket);
         }
     }
 
     void C() {
+        bool cond;
+
         if (g_lex_reg.token == Token::Id) {
             match_token(Token::Id);
 

@@ -4,12 +4,15 @@
  *  @author: Luigi Domenico
  */ 
 
+#include <iostream>
+#include "core/class.hpp"
 #include "core/table_symbol.hpp"
 
 namespace core {
     TSymbolElem::TSymbolElem(std::string lexeme, Token token) {
         this->lexeme = lexeme;
         this->token = token;
+        this->cl = Class::Empty;
     }
 
     TSymbolElem * TSymbol::search(std::string lexeme) {

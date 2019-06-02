@@ -4,6 +4,7 @@
  *  @author: Luigi Domenico
  */ 
 
+#include <iostream>
 #include <regex>
 #include <sstream>
 
@@ -105,7 +106,7 @@ namespace lexer {
             if (p == NULL) {
                 tok = Token::Id;
                 TSymbolElem elem(lexeme.str(), tok);
-                g_tab_symbol.insert(lexeme.str(), elem);
+                p = g_tab_symbol.insert(lexeme.str(), elem);
             } 
             
             // Else we just need to get that token to pass to
@@ -401,7 +402,7 @@ namespace lexer {
         // If we read a second quote, it is a valid string.
         else if (c == '"') {
             TSymbolElem *p = g_tab_symbol.search(lexeme.str());
-            g_lex_reg.fill(Token::Const, lexeme.str(), Type::String, 0);
+            g_lex_reg.fill(Token::Const, lexeme.str(), Type::String, lexeme.str().length());
 
             next_state = 15;
         }

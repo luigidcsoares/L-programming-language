@@ -9,6 +9,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "core/class.hpp"
 #include "core/token.hpp"
 
 namespace core {
@@ -17,8 +18,9 @@ namespace core {
     struct TSymbolElem {
         std::string lexeme;
         Token token;
-
-        // TODO: other fields (class, type, length...).
+        Class cl;
+        Type type;
+        int length;
         
         TSymbolElem(std::string lexeme, Token token);
     };
