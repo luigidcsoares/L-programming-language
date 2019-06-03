@@ -1,5 +1,6 @@
 # Source files.
-SRC = $(wildcard core/*.cpp) \
+SRC = $(wildcard codegen/*.cpp) \
+      $(wildcard core/*.cpp) \
       $(wildcard lexer/*.cpp) \
       $(wildcard parser/*.cpp) \
       $(wildcard utils/*.cpp)

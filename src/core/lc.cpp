@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+#include "codegen/codegen.hpp"
 #include "core/global.hpp"
 #include "core/table_symbol.hpp"
 #include "core/token.hpp"
@@ -67,7 +68,14 @@ int main(int argc, char *argv[]) {
     g_source.file.open(input);
     g_source.curr_line = 1;
 
+    std::string output = "output.asm";
+    if (argc > 2) {
+        output = argv[2];
+    }
+
     try {
+        codegen::create_ofile(output);
+
         lexer::next();
         S();
         
@@ -83,5 +91,7 @@ int main(int argc, char *argv[]) {
     }
 
     g_source.file.close();
+    codegen::close();
+
     return 0;
 }

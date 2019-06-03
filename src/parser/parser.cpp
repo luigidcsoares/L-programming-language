@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <sstream>
+#include "codegen/codegen.hpp"
 #include "core/class.hpp"
 #include "core/global.hpp"
 #include "core/operator.hpp"
@@ -13,7 +14,9 @@
 #include "lexer/lexer.hpp"
 #include "parser/parser.hpp"
 
+using namespace codegen;
 using namespace core; 
+
 namespace parser {
 
     void match_token(Token expected_tok) {
@@ -36,11 +39,19 @@ namespace parser {
     }
 
     void S() {
+        // Create stack segment & init data segment.
+        create_sseg();
+        init_dseg();
+
         // While token belongs to First of {D},
         // call D.
         while (g_lex_reg.token == Token::Var
                 || g_lex_reg.token == Token::ConstKW)
             D();
+
+        // End dseg & init code segment;
+        end_dseg();
+        init_cseg();
 
         // While token belongs to First of {C},
         // call C.
@@ -52,6 +63,9 @@ namespace parser {
                 || g_lex_reg.token == Token::Write
                 || g_lex_reg.token == Token::Writeln)
             C();
+
+        // End code segment & program.
+        end_cseg();
     }
 
     void D() {
@@ -108,22 +122,37 @@ namespace parser {
                 match_token(Token::Sub);
             }
 
-            if (cond && g_lex_reg.type != Type::Integer) {
+            std::string const_lex = g_lex_reg.lexeme;
+            Type const_type = g_lex_reg.type;
+            int const_length = g_lex_reg.length;
+
+            match_token(Token::Const);
+
+            if (cond && const_type != Type::Integer) {
                 std::stringstream err;
                 err << g_source.curr_line << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
-            } else if (g_lex_reg.type == Type::String) {
+            } else if (const_type == Type::String) {
                 std::stringstream err;
                 err << g_source.curr_line << ":classe de identificador incompatível ["
-                    << g_lex_reg.lexeme << "].";
+                    << const_lex << "].";
                 throw std::runtime_error(err.str());
             } else {
-                id->type = g_lex_reg.type;
-                id->length = g_lex_reg.length;
+                id->type = const_type;
+                id->length = const_length;
                 id->cl = Class::Const;
             }
-            
-            match_token(Token::Const);
+
+            int val;
+            if (id->type == Type::Integer) {
+                val = std::stoi(const_lex);
+
+                if (cond) val = signal * val;
+            } else {
+                val = const_lex[1];
+            }
+
+            put_dseg(id->cl, id->type, id->length, val);
             match_token(Token::Semicolon);
         }
     }
