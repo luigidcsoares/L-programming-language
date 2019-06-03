@@ -139,7 +139,7 @@ namespace parser {
         if (id->cl != Class::Empty) {
             std::stringstream err;
             err << g_source.curr_line << ":identificador ja declarado ["
-                << g_lex_reg.lexeme << "].";
+                << id->lexeme << "].";
             throw std::runtime_error(err.str());
         }
 
@@ -439,27 +439,41 @@ namespace parser {
             match_token(Token::RParen);
             match_token(Token::Semicolon);
         } else {
-            if (g_lex_reg.token == Token::Write)
+            if (g_lex_reg.token == Token::Write) {
                 match_token(Token::Write);
-            else match_token(Token::Writeln);
+            } else {
+                match_token(Token::Writeln);
+            }
 
             match_token(Token::LParen);
             Exp(Exp_type, Exp_length);
 
+            bool error = false;
             if (Exp_type == Type::Integer && Exp_length != 0) {
-
+                error = true;
+            } else if (Exp_type == Type::Bool) {
+                error = true;
+            }
+           
+            if (error) {
                 std::stringstream err;
                 err << g_source.curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
-            
+
             while (g_lex_reg.token == Token::Comma) {
                 match_token(Token::Comma);
                 Exp(Exp1_type, Exp1_length);
 
+                error = false;
                 if (Exp1_type == Type::Integer && Exp1_length != 0) {
-
+                    error = true;
+                } else if (Exp1_type == Type::Bool) {
+                    error = true;
+                }
+               
+                if (error) {
                     std::stringstream err;
                     err << g_source.curr_line
                         << ":tipos incompatíveis.";
@@ -526,16 +540,17 @@ namespace parser {
             ExpS(ExpS1_type, ExpS1_length);
 
             bool error = false;
-
-            if (Exp_type != ExpS1_type) {
+            if (Exp_type == Type::Bool || ExpS1_type == Type::Bool) {
                 error = true;
-            } else if (op != Operator::Eq) {
-                if (Exp_length != 0 || ExpS1_length != 0) {
+            } else if (Exp_length != 0 || ExpS1_length != 0) {
+                if (Exp_type == Type::Integer || ExpS1_type == Type::Integer) {
+                    error = true;
+                } else if (op != Operator::Eq) {
+                    error = true;
+                } else if (Exp_length == 0 || ExpS1_length == 0) {
                     error = true;
                 }
-            } else if ((Exp_length != 0 && ExpS1_length == 0)
-                    || (Exp_length == 0 && ExpS1_length != 0)) {
-
+            } else if (Exp_type != ExpS1_type) {
                 error = true;
             }
 
