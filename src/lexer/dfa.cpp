@@ -4,6 +4,7 @@
  *  @author: Luigi Domenico
  */ 
 
+#include <algorithm>
 #include <iostream>
 #include <regex>
 #include <sstream>
@@ -97,8 +98,15 @@ namespace lexer {
                 c == '_' || c == '.') {
             lexeme << c;
         } else {
+            // L is case insensitive.
+            std::string lower_lex = lexeme.str();
+            std::transform(
+                    lower_lex.begin(), lower_lex.end(),
+                    lower_lex.begin(), ::tolower
+            );
+
             // Search for the lexeme.
-            TSymbolElem *p = g_tab_symbol.search(lexeme.str());
+            TSymbolElem *p = g_tab_symbol.search(lower_lex);
             Token tok;
 
             // If the search returns null this is a new identifier
@@ -106,14 +114,14 @@ namespace lexer {
             if (p == NULL) {
                 tok = Token::Id;
                 TSymbolElem elem(lexeme.str(), tok);
-                p = g_tab_symbol.insert(lexeme.str(), elem);
+                p = g_tab_symbol.insert(lower_lex, elem);
             } 
             
             // Else we just need to get that token to pass to
             // the lexical register.
             else tok = p->token;
 
-            g_lex_reg.fill(tok, lexeme.str(), p);
+            g_lex_reg.fill(tok, lower_lex, p);
 
             // Put character back to be read again and go to the
             // final state.

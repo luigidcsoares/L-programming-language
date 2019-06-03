@@ -50,8 +50,6 @@ namespace lexer {
             // If we didn't reach EOF yet, we need to check
             // whether the next character is a valid one or not.
             if (g_source.file.get(c)) {
-                c = tolower(c); // Since L is case insensitive.
-
                 // Handling the current line number.
                 if (c == '\n') g_source.curr_line++;
 
