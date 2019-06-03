@@ -180,69 +180,74 @@ namespace parser {
     void DVO(TSymbolElem* DVO_id) {
         DVO_id->length = 0;
         int signal;
+        bool cond;
 
         if (g_lex_reg.token == Token::EQ) {
+            cond = false;
             match_token(Token::EQ);
 
             if (g_lex_reg.token == Token::Add) {
-                signal = 1;
-
-                if (g_lex_reg.type != Type::Integer) {
-                    std::stringstream err;
-                    err << g_source.curr_line 
-                        << ":tipos incompatíveis.";
-                    throw std::runtime_error(err.str());
-                }
-
                 match_token(Token::Add);
+                signal = 1;
+                cond = true;
             } else if (g_lex_reg.token == Token::Sub) {
-                signal = -1;
-
-                if (g_lex_reg.type != Type::Integer) {
-                    std::stringstream err;
-                    err << g_source.curr_line 
-                        << ":tipos incompatíveis.";
-                    throw std::runtime_error(err.str());
-                }
-
                 match_token(Token::Sub);
+                signal = -1;
+                cond = true;
             }
 
-            if (g_lex_reg.length != 0) {
+            Type const_type = g_lex_reg.type;
+            match_token(Token::Const);
+
+            bool error = false;
+            if (cond && const_type != Type::Integer) {
+                error = true;
+            } else if (DVO_id->type != const_type) {
+                error = true;
+            }
+        
+            if (error) {
                 std::stringstream err;
                 err << g_source.curr_line 
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
-
-            match_token(Token::Const);
         } else if (g_lex_reg.token == Token::LBracket) {
             match_token(Token::LBracket);
             
-            if (g_lex_reg.type != Type::Integer) {
+            std::string const1_lex = g_lex_reg.lexeme;
+            Type const1_type = g_lex_reg.type;
+            match_token(Token::Const);
+
+            if (const1_type != Type::Integer) {
                 std::stringstream err;
                 err << g_source.curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
 
+            if (std::stoi(const1_lex) <= 0) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":tamanho do vetor insuficiente.";
+                throw std::runtime_error(err.str());
+            }
+
             if (DVO_id->type == Type::Integer) {
-                if (std::stoi(g_lex_reg.lexeme) > 2048) {
+                if (std::stoi(const1_lex) > 2048) {
                     std::stringstream err;
                     err << g_source.curr_line
                         << ":tamanho do vetor excede o máximo permitido.";
                     throw std::runtime_error(err.str());
                 }       
-            } else if (std::stoi(g_lex_reg.lexeme) > 4096) {
+            } else if (std::stoi(const1_lex) > 4096) {
                 std::stringstream err;
                 err << g_source.curr_line
                     << ":tamanho do vetor excede o máximo permitido.";
                 throw std::runtime_error(err.str());
-            } else {
-                DVO_id->length = std::stoi(g_lex_reg.lexeme);
             }
 
-            match_token(Token::Const);
+            DVO_id->length = std::stoi(const1_lex);
             match_token(Token::RBracket);
         }
     }
@@ -277,10 +282,10 @@ namespace parser {
             }
 
             cond = false;
-            if (g_lex_reg.token == Token::RBracket) {
+            if (g_lex_reg.token == Token::LBracket) {
                 cond = true;
-                
-                match_token(Token::RBracket);
+        
+                match_token(Token::LBracket);
                 Exp(Exp_type, Exp_length);
 
                 bool error = false;
@@ -297,43 +302,46 @@ namespace parser {
                     throw std::runtime_error(err.str());
                 }
 
-                match_token(Token::LBracket);
+                match_token(Token::RBracket);
             }
 
             match_token(Token::EQ);
             Exp(Exp1_type, Exp1_length);
 
-            if (id->type != Exp1_type) {
+            bool error = false;
+            if (Exp1_type == Type::Bool) {
+                error = true;
 
+                // Accessing element of vector.
+            } else if (cond) {
+                if (id->type != Exp1_type) {
+                    error = true;
+                } else if (Exp1_length != 0) {
+                    error = true;
+                }
+            } else if (id->type == Type::Integer) {
+                if (Exp1_type != Type::Integer) {
+                    error = true;
+                } else if (id->length != 0 || Exp1_length != 0) {
+                    error = true;
+                }
+            } else if (id->length == 0 && Exp1_length != 0) {
+                error = true;
+            } else if (! (Exp1_type == Type::Char || Exp1_type == Type::String)) {
+                error = true;
+            } else if (Exp1_type == Type::String) {
+                if (id->length < Exp1_length + 1) {
+                    error = true;
+                }
+            } else if (id->length < Exp1_length) {
+                error = true;
+            }
+
+            if (error) {
                 std::stringstream err;
                 err << g_source.curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
-
-            } else if (!cond && id->length != 0) {
-
-                if (id->type == Type::Integer) {
-                    std::stringstream err;
-                    err << g_source.curr_line
-                        << ":tipos incompatíveis.";
-                    throw std::runtime_error(err.str());
-
-                } else if (Exp1_type == Type::String &&
-                        id->length < Exp1_length + 1) {
-
-                    std::stringstream err;
-                    err << g_source.curr_line
-                        << ":tamanho do vetor excede o máximo permitido.";
-                    throw std::runtime_error(err.str());
-
-                } else if (id->length < Exp1_length) {
-
-                    std::stringstream err;
-                    err << g_source.curr_line
-                        << ":tamanho do vetor excede o máximo permitido.";
-                    throw std::runtime_error(err.str());
-
-                }
             }
 
             match_token(Token::Semicolon);
@@ -688,9 +696,9 @@ namespace parser {
 
         } else if (g_lex_reg.token == Token::LParen) {
             match_token(Token::LParen);
+            Exp(Exp_type, Exp_length);
             match_token(Token::RParen);
             
-            Exp(Exp_type, Exp_length);
             F_type = Exp_type;
             F_length = Exp_length;
         } else if (g_lex_reg.token == Token::Const) {
