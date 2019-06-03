@@ -215,6 +215,8 @@ namespace parser {
         int signal;
         bool cond;
 
+        int val = -1;
+
         if (g_lex_reg.token == Token::EQ) {
             cond = false;
             match_token(Token::EQ);
@@ -229,6 +231,7 @@ namespace parser {
                 cond = true;
             }
 
+            std::string const_lex = g_lex_reg.lexeme;
             Type const_type = g_lex_reg.type;
             match_token(Token::Const);
 
@@ -244,6 +247,14 @@ namespace parser {
                 err << g_source.curr_line 
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
+            }
+
+            if (DVO_id->type == Type::Integer) {
+                val = std::stoi(const_lex);
+
+                if (cond) val = signal * val;
+            } else {
+                val = const_lex[1];
             }
         } else if (g_lex_reg.token == Token::LBracket) {
             match_token(Token::LBracket);
@@ -283,6 +294,8 @@ namespace parser {
             DVO_id->length = std::stoi(const1_lex);
             match_token(Token::RBracket);
         }
+
+        DVO_id->end = put_dseg(DVO_id->cl, DVO_id->type, DVO_id->length, val);
     }
 
     void C() {

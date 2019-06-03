@@ -32,7 +32,7 @@ namespace codegen {
 
         std::string decl_tail = len == 0 
             ? decl_val
-            : std::to_string(len) + "DUP(?)";
+            : std::to_string(len) + " DUP(?)";
 
         std::string comment_type = type == Type::Integer
             ? len == 0 ? "int" : "vec. int"
