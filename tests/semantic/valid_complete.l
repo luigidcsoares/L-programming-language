@@ -5,7 +5,6 @@ Var char tanguinha = 0x5F;
 Var integer salaminho [20];
 Var char a = 'A';
 Var integer n = 1, h, j = 4;
-Var char j;
 Var char teste [20];
 Const b = 1;
 Const c = +3;
@@ -23,11 +22,11 @@ for n = 1 to 10 step 2 do{
 	}
 }
 
-if((n or b) > 1) then {
+if((n > 1) or (n < b)) then {
 	a = 'A' + 'B';
 }
 
-if((n and b) < 1) then {
+if((n > 1) and (n >= b)) then {
 	a = 'A' + 'B';
 }
 
@@ -61,15 +60,16 @@ salaminho[4] = 4/2;
 salaminho[5] = (+4*(-2));
 salaminho[6] = -10;
 
-if(not(a == 'D')) then {
+if(not(a = 'D')) then {
 	write(1);
 	write(salaminho[1]);
 	write((+5));
 	writeln(1);
 	writeln(salaminho[1]);
 	writeln((+5));
-	readln(salaminho[6]);
-	readln(4);
+	readln(n);
+        readln(a);
 }
 
+for n = 1 to 10 do ;
 /*Erro esperado: nenhum error*/

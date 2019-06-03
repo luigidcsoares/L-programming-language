@@ -359,6 +359,14 @@ namespace parser {
                 throw std::runtime_error(err.str());
             }
 
+            if (id->cl == Class::Const) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":classe de identificador incompatível ["
+                    << id->lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
             match_token(Token::EQ);
             Exp(Exp_type, Exp_length);
 
@@ -425,6 +433,14 @@ namespace parser {
                 std::stringstream err;
                 err << g_source.curr_line
                     << ":identificador nao declarado ["
+                    << id->lexeme << "].";
+                throw std::runtime_error(err.str());
+            }
+
+            if (id->cl == Class::Const) {
+                std::stringstream err;
+                err << g_source.curr_line
+                    << ":classe de identificador incompatível ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
             }
@@ -605,11 +621,11 @@ namespace parser {
             T(T1_type, T1_length);
 
             bool error = false;
-            if (op == Operator::Or &&
-                    (ExpS_type != Type::Bool ||
-                     T1_type != Type::Bool)) {
+            if (op == Operator::Or) {
+                if (ExpS_type != Type::Bool || T1_type != Type::Bool) {
 
-                error = true;
+                    error = true;
+                }   
             } else if (ExpS_length != 0 || T1_length != 0) {
                 error = true;
             } else if (! ((ExpS_type == Type::Integer && 
@@ -664,11 +680,11 @@ namespace parser {
             F(F1_type, F1_length);
 
             bool error = false;
-            if (op == Operator::And &&
-                    (T_type != Type::Bool ||
-                     F1_type != Type::Bool)) {
+            if (op == Operator::And) {
+                if (T_type != Type::Bool || F1_type != Type::Bool) {
 
-                error = true;
+                    error = true;
+                }
             } else if (T_length != 0 || F1_length != 0) {
                 error = true;
             } else if (! ((T_type == Type::Integer && 
@@ -694,6 +710,8 @@ namespace parser {
 
         Type Exp_type;
         int Exp_length;
+
+        TSymbolElem* id;
 
         if (g_lex_reg.token == Token::Not) {
             match_token(Token::Not);
@@ -722,8 +740,10 @@ namespace parser {
 
             match_token(Token::Const);
         } else {
-            
-            if (g_lex_reg.p_tab_elem->cl == Class::Empty) {
+            id = g_lex_reg.p_tab_elem; 
+            match_token(Token::Id);
+
+            if (id->cl == Class::Empty) {
                 std::stringstream err;
                 err << g_source.curr_line
                     << ":identificador nao declarado ["
@@ -731,20 +751,20 @@ namespace parser {
                 throw std::runtime_error(err.str());
             }
 
-            F_type = g_lex_reg.p_tab_elem->type;
-            F_length = g_lex_reg.p_tab_elem->length;
-
-            match_token(Token::Id);
+            F_type = id->type;
+            F_length = id->length;
 
             if (g_lex_reg.token == Token::LBracket) {
                 match_token(Token::LBracket);
                 Exp(Exp_type, Exp_length);
-
+               
                 bool error = false;
                 if (Exp_type != Type::Integer) {
                     error = true;
-                } else if (F_length == 0) {
+                } else if (id->length == 0) {
                     error = true;
+                } else {
+                    F_length = 0;
                 }
 
                 if (error) {

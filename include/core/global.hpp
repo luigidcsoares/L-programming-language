@@ -27,7 +27,6 @@ namespace core {
 
     // Source program
     extern Source g_source;
-
 }
 
 #endif
