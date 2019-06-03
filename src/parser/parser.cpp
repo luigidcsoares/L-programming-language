@@ -97,12 +97,13 @@ namespace parser {
             match_token(Token::ConstKW);
 
             id = g_lex_reg.p_tab_elem;
+            int curr_line = g_source.curr_line;
             match_token(Token::Id);
 
             // Error if ID was already declared.
             if (id->cl != Class::Empty) {
                 std::stringstream err;
-                err << g_source.curr_line << ":identificador ja declarado ["
+                err << curr_line << ":identificador ja declarado ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
             }
@@ -125,16 +126,17 @@ namespace parser {
             std::string const_lex = g_lex_reg.lexeme;
             Type const_type = g_lex_reg.type;
             int const_length = g_lex_reg.length;
+            curr_line = g_source.curr_line;
 
             match_token(Token::Const);
 
             if (cond && const_type != Type::Integer) {
                 std::stringstream err;
-                err << g_source.curr_line << ":tipos incompatíveis.";
+                err << curr_line << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             } else if (const_type == Type::String) {
                 std::stringstream err;
-                err << g_source.curr_line << ":classe de identificador incompatível ["
+                err << curr_line << ":classe de identificador incompatível ["
                     << const_lex << "].";
                 throw std::runtime_error(err.str());
             } else {
@@ -152,7 +154,7 @@ namespace parser {
                 val = const_lex[1];
             }
 
-            put_dseg(id->cl, id->type, id->length, val);
+            id->end = put_dseg(id->cl, id->type, id->length, val);
             match_token(Token::Semicolon);
         }
     }
@@ -162,12 +164,13 @@ namespace parser {
         TSymbolElem *DVO1_id;
 
         TSymbolElem *id = g_lex_reg.p_tab_elem;
+        int curr_line = g_source.curr_line;
         match_token(Token::Id);
 
         // Error if ID was already declared.
         if (id->cl != Class::Empty) {
             std::stringstream err;
-            err << g_source.curr_line << ":identificador ja declarado ["
+            err << curr_line << ":identificador ja declarado ["
                 << id->lexeme << "].";
             throw std::runtime_error(err.str());
         }
@@ -185,12 +188,13 @@ namespace parser {
             match_token(Token::Comma);
 
             id = g_lex_reg.p_tab_elem;
+            int curr_line = g_source.curr_line;
             match_token(Token::Id);
 
             // Error if ID was already declared.
             if (id->cl != Class::Empty) {
                 std::stringstream err;
-                err << g_source.curr_line << ":identificador ja declarado ["
+                err << curr_line << ":identificador ja declarado ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
             }
@@ -292,11 +296,12 @@ namespace parser {
 
         if (g_lex_reg.token == Token::Id) {
             id = g_lex_reg.p_tab_elem;
+            int curr_line = g_source.curr_line;
             match_token(Token::Id);
 
             if (id->cl == Class::Empty) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":identificador nao declarado ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
@@ -304,7 +309,7 @@ namespace parser {
 
             if (id->cl == Class::Const) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":classe de identificador incompatível ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
@@ -378,11 +383,12 @@ namespace parser {
             match_token(Token::For);
 
             id = g_lex_reg.p_tab_elem;
+            int curr_line = g_source.curr_line;
             match_token(Token::Id);
 
             if (id->cl == Class::Empty) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":identificador nao declarado ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
@@ -390,7 +396,7 @@ namespace parser {
 
             if (id->cl == Class::Const) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":classe de identificador incompatível ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
@@ -456,11 +462,12 @@ namespace parser {
             match_token(Token::LParen);
 
             id = g_lex_reg.p_tab_elem;
+            int curr_line = g_source.curr_line;
             match_token(Token::Id);
 
             if (id->cl == Class::Empty) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":identificador nao declarado ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
@@ -468,7 +475,7 @@ namespace parser {
 
             if (id->cl == Class::Const) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":classe de identificador incompatível ["
                     << id->lexeme << "].";
                 throw std::runtime_error(err.str());
@@ -476,7 +483,7 @@ namespace parser {
 
             if (id->type == Type::Integer && id->length != 0) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
@@ -769,12 +776,13 @@ namespace parser {
 
             match_token(Token::Const);
         } else {
-            id = g_lex_reg.p_tab_elem; 
+            id = g_lex_reg.p_tab_elem;
+            int curr_line = g_source.curr_line;
             match_token(Token::Id);
 
             if (id->cl == Class::Empty) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":identificador nao declarado ["
                     << g_lex_reg.lexeme << "].";
                 throw std::runtime_error(err.str());

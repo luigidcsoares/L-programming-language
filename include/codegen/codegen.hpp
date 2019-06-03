@@ -55,7 +55,7 @@ namespace codegen {
      * @param int: len -> length (0 or vector size).
      * @param int: val -> val (-1 if wasn't setted yet).
      */
-    unsigned int put_dseg(Class cl, Type type, int len, int val);
+    int put_dseg(Class cl, Type type, int len, int val);
 
     /**
      * Finish the data segment.

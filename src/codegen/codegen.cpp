@@ -21,7 +21,7 @@ namespace codegen {
         writeln("\tbyte 4000h DUP(?)\t; Temporários");
     }
 
-    unsigned int put_dseg(Class cl, Type type, int len, int val) {
+    int put_dseg(Class cl, Type type, int len, int val) {
         std::string decl_type = type == Type::Char 
             ? "byte" 
             : "sword";
@@ -48,7 +48,7 @@ namespace codegen {
             << decl_type
             << " "
             << decl_tail
-            << "\t\t"
+            << "\t\t\t"
             << decl_comment
             << " em "
             << dseg_counter;

@@ -8,8 +8,8 @@ Var integer n = 1, h, j = 4;
 Var char teste [20];
 Const b = 1;
 Const c = +3;
-Const d = -5;
 Const e = 'C';
+Const d = -5;
 
 /*Programa Principal*/
 teste = "Tails e Sonic";
