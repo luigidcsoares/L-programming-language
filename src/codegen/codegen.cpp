@@ -271,4 +271,49 @@ namespace codegen {
 
         return ExpS_addr;
     }
+
+    int write_exp(
+            Type Exp_type, Operator op,
+            int Exp_addr, int ExpS1_addr,
+            int Exp_length
+    ) {
+        writeln("\n\t; ============ Op. Exp ===========");
+        writeln("\tmov AX, DS:[" + std::to_string(Exp_addr) + "]");
+        writeln("\tmov BX, DS:[" + std::to_string(ExpS1_addr) + "]");
+
+        std::string label_true;
+        std::string label_end;
+
+        // First we're doing non-vector comp.
+        if (Exp_length == 0) {
+            writeln("\tmov AH, 0");
+            writeln("\tmov BH, 0");
+            writeln("\tcmp AX, BX");
+
+            label_true = new_label();
+            std::string cmp = op == Operator::Eq ? "je "
+                : op == Operator::Neq ? "jne "
+                : op == Operator::Lt ? "jl "
+                : op == Operator::Gt ? "jg "
+                : op == Operator::Lte ? "jle "
+                : "jge ";
+            cmp += label_true;
+
+            writeln("\t" + cmp);
+            writeln("\tmov AX, 0");
+
+            label_end = new_label();
+            writeln("\tjmp " + label_end);
+
+            writeln("\t" + label_true + ":");
+            writeln("\t\tmov AX, 1");
+
+            writeln("\t" + label_end + ":");
+            Exp_addr = new_tmp(Exp_type, 0);
+            writeln("\t\tmov DS:[" + std::to_string(Exp_addr) +
+                    "], AX");
+        }
+
+        return Exp_addr;
+    }       
 }

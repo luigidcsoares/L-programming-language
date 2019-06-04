@@ -47,39 +47,81 @@ strt:				; Início do programa
 	mov AX, 68
 	mov DS:[4], AX
 
+	; ============ Op. Exp ===========
+	mov AX, DS:[16445]
+	mov BX, DS:[4]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	jne R1
+	mov AX, 0
+	jmp R2
+	R1:
+		mov AX, 1
+	R2:
+		mov DS:[5], AX
+
 	; ============ Temp. Const. ('A') ===========
 	mov AX, 65
-	mov DS:[5], AX
+	mov DS:[6], AX
 
 	; ============ Temp. Const. ('B') ===========
 	mov AX, 66
-	mov DS:[6], AX
+	mov DS:[7], AX
 
 	; ============ Op. ExpS ===========
-	mov AX, DS:[5]
-	mov BX, DS:[6]
+	mov AX, DS:[6]
+	mov BX, DS:[7]
 	mov AH, 0
 	mov BH, 0
 	add AX, BX
-	mov DS:[7], AL
+	mov DS:[8], AL
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[8], AX
+	mov DS:[9], AX
 
 	; ============ Op. ExpS ===========
 	mov AX, DS:[16446]
-	mov BX, DS:[8]
+	mov BX, DS:[9]
 	add AX, BX
-	mov DS:[10], AX
+	mov DS:[11], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[12], AX
+	mov DS:[13], AX
+
+	; ============ Op. Exp ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[13]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	jg R3
+	mov AX, 0
+	jmp R4
+	R3:
+		mov AX, 1
+	R4:
+		mov DS:[15], AX
+
+	; ============ Op. Exp ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[16472]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	jl R5
+	mov AX, 0
+	jmp R6
+	R5:
+		mov AX, 1
+	R6:
+		mov DS:[16], AX
 
 	; ============ Op. ExpS ===========
-	mov AX, DS:[16446]
-	mov BX, DS:[16446]
+	mov AX, DS:[15]
+	mov BX, DS:[16]
 	mov AH, 0
 	mov BH, 0
 	mov CX, AX
@@ -87,55 +129,63 @@ strt:				; Início do programa
 	imul BX
 	sub CX, AX
 	mov AX, CX
-	mov DS:[14], AL
+	mov DS:[17], AL
 
 	; ============ Temp. Const. ('A') ===========
 	mov AX, 65
-	mov DS:[15], AX
+	mov DS:[18], AX
 
 	; ============ Temp. Const. ('B') ===========
 	mov AX, 66
-	mov DS:[16], AX
+	mov DS:[19], AX
 
 	; ============ Op. ExpS ===========
-	mov AX, DS:[15]
-	mov BX, DS:[16]
+	mov AX, DS:[18]
+	mov BX, DS:[19]
 	mov AH, 0
 	mov BH, 0
 	add AX, BX
-	mov DS:[17], AL
+	mov DS:[20], AL
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[18], AX
+	mov DS:[21], AX
+
+	; ============ Op. Exp ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[21]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	jg R7
+	mov AX, 0
+	jmp R8
+	R7:
+		mov AX, 1
+	R8:
+		mov DS:[23], AX
+
+	; ============ Op. Exp ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[16472]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	jge R9
+	mov AX, 0
+	jmp R10
+	R9:
+		mov AX, 1
+	R10:
+		mov DS:[24], AX
 
 	; ============ Op. Termo ===========
-	mov AX, DS:[16446]
-	mov BX, DS:[16446]
+	mov AX, DS:[23]
+	mov BX, DS:[24]
 	mov AH, 0
 	mov BH, 0
 	imul BX
-	mov DS:[20], AL
-
-	; ============ Temp. Const. ('A') ===========
-	mov AX, 65
-	mov DS:[21], AX
-
-	; ============ Temp. Const. ('B') ===========
-	mov AX, 66
-	mov DS:[22], AX
-
-	; ============ Op. ExpS ===========
-	mov AX, DS:[21]
-	mov BX, DS:[22]
-	mov AH, 0
-	mov BH, 0
-	add AX, BX
-	mov DS:[23], AL
-
-	; ============ Temp. Const. (1) ===========
-	mov AX, 1
-	mov DS:[24], AX
+	mov DS:[25], AL
 
 	; ============ Temp. Const. ('A') ===========
 	mov AX, 65
@@ -157,170 +207,213 @@ strt:				; Início do programa
 	mov AX, 1
 	mov DS:[29], AX
 
+	; ============ Op. Exp ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[29]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	jle R11
+	mov AX, 0
+	jmp R12
+	R11:
+		mov AX, 1
+	R12:
+		mov DS:[31], AX
+
 	; ============ Temp. Const. ('A') ===========
 	mov AX, 65
-	mov DS:[31], AX
+	mov DS:[32], AX
 
 	; ============ Temp. Const. ('B') ===========
 	mov AX, 66
-	mov DS:[32], AX
+	mov DS:[33], AX
 
 	; ============ Op. ExpS ===========
-	mov AX, DS:[31]
-	mov BX, DS:[32]
+	mov AX, DS:[32]
+	mov BX, DS:[33]
 	mov AH, 0
 	mov BH, 0
 	add AX, BX
-	mov DS:[33], AL
+	mov DS:[34], AL
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[34], AX
+	mov DS:[35], AX
+
+	; ============ Op. Exp ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[35]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	jge R13
+	mov AX, 0
+	jmp R14
+	R13:
+		mov AX, 1
+	R14:
+		mov DS:[37], AX
+
+	; ============ Temp. Const. ('A') ===========
+	mov AX, 65
+	mov DS:[38], AX
+
+	; ============ Temp. Const. ('B') ===========
+	mov AX, 66
+	mov DS:[39], AX
+
+	; ============ Op. ExpS ===========
+	mov AX, DS:[38]
+	mov BX, DS:[39]
+	mov AH, 0
+	mov BH, 0
+	add AX, BX
+	mov DS:[40], AL
+
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[41], AX
 
 	; ============ Temp. Const. (10) ===========
 	mov AX, 10
-	mov DS:[36], AX
+	mov DS:[43], AX
 
 	; ============ Temp. Const. (12) ===========
 	mov AX, 12
-	mov DS:[38], AX
+	mov DS:[45], AX
+
+	; ============ Op. Exp ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[45]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	je R15
+	mov AX, 0
+	jmp R16
+	R15:
+		mov AX, 1
+	R16:
+		mov DS:[47], AX
 
 	; ============ Temp. Const. (2) ===========
 	mov AX, 2
-	mov DS:[40], AX
+	mov DS:[48], AX
 
 	; ============ Op. Termo ===========
 	mov AX, DS:[16446]
-	mov BX, DS:[40]
+	mov BX, DS:[48]
 	cwd
 	idiv BX
 	mov AX, DX
-	mov DS:[42], AX
+	mov DS:[50], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[44], AX
+	mov DS:[52], AX
 
 	; ============ Temp. Const. ('M') ===========
 	mov AX, 77
-	mov DS:[46], AX
+	mov DS:[54], AX
 
 	; ============ Temp. Const. (2) ===========
 	mov AX, 2
-	mov DS:[47], AX
+	mov DS:[55], AX
 
 	; ============ Temp. Const. (0x41) ===========
 	mov AX, 65
-	mov DS:[49], AX
+	mov DS:[57], AX
 
 	; ============ Temp. Const. (3) ===========
 	mov AX, 3
-	mov DS:[50], AX
+	mov DS:[58], AX
 
 	; ============ Temp. Const. (0x43) ===========
 	mov AX, 67
-	mov DS:[52], AX
+	mov DS:[60], AX
 
 	; ============ Temp. Const. (4) ===========
 	mov AX, 4
-	mov DS:[53], AX
+	mov DS:[61], AX
 
 	; ============ Temp. Const. (0x4F) ===========
 	mov AX, 79
-	mov DS:[55], AX
+	mov DS:[63], AX
 
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
-	mov DS:[56], AX
+	mov DS:[64], AX
 
 	; ============ Temp. Const. ('N') ===========
 	mov AX, 78
-	mov DS:[58], AX
+	mov DS:[66], AX
 
 	; ============ Temp. Const. (6) ===========
 	mov AX, 6
-	mov DS:[59], AX
+	mov DS:[67], AX
 
 	; ============ Temp. Const. ('H') ===========
 	mov AX, 72
-	mov DS:[61], AX
+	mov DS:[69], AX
 
 	; ============ Temp. Const. (7) ===========
 	mov AX, 7
-	mov DS:[62], AX
+	mov DS:[70], AX
 
 	; ============ Temp. Const. (0x41) ===========
 	mov AX, 65
-	mov DS:[64], AX
+	mov DS:[72], AX
 
 	; ============ Temp. Const. (8) ===========
 	mov AX, 8
-	mov DS:[65], AX
+	mov DS:[73], AX
 
 	; ============ Temp. Const. ('.') ===========
 	mov AX, 46
-	mov DS:[67], AX
+	mov DS:[75], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[68], AX
-
-	; ============ Temp. Const. (5) ===========
-	mov AX, 5
-	mov DS:[70], AX
-
-	; ============ Temp. Const. (2) ===========
-	mov AX, 2
-	mov DS:[72], AX
-
-	; ============ Temp. Const. (4) ===========
-	mov AX, 4
-	mov DS:[74], AX
-
-	; ============ Neg. Termo ===========
-	mov AX, DS:[74]
-	neg AX
-	mov DS:[74], AX
-
-	; ============ Temp. Const. (3) ===========
-	mov AX, 3
 	mov DS:[76], AX
 
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
 	mov DS:[78], AX
 
-	; ============ Temp. Const. (3) ===========
-	mov AX, 3
-	mov DS:[80], AX
-
-	; ============ Op. ExpS ===========
-	mov AX, DS:[78]
-	mov BX, DS:[80]
-	add AX, BX
-	mov DS:[82], AX
-
-	; ============ Temp. Const. (4) ===========
-	mov AX, 4
-	mov DS:[84], AX
-
-	; ============ Temp. Const. (4) ===========
-	mov AX, 4
-	mov DS:[86], AX
-
 	; ============ Temp. Const. (2) ===========
 	mov AX, 2
-	mov DS:[88], AX
+	mov DS:[80], AX
 
-	; ============ Op. Termo ===========
-	mov AX, DS:[86]
-	mov BX, DS:[88]
-	cwd
-	idiv BX
-	mov DS:[90], AX
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
+	mov DS:[82], AX
+
+	; ============ Neg. Termo ===========
+	mov AX, DS:[82]
+	neg AX
+	mov DS:[82], AX
+
+	; ============ Temp. Const. (3) ===========
+	mov AX, 3
+	mov DS:[84], AX
 
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
+	mov DS:[86], AX
+
+	; ============ Temp. Const. (3) ===========
+	mov AX, 3
+	mov DS:[88], AX
+
+	; ============ Op. ExpS ===========
+	mov AX, DS:[86]
+	mov BX, DS:[88]
+	add AX, BX
+	mov DS:[90], AX
+
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
 	mov DS:[92], AX
 
 	; ============ Temp. Const. (4) ===========
@@ -331,85 +424,118 @@ strt:				; Início do programa
 	mov AX, 2
 	mov DS:[96], AX
 
-	; ============ Neg. Termo ===========
-	mov AX, DS:[96]
-	neg AX
-	mov DS:[96], AX
-
 	; ============ Op. Termo ===========
 	mov AX, DS:[94]
 	mov BX, DS:[96]
-	imul BX
+	cwd
+	idiv BX
 	mov DS:[98], AX
+
+	; ============ Temp. Const. (5) ===========
+	mov AX, 5
+	mov DS:[100], AX
+
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
+	mov DS:[102], AX
+
+	; ============ Temp. Const. (2) ===========
+	mov AX, 2
+	mov DS:[104], AX
+
+	; ============ Neg. Termo ===========
+	mov AX, DS:[104]
+	neg AX
+	mov DS:[104], AX
+
+	; ============ Op. Termo ===========
+	mov AX, DS:[102]
+	mov BX, DS:[104]
+	imul BX
+	mov DS:[106], AX
 
 	; ============ Temp. Const. (6) ===========
 	mov AX, 6
-	mov DS:[100], AX
+	mov DS:[108], AX
 
 	; ============ Temp. Const. (10) ===========
 	mov AX, 10
-	mov DS:[102], AX
+	mov DS:[110], AX
 
 	; ============ Neg. Termo ===========
-	mov AX, DS:[102]
+	mov AX, DS:[110]
 	neg AX
-	mov DS:[102], AX
+	mov DS:[110], AX
 
 	; ============ Temp. Const. ('D') ===========
 	mov AX, 68
-	mov DS:[104], AX
+	mov DS:[112], AX
+
+	; ============ Op. Exp ===========
+	mov AX, DS:[16445]
+	mov BX, DS:[112]
+	mov AH, 0
+	mov BH, 0
+	cmp AX, BX
+	je R17
+	mov AX, 0
+	jmp R18
+	R17:
+		mov AX, 1
+	R18:
+		mov DS:[113], AX
 	; ============ Op. NOT ===========
 
-	mov AX, DS:[16445]
+	mov AX, DS:[113]
 	neg AX
 	add AX, 1
-	mov DS:[105], AX
+	mov DS:[114], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[106], AX
+	mov DS:[115], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[108], AX
+	mov DS:[117], AX
 
 	; ============ Acesso a vetor ===========
-	mov DI, DS:[108]
+	mov DI, DS:[117]
 	add DI, DI
 	add DI, 16405
 	mov AX, DS:[DI]
-	mov DS:[110], AX
+	mov DS:[119], AX
 
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
-	mov DS:[150], AX
+	mov DS:[159], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[152], AX
+	mov DS:[161], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[154], AX
+	mov DS:[163], AX
 
 	; ============ Acesso a vetor ===========
-	mov DI, DS:[154]
+	mov DI, DS:[163]
 	add DI, DI
 	add DI, 16405
 	mov AX, DS:[DI]
-	mov DS:[156], AX
+	mov DS:[165], AX
 
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
-	mov DS:[196], AX
+	mov DS:[205], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[198], AX
+	mov DS:[207], AX
 
 	; ============ Temp. Const. (10) ===========
 	mov AX, 10
-	mov DS:[200], AX
+	mov DS:[209], AX
 
 	mov ah, 4Ch		; Finalização do programa
 	int 21h			; Finalização do programa

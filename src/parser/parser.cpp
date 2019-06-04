@@ -594,19 +594,19 @@ namespace parser {
             op = Operator::Eq;
             match_token(Token::EQ);
         } else if (g_lex_reg.token == Token::NE) {
-            op = Operator::Eq;
+            op = Operator::Neq;
             match_token(Token::NE);
         } else if (g_lex_reg.token == Token::LT){
-            op = Operator::Eq;
+            op = Operator::Lt;
             match_token(Token::LT);
         } else if (g_lex_reg.token == Token::GT){
-            op = Operator::Eq;
+            op = Operator::Gt;
             match_token(Token::GT);
         } else if (g_lex_reg.token == Token::LE){
-            op = Operator::Eq;
+            op = Operator::Lte;
             match_token(Token::LE);
         } else if (g_lex_reg.token == Token::GE){
-            op = Operator::Eq;
+            op = Operator::Gte;
             match_token(Token::GE);
         }
 
@@ -638,6 +638,8 @@ namespace parser {
 
             Exp_type = Type::Bool;
             Exp_length = 0;
+            Exp_addr = write_exp(Exp_type, op, Exp_addr, ExpS1_addr,
+                    Exp_length);
         }
     }
 

@@ -26,7 +26,7 @@ namespace core {
         Eq,
         Neq,
         Lt,
-        Leq,
+        Lte,
         Gt,
         Gte
     };
