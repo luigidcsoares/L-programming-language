@@ -5,7 +5,7 @@ sseg ENDS			; Fim seg. pilha
 dseg SEGMENT PUBLIC		; Início seg. dados
 	byte 4000h DUP(?)	; Temporários
 	byte 20 DUP(?)			; Var. vec. char em 16384
-	byte 120			; Var. char em 16404
+	byte 95			; Var. char em 16404
 	sword 20 DUP(?)			; Var. vec. int em 16405
 	byte 65			; Var. char em 16445
 	sword 1			; Var. int em 16446

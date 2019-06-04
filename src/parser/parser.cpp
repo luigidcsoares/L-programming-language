@@ -154,7 +154,7 @@ namespace parser {
                 val = const_lex[1];
             }
 
-            id->end = put_dseg(id->cl, id->type, id->length, val);
+            id->addr = put_dseg(id->cl, id->type, id->length, val);
             match_token(Token::Semicolon);
         }
     }
@@ -251,11 +251,13 @@ namespace parser {
 
             if (DVO_id->type == Type::Integer) {
                 val = std::stoi(const_lex);
-
                 if (cond) val = signal * val;
+            } else if (const_lex[1] == 'x') {
+                val = std::stoi(const_lex, nullptr, 16);
             } else {
                 val = const_lex[1];
             }
+
         } else if (g_lex_reg.token == Token::LBracket) {
             match_token(Token::LBracket);
             
@@ -295,7 +297,7 @@ namespace parser {
             match_token(Token::RBracket);
         }
 
-        DVO_id->end = put_dseg(DVO_id->cl, DVO_id->type, DVO_id->length, val);
+        DVO_id->addr = put_dseg(DVO_id->cl, DVO_id->type, DVO_id->length, val);
     }
 
     void C() {

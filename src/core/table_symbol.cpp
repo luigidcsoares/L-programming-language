@@ -13,7 +13,7 @@ namespace core {
         this->lexeme = lexeme;
         this->token = token;
         this->cl = Class::Empty;
-        this->end = -1;
+        this->addr = -1;
     }
 
     TSymbolElem * TSymbol::search(std::string lexeme) {

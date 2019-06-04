@@ -10,6 +10,29 @@
 
 namespace codegen {
 
+    int new_tmp(Type type, int length) {
+        int curr_addr = tmp_counter;
+
+        int mult = type == Type::Integer
+            ? 2
+            : 1;
+
+        int inc = length == 0
+            ? mult
+            : mult * length;
+
+        tmp_counter += inc;
+        return curr_addr;
+    }
+
+    void reset_tmp() {
+        tmp_counter = 0;
+    }
+
+    int new_label() {
+        return label_counter++;
+    }
+
     void create_sseg() {
         writeln("sseg SEGMENT STACK\t\t; Início seg. pilha");
         writeln("\tbyte 4000h DUP(?)\t; Dimensiona pilha");
@@ -61,10 +84,10 @@ namespace codegen {
             ? mult
             : len * mult;
 
-        int end = dseg_counter;
+        int addr = dseg_counter;
         dseg_counter += nbytes;
 
-        return end;
+        return addr;
     }
 
     void end_dseg() {
