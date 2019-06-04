@@ -173,7 +173,7 @@ namespace codegen {
         int F_addr = new_tmp(id_type, id_length);
 
         writeln("\n\t; ============ Acesso a vetor ===========");
-        writeln("\tmov DI, DS:[" + std::to_string(Exp_addr));
+        writeln("\tmov DI, DS:[" + std::to_string(Exp_addr) + "]");
 
         if (id_type == Type::Integer) {
             writeln("\tadd DI, DI");
@@ -202,7 +202,7 @@ namespace codegen {
         writeln("\tmov AX, DS:[" + std::to_string(T_addr) + "]");
         writeln("\tmov BX, DS:[" + std::to_string(F1_addr) + "]");
 
-        if (T_type == Type::Char || T_type == Type::Bool) {
+        if (T_type != Type::Integer) {
             writeln("\tmov AH, 0");
             writeln("\tmov BH, 0");
         }
@@ -232,5 +232,43 @@ namespace codegen {
         }
 
         return T_addr;
+    }
+
+    int write_exps(
+            Type ExpS_type, Operator op,
+            int ExpS_addr, int T1_addr
+    ) {
+        writeln("\n\t; ============ Op. ExpS ===========");
+        writeln("\tmov AX, DS:[" + std::to_string(ExpS_addr) + "]");
+        writeln("\tmov BX, DS:[" + std::to_string(T1_addr) + "]");
+
+        if (ExpS_type != Type::Integer) {
+            writeln("\tmov AH, 0");
+            writeln("\tmov BH, 0");
+        }
+
+        if (op == Operator::Add) {
+            writeln("\tadd AX, BX");
+        } else if (op == Operator::Sub){
+            writeln("\tsub AX, BX");
+        } else {
+            writeln("\tmov CX, AX");
+            writeln("\tadd CX, BX");
+            writeln("\timul BX");
+            writeln("\tsub CX, AX");
+            writeln("\tmov AX, CX");
+        }
+
+        ExpS_addr = new_tmp(ExpS_type, 0);
+
+        if (ExpS_type == Type::Integer) {
+            writeln("\tmov DS:[" + std::to_string(ExpS_addr) +
+                    "], AX");
+        } else {
+            writeln("\tmov DS:[" + std::to_string(ExpS_addr) +
+                    "], AL");
+        }
+
+        return ExpS_addr;
     }
 }

@@ -711,6 +711,9 @@ namespace parser {
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
+
+            ExpS_addr = write_exps(ExpS_type, op,
+                    ExpS_addr, T1_addr);
         } 
     }
 

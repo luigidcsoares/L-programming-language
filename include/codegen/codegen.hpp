@@ -123,6 +123,12 @@ namespace codegen {
      */
     int write_term(Type T_type, Operator op, 
             int T_addr, int F1_addr);
+
+    /**
+     * Code gen for ExpS.
+     */
+    int write_exps(Type ExpS_type, Operator op,
+            int ExpS_addr, int T1_addr);
 }
 
 #endif
