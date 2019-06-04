@@ -21,7 +21,7 @@ namespace core {
         Class cl;
         Type type;
         int length;
-        int end;
+        int addr;
         
         TSymbolElem(std::string lexeme, Token token);
     };

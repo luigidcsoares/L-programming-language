@@ -17,9 +17,25 @@ using namespace core;
 namespace codegen {
     
     namespace {
-        unsigned int dseg_counter = 0x4000;
-        unsigned int tmp_counter = 0x0;
+        int dseg_counter = 0x4000;
+        int tmp_counter = 0;
+        int label_counter = 0;
     }
+
+    /**
+     * Return the current valid address and increment it.
+     */
+    int new_tmp(Type type, int length);
+
+    /**
+     * Reset tmp counter.
+     */
+    void reset_tmp();
+
+    /**
+     * Return the next label and increment it.
+     */
+    int new_label();
 
     /**
      * Create the output file.
@@ -53,7 +69,7 @@ namespace codegen {
      * @param Class: cl -> class for debug.
      * @param Type: type -> integer, char.
      * @param int: len -> length (0 or vector size).
-     * @param int: val -> val (-1 if wasn't setted yet).
+     * @param int: val -> val (-1 if it wasn't set).
      */
     int put_dseg(Class cl, Type type, int len, int val);
 

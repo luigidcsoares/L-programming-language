@@ -5,7 +5,7 @@ sseg ENDS			; Fim seg. pilha
 dseg SEGMENT PUBLIC		; Início seg. dados
 	byte 4000h DUP(?)	; Temporários
 	byte 20 DUP(?)			; Var. vec. char em 16384
-	byte 120			; Var. char em 16404
+	byte 95			; Var. char em 16404
 	sword 20 DUP(?)			; Var. vec. int em 16405
 	byte 65			; Var. char em 16445
 	sword 1			; Var. int em 16446
@@ -22,5 +22,7 @@ cseg SEGMENT PUBLIC		; Início seg. código
 	ASSUME CS:cseg, DS:dseg
 
 strt:				; Início do programa
+	mov ah, 4Ch		; Finalização do programa
+	int 21h			; Finalização do programa
 cseg ENDS			; Fim seg. código
-END strs			; Fim programa
+END strt			; Fim programa
