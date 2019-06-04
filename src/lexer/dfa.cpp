@@ -247,7 +247,8 @@ namespace lexer {
         if (utils::is_digit(c)) lexeme << c;
         else {
             TSymbolElem *p = g_tab_symbol.search(lexeme.str());
-            g_lex_reg.fill(Token::Const, lexeme.str(), Type::Integer, 0);
+            g_lex_reg.fill(Token::Const, lexeme.str(), 
+                    Type::Integer, 0);
            
             // Put character back to be read again.
             g_source.file.putback(c);
@@ -314,7 +315,8 @@ namespace lexer {
             next_state = 12;
         } else {
             TSymbolElem *p = g_tab_symbol.search(lexeme.str());
-            g_lex_reg.fill(Token::Const, lexeme.str(), Type::Integer, 0);
+            g_lex_reg.fill(Token::Const, lexeme.str(), 
+                    Type::Integer, 0);
             
             // Put character back to be read again.
             g_source.file.putback(c);
@@ -410,7 +412,8 @@ namespace lexer {
         // If we read a second quote, it is a valid string.
         else if (c == '"') {
             TSymbolElem *p = g_tab_symbol.search(lexeme.str());
-            g_lex_reg.fill(Token::Const, lexeme.str(), Type::String, lexeme.str().length());
+            g_lex_reg.fill(Token::Const, lexeme.str(), 
+                    Type::String, lexeme.str().length() - 2);
 
             next_state = 15;
         }

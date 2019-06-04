@@ -84,10 +84,11 @@ namespace parser {
      * operators.
      *
      * Attributes:
-     * @param Type&: Exp_type
-     * @param int&: Exp_length
+     * @param Type&: ExpS_type
+     * @param int&: ExpS_length
+     * @param int&: ExpS_addr
      */
-    void ExpS(Type &ExpS_type, int &ExpS_length);
+    void ExpS(Type &ExpS_type, int &ExpS_length, int &ExpS_addr);
 
     /**
      * T refers to the terms of an expression.
@@ -97,8 +98,9 @@ namespace parser {
      * Attributes:
      * @param Type&: T_type
      * @param int&: T_length
+     * @param int&: T_addr
      */
-    void T(Type &T_type, int &T_length);
+    void T(Type &T_type, int &T_length, int &T_addr);
 
     /**
      * F is the last non-terminal symbol that refers to an expression.

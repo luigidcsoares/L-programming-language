@@ -578,13 +578,17 @@ namespace parser {
 
         Type ExpS_type;
         int ExpS_length;
+        int ExpS_addr;
+
         Type ExpS1_type;
         int ExpS1_length;
+        int ExpS1_addr;
 
-        ExpS(ExpS_type, ExpS_length);
+        ExpS(ExpS_type, ExpS_length, ExpS_addr);
 
         Exp_type = ExpS_type;
         Exp_length = ExpS_length;
+        Exp_addr = ExpS_addr;
 
         if (g_lex_reg.token == Token::EQ) {
             op = Operator::Eq;
@@ -607,13 +611,14 @@ namespace parser {
         }
 
         if (op != Operator::None) {
-            ExpS(ExpS1_type, ExpS1_length);
+            ExpS(ExpS1_type, ExpS1_length, ExpS1_addr);
 
             bool error = false;
             if (Exp_type == Type::Bool || ExpS1_type == Type::Bool) {
                 error = true;
             } else if (Exp_length != 0 || ExpS1_length != 0) {
-                if (Exp_type == Type::Integer || ExpS1_type == Type::Integer) {
+                if (Exp_type == Type::Integer 
+                        || ExpS1_type == Type::Integer) {
                     error = true;
                 } else if (op != Operator::Eq) {
                     error = true;
@@ -636,14 +641,17 @@ namespace parser {
         }
     }
 
-    void ExpS(Type &ExpS_type, int &ExpS_length) {
+    void ExpS(Type &ExpS_type, int &ExpS_length, int &ExpS_addr) {
         int signal = 1;
         Operator op;
 
         Type T_type;
         int T_length;
+        int T_addr;
+
         Type T1_type;
         int T1_length;
+        int T1_addr;
 
         if (g_lex_reg.token == Token::Add) {
             match_token(Token::Add);
@@ -652,10 +660,11 @@ namespace parser {
             match_token(Token::Sub);
         }
 
-        T(T_type, T_length);
+        T(T_type, T_length, T_addr);
 
         ExpS_type = T_type;
         ExpS_length = T_length;
+        ExpS_addr = T_addr;
 
         while (g_lex_reg.token == Token::Add
                 || g_lex_reg.token == Token::Sub
@@ -672,11 +681,12 @@ namespace parser {
                 match_token(Token::Or);
             }
             
-            T(T1_type, T1_length);
+            T(T1_type, T1_length, T1_addr);
 
             bool error = false;
             if (op == Operator::Or) {
-                if (ExpS_type != Type::Bool || T1_type != Type::Bool) {
+                if (ExpS_type != Type::Bool || 
+                        T1_type != Type::Bool) {
 
                     error = true;
                 }   
@@ -699,7 +709,7 @@ namespace parser {
         } 
     }
 
-    void T(Type &T_type, int &T_length) {
+    void T(Type &T_type, int &T_length, int &T_addr) {
         Operator op;
 
         Type F_type;
@@ -710,10 +720,11 @@ namespace parser {
         int F1_length;
         int F1_addr;
 
-        F(F_type, F_length, F1_addr);
+        F(F_type, F_length, F_addr);
         
         T_type = F_type;
         T_length = F_length;
+        T_addr = F_addr;
 
         while (g_lex_reg.token == Token::Mult 
                 || g_lex_reg.token == Token::Div
@@ -796,7 +807,6 @@ namespace parser {
             F_type = Exp_type;
             F_length = Exp_length;
             F_addr = Exp_addr;
-            std::cout << Exp_addr << std::endl;
 
         } else if (g_lex_reg.token == Token::Const) {
             Type const_type = g_lex_reg.type;

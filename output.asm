@@ -27,6 +27,10 @@ strt:				; Início do programa
 		byte "Tails e Sonic$"
 	dseg ENDS
 
+	dseg SEGMENT PUBLIC		; String em 16493
+		byte "Lasanha eh Vida$"
+	dseg ENDS
+
 	mov AX, 1			; Temp. const.: 1
 	mov DS:[0], AX
 
@@ -189,7 +193,7 @@ strt:				; Início do programa
 	mov AX, 68			; Temp. const.: 'D'
 	mov DS:[87], AX
 
-	mov AX, DS:[32767] 		; Not
+	mov AX, DS:[16445] 		; Not
 	neg AX
 	add AX, 1
 	mov DS:[88], AX
@@ -200,7 +204,7 @@ strt:				; Início do programa
 	mov AX, 1			; Temp. const.: 1
 	mov DS:[91], AX
 
-	mov AX, DS:[21951]		; Acesso a vetor
+	mov AX, DS:[91]		; Acesso a vetor
 	add AX, AX
 	add AX, 16405
 	mov AX, DS:[AX]
@@ -215,7 +219,7 @@ strt:				; Início do programa
 	mov AX, 1			; Temp. const.: 1
 	mov DS:[137], AX
 
-	mov AX, DS:[21951]		; Acesso a vetor
+	mov AX, DS:[137]		; Acesso a vetor
 	add AX, AX
 	add AX, 16405
 	mov AX, DS:[AX]

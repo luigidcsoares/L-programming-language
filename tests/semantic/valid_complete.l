@@ -13,6 +13,8 @@ Const d = -5;
 
 /*Programa Principal*/
 teste = "Tails e Sonic";
+luigi = "Lasanha eh Vida";
+
 for n = 1 to 10 step 2 do{
 	if(a <> 'D') then {
 		a = 'A' + 'B';
