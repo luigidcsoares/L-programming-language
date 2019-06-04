@@ -17,8 +17,9 @@ using namespace core;
 namespace codegen {
     
     namespace {
-        unsigned int dseg_counter = 0x4000;
-        unsigned int tmp_counter = 0x0;
+        int dseg_counter = 0x4000;
+        int tmp_counter = 0x0;
+
     }
 
     /**

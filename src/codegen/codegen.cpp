@@ -78,6 +78,8 @@ namespace codegen {
     }
 
     void end_cseg() {
+        writeln("\tmov ah, 4Ch\t\t; Finalização do programa");
+        writeln("\tint 21h\t\t\t; Finalização do programa");
         writeln("cseg ENDS\t\t\t; Fim seg. código");
         writeln("END strt\t\t\t; Fim programa");
     }

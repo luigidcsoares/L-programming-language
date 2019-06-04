@@ -22,5 +22,7 @@ cseg SEGMENT PUBLIC		; Início seg. código
 	ASSUME CS:cseg, DS:dseg
 
 strt:				; Início do programa
+	mov ah, 4Ch		; Finalização do programa
+	int 21h			; Finalização do programa
 cseg ENDS			; Fim seg. código
-END strs			; Fim programa
+END strt			; Fim programa
