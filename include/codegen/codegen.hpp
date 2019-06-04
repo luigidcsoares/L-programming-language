@@ -10,6 +10,7 @@
 #include <string>
 #include "codegen/writer.hpp"
 #include "core/class.hpp"
+#include "core/operator.hpp"
 #include "core/type.hpp"
 
 using namespace core;
@@ -104,12 +105,24 @@ namespace codegen {
 
     /**
      * Code gen for access to vector element.
-     * F -> id [ '[' Exp ']' ]
+     * F -> id '[' Exp ']'
      * 
      * Here we are considering that we entered in the vector access.
      */
     int write_vec(Type id_type, int id_length, 
             int id_addr, int Exp_addr);
+
+    /**
+     * Code gen for negate term.
+     * ExpS -> - T
+     */
+    void write_neg_term(int T_addr);
+
+    /**
+     * Code gen for term.
+     */
+    int write_term(Type T_type, Operator op, 
+            int T_addr, int F1_addr);
 }
 
 #endif

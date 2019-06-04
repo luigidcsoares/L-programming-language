@@ -22,217 +22,330 @@ cseg SEGMENT PUBLIC		; Início seg. código
 	ASSUME CS:cseg, DS:dseg
 
 strt:				; Início do programa
+	mov AX, dseg
+	mov DS, AX
 
+	; ============ Decl. de String ===========
 	dseg SEGMENT PUBLIC		; String em 16479
 		byte "Tails e Sonic$"
 	dseg ENDS
 
+	; ============ Decl. de String ===========
 	dseg SEGMENT PUBLIC		; String em 16493
 		byte "Lasanha eh Vida$"
 	dseg ENDS
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
 	mov DS:[0], AX
 
-	mov AX, 10			; Temp. const.: 10
+	; ============ Temp. Const. (10) ===========
+	mov AX, 10
 	mov DS:[2], AX
 
-	mov AX, 68			; Temp. const.: 'D'
+	; ============ Temp. Const. ('D') ===========
+	mov AX, 68
 	mov DS:[4], AX
 
-	mov AX, 65			; Temp. const.: 'A'
+	; ============ Temp. Const. ('A') ===========
+	mov AX, 65
 	mov DS:[5], AX
 
-	mov AX, 66			; Temp. const.: 'B'
+	; ============ Temp. Const. ('B') ===========
+	mov AX, 66
 	mov DS:[6], AX
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
 	mov DS:[7], AX
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
 	mov DS:[9], AX
 
-	mov AX, 65			; Temp. const.: 'A'
+	; ============ Temp. Const. ('A') ===========
+	mov AX, 65
 	mov DS:[11], AX
 
-	mov AX, 66			; Temp. const.: 'B'
+	; ============ Temp. Const. ('B') ===========
+	mov AX, 66
 	mov DS:[12], AX
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
 	mov DS:[13], AX
 
-	mov AX, 65			; Temp. const.: 'A'
-	mov DS:[15], AX
+	; ============ Op. Termo ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[16446]
+	mov AH, 0
+	mov BH, 0
+	imul BX
+	mov DS:[15], AL
 
-	mov AX, 66			; Temp. const.: 'B'
+	; ============ Temp. Const. ('A') ===========
+	mov AX, 65
 	mov DS:[16], AX
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. ('B') ===========
+	mov AX, 66
 	mov DS:[17], AX
 
-	mov AX, 65			; Temp. const.: 'A'
-	mov DS:[19], AX
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[18], AX
 
-	mov AX, 66			; Temp. const.: 'B'
+	; ============ Temp. Const. ('A') ===========
+	mov AX, 65
 	mov DS:[20], AX
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. ('B') ===========
+	mov AX, 66
 	mov DS:[21], AX
 
-	mov AX, 65			; Temp. const.: 'A'
-	mov DS:[23], AX
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[22], AX
 
-	mov AX, 66			; Temp. const.: 'B'
+	; ============ Temp. Const. ('A') ===========
+	mov AX, 65
 	mov DS:[24], AX
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. ('B') ===========
+	mov AX, 66
 	mov DS:[25], AX
 
-	mov AX, 10			; Temp. const.: 10
-	mov DS:[27], AX
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[26], AX
 
-	mov AX, 12			; Temp. const.: 12
-	mov DS:[29], AX
+	; ============ Temp. Const. (10) ===========
+	mov AX, 10
+	mov DS:[28], AX
 
-	mov AX, 2			; Temp. const.: 2
-	mov DS:[31], AX
+	; ============ Temp. Const. (12) ===========
+	mov AX, 12
+	mov DS:[30], AX
 
-	mov AX, 1			; Temp. const.: 1
-	mov DS:[33], AX
+	; ============ Temp. Const. (2) ===========
+	mov AX, 2
+	mov DS:[32], AX
 
-	mov AX, 77			; Temp. const.: 'M'
-	mov DS:[35], AX
+	; ============ Op. Termo ===========
+	mov AX, DS:[16446]
+	mov BX, DS:[32]
+	cwd
+	idiv BX
+mov AX, DX
+	mov DS:[34], AX
 
-	mov AX, 2			; Temp. const.: 2
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
 	mov DS:[36], AX
 
-	mov AX, 65			; Temp. const.: 0x41
+	; ============ Temp. Const. ('M') ===========
+	mov AX, 77
 	mov DS:[38], AX
 
-	mov AX, 3			; Temp. const.: 3
+	; ============ Temp. Const. (2) ===========
+	mov AX, 2
 	mov DS:[39], AX
 
-	mov AX, 67			; Temp. const.: 0x43
+	; ============ Temp. Const. (0x41) ===========
+	mov AX, 65
 	mov DS:[41], AX
 
-	mov AX, 4			; Temp. const.: 4
+	; ============ Temp. Const. (3) ===========
+	mov AX, 3
 	mov DS:[42], AX
 
-	mov AX, 79			; Temp. const.: 0x4F
+	; ============ Temp. Const. (0x43) ===========
+	mov AX, 67
 	mov DS:[44], AX
 
-	mov AX, 5			; Temp. const.: 5
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
 	mov DS:[45], AX
 
-	mov AX, 78			; Temp. const.: 'N'
+	; ============ Temp. Const. (0x4F) ===========
+	mov AX, 79
 	mov DS:[47], AX
 
-	mov AX, 6			; Temp. const.: 6
+	; ============ Temp. Const. (5) ===========
+	mov AX, 5
 	mov DS:[48], AX
 
-	mov AX, 72			; Temp. const.: 'H'
+	; ============ Temp. Const. ('N') ===========
+	mov AX, 78
 	mov DS:[50], AX
 
-	mov AX, 7			; Temp. const.: 7
+	; ============ Temp. Const. (6) ===========
+	mov AX, 6
 	mov DS:[51], AX
 
-	mov AX, 65			; Temp. const.: 0x41
+	; ============ Temp. Const. ('H') ===========
+	mov AX, 72
 	mov DS:[53], AX
 
-	mov AX, 8			; Temp. const.: 8
+	; ============ Temp. Const. (7) ===========
+	mov AX, 7
 	mov DS:[54], AX
 
-	mov AX, 46			; Temp. const.: '.'
+	; ============ Temp. Const. (0x41) ===========
+	mov AX, 65
 	mov DS:[56], AX
 
-	mov AX, 1			; Temp. const.: 1
+	; ============ Temp. Const. (8) ===========
+	mov AX, 8
 	mov DS:[57], AX
 
-	mov AX, 5			; Temp. const.: 5
+	; ============ Temp. Const. ('.') ===========
+	mov AX, 46
 	mov DS:[59], AX
 
-	mov AX, 2			; Temp. const.: 2
-	mov DS:[61], AX
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[60], AX
 
-	mov AX, 4			; Temp. const.: 4
-	mov DS:[63], AX
+	; ============ Temp. Const. (5) ===========
+	mov AX, 5
+	mov DS:[62], AX
 
-	mov AX, 3			; Temp. const.: 3
-	mov DS:[65], AX
+	; ============ Temp. Const. (2) ===========
+	mov AX, 2
+	mov DS:[64], AX
 
-	mov AX, 5			; Temp. const.: 5
-	mov DS:[67], AX
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
+	mov DS:[66], AX
 
-	mov AX, 3			; Temp. const.: 3
-	mov DS:[69], AX
-
-	mov AX, 4			; Temp. const.: 4
-	mov DS:[71], AX
-
-	mov AX, 4			; Temp. const.: 4
-	mov DS:[73], AX
-
-	mov AX, 2			; Temp. const.: 2
-	mov DS:[75], AX
-
-	mov AX, 5			; Temp. const.: 5
-	mov DS:[77], AX
-
-	mov AX, 4			; Temp. const.: 4
-	mov DS:[79], AX
-
-	mov AX, 2			; Temp. const.: 2
-	mov DS:[81], AX
-
-	mov AX, 6			; Temp. const.: 6
-	mov DS:[83], AX
-
-	mov AX, 10			; Temp. const.: 10
-	mov DS:[85], AX
-
-	mov AX, 68			; Temp. const.: 'D'
-	mov DS:[87], AX
-
-	mov AX, DS:[16445] 		; Not
+	; ============ Neg. Termo ===========
+	mov AX, DS:[66]
 	neg AX
-	add AX, 1
+	mov DS:[66], AX
+
+	; ============ Temp. Const. (3) ===========
+	mov AX, 3
+	mov DS:[68], AX
+
+	; ============ Temp. Const. (5) ===========
+	mov AX, 5
+	mov DS:[70], AX
+
+	; ============ Temp. Const. (3) ===========
+	mov AX, 3
+	mov DS:[72], AX
+
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
+	mov DS:[74], AX
+
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
+	mov DS:[76], AX
+
+	; ============ Temp. Const. (2) ===========
+	mov AX, 2
+	mov DS:[78], AX
+
+	; ============ Op. Termo ===========
+	mov AX, DS:[76]
+	mov BX, DS:[78]
+	cwd
+	idiv BX
+	mov DS:[80], AX
+
+	; ============ Temp. Const. (5) ===========
+	mov AX, 5
+	mov DS:[82], AX
+
+	; ============ Temp. Const. (4) ===========
+	mov AX, 4
+	mov DS:[84], AX
+
+	; ============ Temp. Const. (2) ===========
+	mov AX, 2
+	mov DS:[86], AX
+
+	; ============ Neg. Termo ===========
+	mov AX, DS:[86]
+	neg AX
+	mov DS:[86], AX
+
+	; ============ Op. Termo ===========
+	mov AX, DS:[84]
+	mov BX, DS:[86]
+	imul BX
 	mov DS:[88], AX
 
-	mov AX, 1			; Temp. const.: 1
-	mov DS:[89], AX
+	; ============ Temp. Const. (6) ===========
+	mov AX, 6
+	mov DS:[90], AX
 
-	mov AX, 1			; Temp. const.: 1
-	mov DS:[91], AX
+	; ============ Temp. Const. (10) ===========
+	mov AX, 10
+	mov DS:[92], AX
 
-	mov AX, DS:[91]		; Acesso a vetor
-	add AX, AX
-	add AX, 16405
-	mov AX, DS:[AX]
-	mov DS:[93], AX
+	; ============ Neg. Termo ===========
+	mov AX, DS:[92]
+	neg AX
+	mov DS:[92], AX
 
-	mov AX, 5			; Temp. const.: 5
-	mov DS:[133], AX
+	; ============ Temp. Const. ('D') ===========
+	mov AX, 68
+	mov DS:[94], AX
+	; ============ Op. NOT ===========
 
-	mov AX, 1			; Temp. const.: 1
-	mov DS:[135], AX
+	mov AX, DS:[16445]
+	neg AX
+	add AX, 1
+	mov DS:[95], AX
 
-	mov AX, 1			; Temp. const.: 1
-	mov DS:[137], AX
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[96], AX
 
-	mov AX, DS:[137]		; Acesso a vetor
-	add AX, AX
-	add AX, 16405
-	mov AX, DS:[AX]
-	mov DS:[139], AX
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[98], AX
 
-	mov AX, 5			; Temp. const.: 5
-	mov DS:[179], AX
+	; ============ Acesso a vetor ===========
+	mov DI, DS:[98
+	add DI, DI
+	add DI, 16405
+	mov AX, DS:[DI]
+	mov DS:[100], AX
 
-	mov AX, 1			; Temp. const.: 1
-	mov DS:[181], AX
+	; ============ Temp. Const. (5) ===========
+	mov AX, 5
+	mov DS:[140], AX
 
-	mov AX, 10			; Temp. const.: 10
-	mov DS:[183], AX
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[142], AX
+
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[144], AX
+
+	; ============ Acesso a vetor ===========
+	mov DI, DS:[144
+	add DI, DI
+	add DI, 16405
+	mov AX, DS:[DI]
+	mov DS:[146], AX
+
+	; ============ Temp. Const. (5) ===========
+	mov AX, 5
+	mov DS:[186], AX
+
+	; ============ Temp. Const. (1) ===========
+	mov AX, 1
+	mov DS:[188], AX
+
+	; ============ Temp. Const. (10) ===========
+	mov AX, 10
+	mov DS:[190], AX
 
 	mov ah, 4Ch		; Finalização do programa
 	int 21h			; Finalização do programa

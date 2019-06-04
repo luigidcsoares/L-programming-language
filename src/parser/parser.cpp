@@ -664,6 +664,11 @@ namespace parser {
 
         ExpS_type = T_type;
         ExpS_length = T_length;
+
+        if (signal == -1) {
+            write_neg_term(T_addr);
+        }
+
         ExpS_addr = T_addr;
 
         while (g_lex_reg.token == Token::Add
@@ -768,7 +773,9 @@ namespace parser {
                 err << g_source.curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
-            }        
+            }
+
+            T_addr = write_term(T_type, op, T_addr, F1_addr);
         }
     }
 
