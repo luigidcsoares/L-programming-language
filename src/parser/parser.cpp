@@ -359,6 +359,7 @@ namespace parser {
 
             match_token(Token::EQ);
             Exp(Exp1_type, Exp1_length, Exp1_addr);
+            match_token(Token::Semicolon);
 
             bool error = false;
             if (Exp1_type == Type::Bool) {
@@ -396,7 +397,9 @@ namespace parser {
                 throw std::runtime_error(err.str());
             }
 
-            match_token(Token::Semicolon);
+            write_assign_id(id->type, cond, Exp_addr, id->addr,
+                    Exp1_addr);
+
         } else if (g_lex_reg.token == Token::For) {
             match_token(Token::For);
 

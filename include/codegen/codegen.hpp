@@ -136,6 +136,12 @@ namespace codegen {
     int write_exp(Type Exp_type, Operator op,
             int Exp_addr, int ExpS1_addr,
             int Exp_length);
+
+    /**
+     * Code gen for assigment.
+     */
+    void write_assign_id(Type id_type, bool cond, 
+            int Exp_addr, int id_addr, int Exp1_addr);
 }
 
 #endif

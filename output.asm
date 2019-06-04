@@ -30,10 +30,18 @@ strt:				; Início do programa
 		byte "Tails e Sonic$"
 	dseg ENDS
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[16479]
+	mov DS:[16452], AX
+
 	; ============ Decl. de String ===========
 	dseg SEGMENT PUBLIC		; String em 16493
 		byte "Lasanha eh Vida$"
 	dseg ENDS
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[16493]
+	mov DS:[16384], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
@@ -77,6 +85,10 @@ strt:				; Início do programa
 	add AX, BX
 	mov DS:[8], AL
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[8]
+	mov DS:[16445], AX
+
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
 	mov DS:[9], AX
@@ -86,6 +98,10 @@ strt:				; Início do programa
 	mov BX, DS:[9]
 	add AX, BX
 	mov DS:[11], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[11]
+	mov DS:[16446], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
@@ -147,6 +163,10 @@ strt:				; Início do programa
 	add AX, BX
 	mov DS:[20], AL
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[20]
+	mov DS:[16445], AX
+
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
 	mov DS:[21], AX
@@ -203,6 +223,10 @@ strt:				; Início do programa
 	add AX, BX
 	mov DS:[28], AL
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[28]
+	mov DS:[16445], AX
+
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
 	mov DS:[29], AX
@@ -237,6 +261,10 @@ strt:				; Início do programa
 	add AX, BX
 	mov DS:[34], AL
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[34]
+	mov DS:[16445], AX
+
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
 	mov DS:[35], AX
@@ -270,6 +298,10 @@ strt:				; Início do programa
 	mov BH, 0
 	add AX, BX
 	mov DS:[40], AL
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[40]
+	mov DS:[16445], AX
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
@@ -309,6 +341,10 @@ strt:				; Início do programa
 	mov AX, DX
 	mov DS:[50], AX
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[50]
+	mov DS:[16446], AX
+
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
 	mov DS:[52], AX
@@ -316,6 +352,12 @@ strt:				; Início do programa
 	; ============ Temp. Const. ('M') ===========
 	mov AX, 77
 	mov DS:[54], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[54]
+	mov DI, DS:[52]
+	add DI, 16384
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. (2) ===========
 	mov AX, 2
@@ -325,6 +367,12 @@ strt:				; Início do programa
 	mov AX, 65
 	mov DS:[57], AX
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[57]
+	mov DI, DS:[55]
+	add DI, 16384
+	mov DS:[DI], AX
+
 	; ============ Temp. Const. (3) ===========
 	mov AX, 3
 	mov DS:[58], AX
@@ -332,6 +380,12 @@ strt:				; Início do programa
 	; ============ Temp. Const. (0x43) ===========
 	mov AX, 67
 	mov DS:[60], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[60]
+	mov DI, DS:[58]
+	add DI, 16384
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. (4) ===========
 	mov AX, 4
@@ -341,6 +395,12 @@ strt:				; Início do programa
 	mov AX, 79
 	mov DS:[63], AX
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[63]
+	mov DI, DS:[61]
+	add DI, 16384
+	mov DS:[DI], AX
+
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
 	mov DS:[64], AX
@@ -348,6 +408,12 @@ strt:				; Início do programa
 	; ============ Temp. Const. ('N') ===========
 	mov AX, 78
 	mov DS:[66], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[66]
+	mov DI, DS:[64]
+	add DI, 16384
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. (6) ===========
 	mov AX, 6
@@ -357,6 +423,12 @@ strt:				; Início do programa
 	mov AX, 72
 	mov DS:[69], AX
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[69]
+	mov DI, DS:[67]
+	add DI, 16384
+	mov DS:[DI], AX
+
 	; ============ Temp. Const. (7) ===========
 	mov AX, 7
 	mov DS:[70], AX
@@ -364,6 +436,12 @@ strt:				; Início do programa
 	; ============ Temp. Const. (0x41) ===========
 	mov AX, 65
 	mov DS:[72], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[72]
+	mov DI, DS:[70]
+	add DI, 16384
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. (8) ===========
 	mov AX, 8
@@ -373,6 +451,12 @@ strt:				; Início do programa
 	mov AX, 46
 	mov DS:[75], AX
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[75]
+	mov DI, DS:[73]
+	add DI, 16384
+	mov DS:[DI], AX
+
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
 	mov DS:[76], AX
@@ -380,6 +464,13 @@ strt:				; Início do programa
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
 	mov DS:[78], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[78]
+	mov DI, DS:[76]
+	add DI, DI
+	add DI, 16405
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. (2) ===========
 	mov AX, 2
@@ -393,6 +484,13 @@ strt:				; Início do programa
 	mov AX, DS:[82]
 	neg AX
 	mov DS:[82], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[82]
+	mov DI, DS:[80]
+	add DI, DI
+	add DI, 16405
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. (3) ===========
 	mov AX, 3
@@ -412,6 +510,13 @@ strt:				; Início do programa
 	add AX, BX
 	mov DS:[90], AX
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[90]
+	mov DI, DS:[84]
+	add DI, DI
+	add DI, 16405
+	mov DS:[DI], AX
+
 	; ============ Temp. Const. (4) ===========
 	mov AX, 4
 	mov DS:[92], AX
@@ -430,6 +535,13 @@ strt:				; Início do programa
 	cwd
 	idiv BX
 	mov DS:[98], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[98]
+	mov DI, DS:[92]
+	add DI, DI
+	add DI, 16405
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. (5) ===========
 	mov AX, 5
@@ -454,6 +566,13 @@ strt:				; Início do programa
 	imul BX
 	mov DS:[106], AX
 
+	; ============ Atrib. id ===========
+	mov AX, DS:[106]
+	mov DI, DS:[100]
+	add DI, DI
+	add DI, 16405
+	mov DS:[DI], AX
+
 	; ============ Temp. Const. (6) ===========
 	mov AX, 6
 	mov DS:[108], AX
@@ -466,6 +585,13 @@ strt:				; Início do programa
 	mov AX, DS:[110]
 	neg AX
 	mov DS:[110], AX
+
+	; ============ Atrib. id ===========
+	mov AX, DS:[110]
+	mov DI, DS:[108]
+	add DI, DI
+	add DI, 16405
+	mov DS:[DI], AX
 
 	; ============ Temp. Const. ('D') ===========
 	mov AX, 68

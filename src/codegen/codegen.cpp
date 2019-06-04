@@ -316,4 +316,29 @@ namespace codegen {
 
         return Exp_addr;
     }       
+
+    void write_assign_id(
+            Type id_type, bool cond, 
+            int Exp_addr, int id_addr,
+            int Exp1_addr
+    ) {
+        writeln("\n\t; ============ Atrib. id ===========");
+        writeln("\tmov AX, DS:[" + std::to_string(Exp1_addr) +
+                "]");
+        
+        if (cond) {
+            writeln("\tmov DI, DS:[" + std::to_string(Exp_addr) +
+                    "]");
+
+            if (id_type == Type::Integer) {
+                writeln("\tadd DI, DI");
+            }
+
+            writeln("\tadd DI, " + std::to_string(id_addr));
+            writeln("\tmov DS:[DI], AX");
+        } else {
+            writeln("\tmov DS:[" + std::to_string(id_addr) +
+                    "], AX");
+        }
+    }
 }
