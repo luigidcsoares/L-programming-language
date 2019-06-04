@@ -4,6 +4,7 @@
  *  @author: Luigi Domenico
  */ 
 
+#include <string>
 #include <iostream>
 #include <sstream>
 #include "codegen/codegen.hpp"
@@ -29,8 +30,11 @@ namespace codegen {
         tmp_counter = 0;
     }
 
-    int new_label() {
-        return label_counter++;
+    std::string new_label() {
+        std::stringstream ss;
+        ss << "R" << label_counter;
+        label_counter++;
+        return ss.str();
     }
 
     void create_sseg() {
@@ -101,9 +105,79 @@ namespace codegen {
     }
 
     void end_cseg() {
-        writeln("\tmov ah, 4Ch\t\t; Finalização do programa");
+        writeln("\n\tmov ah, 4Ch\t\t; Finalização do programa");
         writeln("\tint 21h\t\t\t; Finalização do programa");
         writeln("cseg ENDS\t\t\t; Fim seg. código");
         writeln("END strt\t\t\t; Fim programa");
+    }
+
+    int write_not(Type F1_type, int F1_length, int F1_addr) {
+        int F_addr = new_tmp(F1_type, F1_length);
+
+        writeln("\n\tmov AX, DS:[" + std::to_string(F1_addr) + 
+                "] \t\t; Not");
+        writeln("\tneg AX");
+        writeln("\tadd AX, 1");
+        writeln("\tmov DS:[" + std::to_string(F_addr) + "], AX");
+
+        return F_addr;
+    }
+
+    int write_const(
+            Type const_type,
+            int const_length, 
+            std::string const_lex
+    ) {
+
+        int F_addr;
+
+        if (const_type == Type::String) {
+            const_lex = const_lex.substr(1, const_lex.length() - 2);
+            writeln("\n\tdseg SEGMENT PUBLIC\t\t; String em " +
+                    std::to_string(dseg_counter));
+            writeln("\t\tbyte \"" + const_lex + "$\"");
+            writeln("\tdseg ENDS");
+
+            F_addr = dseg_counter;
+            dseg_counter += const_length + 1;
+
+        } else {
+            F_addr = new_tmp(const_type, const_length);
+
+            int val;
+            if (const_type == Type::Integer) {
+                val = std::stoi(const_lex);
+            } else if (const_lex.length() == 4) { // hexadecimal
+                val = std::stoi(const_lex, nullptr, 16);
+            } else {
+                val = const_lex[1];
+            }
+
+            writeln("\n\tmov AX, " + std::to_string(val) + 
+                    "\t\t\t; Temp. const.: " + const_lex);
+            writeln("\tmov DS:[" + std::to_string(F_addr) + "], AX");
+        }
+
+        return F_addr;
+    }
+
+    int write_vec(
+            Type id_type, int id_length, 
+            int id_addr, int Exp_addr
+    ) {
+        int F_addr = new_tmp(id_type, id_length);
+
+        writeln("\n\tmov AX, DS:[" + std::to_string(Exp_addr) + 
+                "]\t\t; Acesso a vetor");
+
+        if (id_type == Type::Integer) {
+            writeln("\tadd AX, AX");
+        }
+
+        writeln("\tadd AX, " + std::to_string(id_addr));
+        writeln("\tmov AX, DS:[AX]");
+        writeln("\tmov DS:[" + std::to_string(F_addr) + "], AX");
+
+        return F_addr;
     }
 }

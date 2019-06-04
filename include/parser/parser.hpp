@@ -74,8 +74,9 @@ namespace parser {
      * Attributes:
      * @param Type&: Exp_type
      * @param int&: Exp_length
+     * @param int&: Exp_addr
      */
-    void Exp(Type &Exp_type, int &Exp_length);
+    void Exp(Type &Exp_type, int &Exp_length, int &Exp_addr);
 
     /**
      * ExpS is a non-terminal symbol called by Exp.
@@ -106,8 +107,9 @@ namespace parser {
      * Attributes:
      * @param Type&: F_type
      * @param int&:  F_length
+     * @param int&:  F_addr
      */
-    void F(Type &F_type, int &F_length);
+    void F(Type &F_type, int &F_length, int &F_addr);
 
 }
 

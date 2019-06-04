@@ -19,7 +19,7 @@ namespace codegen {
     namespace {
         int dseg_counter = 0x4000;
         int tmp_counter = 0;
-        int label_counter = 0;
+        int label_counter = 1;
     }
 
     /**
@@ -35,7 +35,7 @@ namespace codegen {
     /**
      * Return the next label and increment it.
      */
-    int new_label();
+    std::string new_label();
 
     /**
      * Create the output file.
@@ -87,6 +87,29 @@ namespace codegen {
      * Finish the code segment.
      */
     void end_cseg();
+
+    /**
+     * Code gen for "not" operation.
+     * F-> not F1
+     */
+    int write_not(Type F1_type, int F1_length, int F1_addr);
+
+    /**
+     * Code gen for const (string or int/char).
+     * F -> const
+     */
+    int write_const(Type const_type,
+            int const_length, 
+            std::string const_lex);
+
+    /**
+     * Code gen for access to vector element.
+     * F -> id [ '[' Exp ']' ]
+     * 
+     * Here we are considering that we entered in the vector access.
+     */
+    int write_vec(Type id_type, int id_length, 
+            int id_addr, int Exp_addr);
 }
 
 #endif

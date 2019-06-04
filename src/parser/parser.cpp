@@ -252,7 +252,7 @@ namespace parser {
             if (DVO_id->type == Type::Integer) {
                 val = std::stoi(const_lex);
                 if (cond) val = signal * val;
-            } else if (const_lex[1] == 'x') {
+            } else if (const_lex.length() == 4) { // hexadecimal
                 val = std::stoi(const_lex, nullptr, 16);
             } else {
                 val = const_lex[1];
@@ -306,8 +306,11 @@ namespace parser {
 
         Type Exp_type;
         int Exp_length;
+        int Exp_addr;
+
         Type Exp1_type;
         int Exp1_length;
+        int Exp1_addr;
 
         if (g_lex_reg.token == Token::Id) {
             id = g_lex_reg.p_tab_elem;
@@ -335,7 +338,7 @@ namespace parser {
                 cond = true;
         
                 match_token(Token::LBracket);
-                Exp(Exp_type, Exp_length);
+                Exp(Exp_type, Exp_length, Exp_addr);
 
                 bool error = false;
                 if (Exp_type != Type::Integer) {
@@ -355,7 +358,7 @@ namespace parser {
             }
 
             match_token(Token::EQ);
-            Exp(Exp1_type, Exp1_length);
+            Exp(Exp1_type, Exp1_length, Exp1_addr);
 
             bool error = false;
             if (Exp1_type == Type::Bool) {
@@ -418,7 +421,7 @@ namespace parser {
             }
 
             match_token(Token::EQ);
-            Exp(Exp_type, Exp_length);
+            Exp(Exp_type, Exp_length, Exp_addr);
 
             if (Exp_type != Type::Integer) {
                 std::stringstream err;
@@ -428,7 +431,7 @@ namespace parser {
             }
 
             match_token(Token::To);
-            Exp(Exp1_type, Exp1_length);
+            Exp(Exp1_type, Exp1_length, Exp1_addr);
 
             if (Exp1_type != Type::Integer) {
                 std::stringstream err;
@@ -454,7 +457,7 @@ namespace parser {
             LC();
         } else if (g_lex_reg.token == Token::If) {
             match_token(Token::If);
-            Exp(Exp_type, Exp_length);
+            Exp(Exp_type, Exp_length, Exp_addr);
 
             if (Exp_type != Type::Bool) {
                 std::stringstream err;
@@ -513,7 +516,7 @@ namespace parser {
             }
 
             match_token(Token::LParen);
-            Exp(Exp_type, Exp_length);
+            Exp(Exp_type, Exp_length, Exp_addr);
 
             bool error = false;
             if (Exp_type == Type::Integer && Exp_length != 0) {
@@ -531,7 +534,7 @@ namespace parser {
 
             while (g_lex_reg.token == Token::Comma) {
                 match_token(Token::Comma);
-                Exp(Exp1_type, Exp1_length);
+                Exp(Exp1_type, Exp1_length, Exp1_addr);
 
                 error = false;
                 if (Exp1_type == Type::Integer && Exp1_length != 0) {
@@ -570,7 +573,7 @@ namespace parser {
         } else C();
     }
 
-    void Exp(Type &Exp_type, int &Exp_length) {
+    void Exp(Type &Exp_type, int &Exp_length, int& Exp_addr) {
         Operator op = Operator::None;
 
         Type ExpS_type;
@@ -701,10 +704,13 @@ namespace parser {
 
         Type F_type;
         int F_length;
+        int F_addr;
+
         Type F1_type;
         int F1_length;
+        int F1_addr;
 
-        F(F_type, F_length);
+        F(F_type, F_length, F1_addr);
         
         T_type = F_type;
         T_length = F_length;
@@ -728,7 +734,7 @@ namespace parser {
                 match_token(Token::Mod);
             }
             
-            F(F1_type, F1_length);
+            F(F1_type, F1_length, F1_addr);
 
             bool error = false;
             if (op == Operator::And) {
@@ -755,18 +761,20 @@ namespace parser {
         }
     }
 
-    void F(Type &F_type, int &F_length) {
+    void F(Type &F_type, int &F_length, int &F_addr) {
         Type F1_type;
         int F1_length;
+        int F1_addr;
 
         Type Exp_type;
         int Exp_length;
+        int Exp_addr;
 
         TSymbolElem* id;
 
         if (g_lex_reg.token == Token::Not) {
             match_token(Token::Not);
-            F(F1_type, F1_length);
+            F(F1_type, F1_length, F1_addr);
         
             if (F1_type != Type::Bool) {
                 std::stringstream err;
@@ -778,18 +786,29 @@ namespace parser {
                 F_length = F1_length;
             }
 
+            F_addr = write_not(F1_type, F1_length, F1_addr);
+
         } else if (g_lex_reg.token == Token::LParen) {
             match_token(Token::LParen);
-            Exp(Exp_type, Exp_length);
+            Exp(Exp_type, Exp_length, Exp_addr);
             match_token(Token::RParen);
             
             F_type = Exp_type;
             F_length = Exp_length;
+            F_addr = Exp_addr;
+            std::cout << Exp_addr << std::endl;
+
         } else if (g_lex_reg.token == Token::Const) {
-            F_type = g_lex_reg.type;
-            F_length = g_lex_reg.length;
+            Type const_type = g_lex_reg.type;
+            int const_length = g_lex_reg.length;
+            std::string const_lex = g_lex_reg.lexeme;
 
             match_token(Token::Const);
+
+            F_type = const_type;
+            F_length = const_length;
+
+            F_addr = write_const(const_type, const_length, const_lex);
         } else {
             id = g_lex_reg.p_tab_elem;
             int curr_line = g_source.curr_line;
@@ -805,11 +824,15 @@ namespace parser {
 
             F_type = id->type;
             F_length = id->length;
+            F_addr = id->addr;
 
             if (g_lex_reg.token == Token::LBracket) {
                 match_token(Token::LBracket);
-                Exp(Exp_type, Exp_length);
-               
+                Exp(Exp_type, Exp_length, Exp_addr);
+
+                int curr_line = g_source.curr_line;
+                match_token(Token::RBracket);
+
                 bool error = false;
                 if (Exp_type != Type::Integer) {
                     error = true;
@@ -821,12 +844,13 @@ namespace parser {
 
                 if (error) {
                     std::stringstream err;
-                    err << g_source.curr_line
+                    err << curr_line
                         << ":tipos incompatíveis.";
                     throw std::runtime_error(err.str());
                 }
 
-                match_token(Token::RBracket);
+                F_addr = write_vec(id->type, id->length, 
+                        id->addr, Exp_addr);
             }
         }
     }
