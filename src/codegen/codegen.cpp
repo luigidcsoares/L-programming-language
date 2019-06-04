@@ -79,6 +79,6 @@ namespace codegen {
 
     void end_cseg() {
         writeln("cseg ENDS\t\t\t; Fim seg. código");
-        writeln("END strs\t\t\t; Fim programa");
+        writeln("END strt\t\t\t; Fim programa");
     }
 }
