@@ -499,13 +499,11 @@ namespace codegen {
                 writeln("\tint 21h");
 
                 writeln("\n\tmov DL, 024h");
-                writeln("\tmov DS:[3], DL");
-                writeln("\tmov DI, 2");
+                writeln("\tmov DS:[" + std::to_string(buffer + 3) + "], DL");
+                writeln("\tmov DI, " + std::to_string(buffer + 2));
                 writeln("\tmov AL, DS:[DI]");
                 writeln("\tmov DS:[" + std::to_string(id_addr) + 
                         "], AL");
-
-
             } else {
                 writeln("\n\t; ============ Readln Int ===========");
                 writeln("\tmov AL, 255");

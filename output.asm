@@ -978,8 +978,8 @@ R43:
 	int 21h
 
 	mov DL, 024h
-	mov DS:[3], DL
-	mov DI, 2
+	mov DS:[12], DL
+	mov DI, 11
 	mov AL, DS:[DI]
 	mov DS:[16445], AL
 
