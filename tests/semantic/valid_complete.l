@@ -6,6 +6,7 @@ Var integer salaminho [20];
 Var char a = 'A';
 Var integer n = 1, h, j = 4;
 Var char teste [20];
+Var char compTeste[5];
 Const b = 1;
 Const c = +3;
 Const e = 'C';
@@ -14,6 +15,16 @@ Const d = -5;
 /*Programa Principal*/
 teste = "Tails e Sonic";
 luigi = "Lasanha eh Vida";
+
+compTeste[0] = 'A';
+compTeste[1] = 'B';
+compTeste[2] = 'C';
+compTeste[3] = 'D';
+compTeste[4] = 'E';
+
+if "ABCDE" = compTeste then {
+  writeln("IGUAL");
+}
 
 for n = 1 to 10 step 2 do{
 	if(a <> 'D') then {

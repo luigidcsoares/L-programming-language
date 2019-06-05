@@ -679,10 +679,11 @@ namespace parser {
                 throw std::runtime_error(err.str());
             }
 
+            Exp_addr = write_exp(Exp_type, op, Exp_addr, ExpS1_addr,
+                    Exp_length, ExpS1_length);
+
             Exp_type = Type::Bool;
             Exp_length = 0;
-            Exp_addr = write_exp(Exp_type, op, Exp_addr, ExpS1_addr,
-                    Exp_length);
         }
     }
 

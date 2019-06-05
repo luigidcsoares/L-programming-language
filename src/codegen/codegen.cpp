@@ -281,21 +281,25 @@ namespace codegen {
     int write_exp(
             Type Exp_type, Operator op,
             int Exp_addr, int ExpS1_addr,
-            int Exp_length
+            int Exp_length, int ExpS1_length
     ) {
         writeln("\n\t; ============ Op. Exp ===========");
-        writeln("\tmov AX, DS:[" + std::to_string(Exp_addr) + "]");
-        writeln("\tmov BX, DS:[" + std::to_string(ExpS1_addr) + "]");
-
-        std::string label_true;
-        std::string label_end;
-
         // First we're doing non-vector comp.
         if (Exp_length == 0) {
-            writeln("\tmov AH, 0");
-            writeln("\tmov BH, 0");
-            writeln("\tcmp AX, BX");
+            std::string label_true;
+            std::string label_end;
 
+            writeln("\tmov AX, DS:[" + std::to_string(Exp_addr) + 
+                    "]");
+            writeln("\tmov BX, DS:[" + std::to_string(ExpS1_addr) +
+                    "]");
+
+            if (Exp_type != Type::Integer) {
+                writeln("\tmov AH, 0");
+                writeln("\tmov BH, 0");
+            }
+
+            writeln("\tcmp AX, BX");
             label_true = new_label();
             std::string cmp = op == Operator::Eq ? "je "
                 : op == Operator::Neq ? "jne "
@@ -306,18 +310,65 @@ namespace codegen {
             cmp += label_true;
 
             writeln("\t" + cmp);
-            writeln("\tmov AX, 0");
+            writeln("\tmov AL, 0");
 
             label_end = new_label();
             writeln("\tjmp " + label_end);
 
             writeln(label_true + ":");
-            writeln("\tmov AX, 1");
+            writeln("\tmov AL, 1");
 
             writeln(label_end + ":");
             Exp_addr = new_tmp(Exp_type, 0);
             writeln("\tmov DS:[" + std::to_string(Exp_addr) +
-                    "], AX");
+                    "], AL");
+        }
+
+        // Comparing vector of char/string.
+        else {
+            writeln("\tmov AX, " + std::to_string(Exp_length));
+            writeln("\tmov BX, " + std::to_string(ExpS1_length));
+            writeln("\tcmp AX, BX");
+
+            std::string label_false = new_label();
+            writeln("\tjne " + label_false);
+
+            writeln("\tmov DI, " + std::to_string(Exp_addr));
+            writeln("\tmov SI, " + std::to_string(ExpS1_addr));
+            writeln("\tadd AX, DI");
+            writeln("\tmov BH, 0");
+            writeln("\tmov CH, 0");
+
+            std::string label_init = new_label();
+            std::string label_true = new_label();
+            writeln(label_init + ":");
+
+            writeln("\tcmp DI, AX");
+            writeln("\tje " + label_true);
+
+            writeln("\tmov BL, DS:[DI]");
+            writeln("\tmov CL, DS:[SI]");
+            writeln("\tcmp BX, CX");
+            writeln("\tjne " + label_false);
+
+            writeln("\tadd DI, 1");
+            writeln("\tadd SI, 1");
+            writeln("\tjmp " + label_init);
+
+            writeln(label_true + ":");
+            writeln("\tmov AL, 1");
+
+            std::string label_end = new_label();
+            writeln("\tjmp " + label_end);
+
+            writeln(label_false + ":");
+            writeln("\tmov AL, 0");
+
+            writeln(label_end + ":");
+
+            Exp_addr = new_tmp(Exp_type, Exp_length);
+            writeln("\tmov DS:[" + std::to_string(Exp_addr) + 
+                    "], AL");
         }
 
         return Exp_addr;

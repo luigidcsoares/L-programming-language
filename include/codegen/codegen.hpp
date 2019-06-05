@@ -135,7 +135,7 @@ namespace codegen {
      */
     int write_exp(Type Exp_type, Operator op,
             int Exp_addr, int ExpS1_addr,
-            int Exp_length);
+            int Exp_length, int ExpS1_length);
 
     /**
      * Code gen for assigment.
