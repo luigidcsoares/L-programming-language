@@ -577,6 +577,8 @@ namespace parser {
                 throw std::runtime_error(err.str());
             }
 
+            write_output(Exp_type, Exp_addr, Exp_length);
+
             while (g_lex_reg.token == Token::Comma) {
                 match_token(Token::Comma);
                 Exp(Exp1_type, Exp1_length, Exp1_addr);
@@ -594,6 +596,8 @@ namespace parser {
                         << ":tipos incompatíveis.";
                     throw std::runtime_error(err.str());
                 }
+
+                write_output(Exp1_type, Exp1_addr, Exp1_length);
             }
 
             match_token(Token::RParen);

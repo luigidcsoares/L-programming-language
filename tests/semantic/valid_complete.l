@@ -57,6 +57,8 @@ for n = 1 to 10 do{
 	if(n = 12) then {
 		n = n % 2;
 	}
+
+        writeln("valor: ", n);
 }
 
 luigi[1] = 'M';
@@ -76,14 +78,10 @@ salaminho[5] = (+4*(-2));
 salaminho[6] = -10;
 
 if(not(a = 'D')) then {
-	write(1);
-	write(salaminho[1]);
-	write((+5));
-	writeln(1);
-	writeln(salaminho[1]);
-	writeln((+5));
 	readln(n);
         readln(a);
+        write(n, ' ', a);
+        writeln("CHUPA");
 }
 
 for n = 1 to 10 do ;

@@ -185,6 +185,11 @@ namespace codegen {
     void write_input(Type id_type, int id_addr, int id_length);
 
     /**
+     * Code gen write/writeln.
+     */
+    void write_output(Type Exp_type, int Exp_addr, int Exp_length);
+
+    /**
      * Code gen for writeln.
      */
     void write_newline();

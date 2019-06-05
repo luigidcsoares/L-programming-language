@@ -188,15 +188,17 @@ R6:
 		byte "IGUAL$"
 	dseg ENDS
 
+	; ============ Write(ln) Vetor/String ===========
+	mov DX, 16520
+	mov AH, 09h
+	int 21h
+
 	; ============ Writeln (End) ===========
 	mov AH, 02h
 	mov DL, 0Dh
 	int 21h
 
 	mov DL, 0Ah
-	 int 21h
-
-	mov AH, 09h
 	int 21h
 
 	; ============ If sem Else ===========
@@ -578,6 +580,58 @@ R33:
 	; ============ If sem Else ===========
 R34:
 
+	; ============ Decl. de String ===========
+	dseg SEGMENT PUBLIC		; String em 16526
+		byte "valor: $"
+	dseg ENDS
+
+	; ============ Write(ln) Vetor/String ===========
+	mov DX, 16526
+	mov AH, 09h
+	int 21h
+
+	; ============ Write(ln) Int ===========
+	mov AX, DS:[16446]
+	mov DI, 0
+	mov CX, 0
+	cmp AX, 0
+	jge R35
+	mov BL, 2Dh
+	mov DS:[DI], BL
+	add DI, 1
+	neg AX
+R35:
+	mov BX, 10
+R36:
+	add CX, 1
+	mov DX, 0
+	idiv BX
+	push DX
+	cmp AX, 0
+	jne R36
+R37:
+	pop DX
+	add DX, 48
+	mov DS:[DI], DL
+	add DI, 1
+	add CX, -1
+	cmp CX, 0
+	jne R37
+	mov DL, 024h
+	mov DS:[DI], DL
+
+	mov DX, 0
+	mov AH, 09h
+	int 21h
+
+	; ============ Writeln (End) ===========
+	mov AH, 02h
+	mov DL, 0Dh
+	int 21h
+
+	mov DL, 0Ah
+	int 21h
+
 	; ============ Fim For ===========
 	mov AX, DS:[16446]
 	mov BX, 1
@@ -844,12 +898,12 @@ R31:
 	mov AH, 0
 	mov BH, 0
 	cmp AX, BX
-	je R35
+	je R38
 	mov AL, 0
-	jmp R36
-R35:
+	jmp R39
+R38:
 	mov AL, 1
-R36:
+R39:
 	mov DS:[1], AL
 	; ============ Op. NOT ===========
 
@@ -862,83 +916,12 @@ R36:
 	mov AX, DS:[2]
 	mov AH, 0
 	cmp AX, 0
-	je R37
-
-	; ============ Temp. Const. (1) ===========
-	mov AX, 1
-	mov DS:[3], AX
-
-	; ============ Temp. Const. (1) ===========
-	mov AX, 1
-	mov DS:[0], AX
-
-	; ============ Acesso a vetor ===========
-	mov DI, DS:[0]
-	add DI, DI
-	add DI, 16405
-	mov AX, DS:[DI]
-	mov DS:[2], AX
-
-	; ============ Temp. Const. (5) ===========
-	mov AX, 5
-	mov DS:[0], AX
-
-	; ============ Temp. Const. (1) ===========
-	mov AX, 1
-	mov DS:[0], AX
-
-	; ============ Writeln (End) ===========
-	mov AH, 02h
-	mov DL, 0Dh
-	int 21h
-
-	mov DL, 0Ah
-	 int 21h
-
-	mov AH, 09h
-	int 21h
-
-	; ============ Temp. Const. (1) ===========
-	mov AX, 1
-	mov DS:[0], AX
-
-	; ============ Acesso a vetor ===========
-	mov DI, DS:[0]
-	add DI, DI
-	add DI, 16405
-	mov AX, DS:[DI]
-	mov DS:[2], AX
-
-	; ============ Writeln (End) ===========
-	mov AH, 02h
-	mov DL, 0Dh
-	int 21h
-
-	mov DL, 0Ah
-	 int 21h
-
-	mov AH, 09h
-	int 21h
-
-	; ============ Temp. Const. (5) ===========
-	mov AX, 5
-	mov DS:[0], AX
-
-	; ============ Writeln (End) ===========
-	mov AH, 02h
-	mov DL, 0Dh
-	int 21h
-
-	mov DL, 0Ah
-	 int 21h
-
-	mov AH, 09h
-	int 21h
-	mov DX, 0
+	je R40
+	mov DX, 3
 
 	; ============ Readln Int ===========
 	mov AL, 255
-	mov DS:[0], AL
+	mov DS:[3], AL
 
 	mov AH, 0Ah
 	int 21h
@@ -950,39 +933,39 @@ R36:
 	mov DL, 0Ah
 	int 21h
 
-	mov DI, 2
+	mov DI, 5
 	mov AX, 0
 	mov CX, 10
 	mov DX, 1
 	mov DH, 0
 	mov BL, DS:[DI]
 	cmp BX, 2Dh
-	jne R38
+	jne R41
 	mov DX, -1
 	add DI, 1
 	mov BL, DS:[DI]
-R38:
+R41:
 	push DX
 	mov DX, 0
-R39:
+R42:
 	cmp BX, 0Dh
-	je R40
+	je R43
 	imul CX
 	add BX, -48
 	add AX, BX
 	add DI, 1
 	mov BH, 0
 	mov BL, DS:[DI]
-	jmp R39
-R40:
+	jmp R42
+R43:
 	pop CX
 	imul CX
 	mov DS:[16446], AX
-	mov DX, 6
+	mov DX, 9
 
 	; ============ Readln Char ===========
 	mov AL, 3
-	mov DS:[6], AL
+	mov DS:[9], AL
 
 	mov AH, 0Ah
 	int 21h
@@ -1000,35 +983,115 @@ R40:
 	mov AL, DS:[DI]
 	mov DS:[16445], AL
 
+	; ============ Write(ln) Int ===========
+	mov AX, DS:[16446]
+	mov DI, 12
+	mov CX, 0
+	cmp AX, 0
+	jge R44
+	mov BL, 2Dh
+	mov DS:[DI], BL
+	add DI, 1
+	neg AX
+R44:
+	mov BX, 10
+R45:
+	add CX, 1
+	mov DX, 0
+	idiv BX
+	push DX
+	cmp AX, 0
+	jne R45
+R46:
+	pop DX
+	add DX, 48
+	mov DS:[DI], DL
+	add DI, 1
+	add CX, -1
+	cmp CX, 0
+	jne R46
+	mov DL, 024h
+	mov DS:[DI], DL
+
+	mov DX, 12
+	mov AH, 09h
+	int 21h
+
+	; ============ Temp. Const. (' ') ===========
+	mov AL, 32
+	mov DS:[14], AL
+
+	; ============ Write(ln) Char ===========
+	mov DX, 15
+	mov AL, DS:[14]
+	mov DS:[15], AL
+	mov DI, 16
+	mov DL, 024h
+	mov DS:[DI], DL
+
+	mov DX, 15
+	mov AH, 09h
+	int 21h
+
+	; ============ Write(ln) Char ===========
+	mov DX, 16
+	mov AL, DS:[16445]
+	mov DS:[16], AL
+	mov DI, 17
+	mov DL, 024h
+	mov DS:[DI], DL
+
+	mov DX, 16
+	mov AH, 09h
+	int 21h
+
+	; ============ Decl. de String ===========
+	dseg SEGMENT PUBLIC		; String em 16534
+		byte "CHUPA$"
+	dseg ENDS
+
+	; ============ Write(ln) Vetor/String ===========
+	mov DX, 16534
+	mov AH, 09h
+	int 21h
+
+	; ============ Writeln (End) ===========
+	mov AH, 02h
+	mov DL, 0Dh
+	int 21h
+
+	mov DL, 0Ah
+	int 21h
+
 	; ============ If sem Else ===========
-R37:
+R40:
 
 	; ============ Temp. Const. (1) ===========
 	mov AX, 1
-	mov DS:[9], AX
+	mov DS:[0], AX
 
 	; ============ Inicio For ===========
-	mov AX, DS:[9]
+	mov AX, DS:[0]
 	mov DS:[16446], AX
-R41:
+R47:
 
 	; ============ Temp. Const. (10) ===========
 	mov AX, 10
-	mov DS:[11], AX
+	mov DS:[2], AX
 
 	; ============ Teste For ===========
 	mov AX, DS:[16446]
-	mov BX, DS:[11]
+	mov BX, DS:[2]
 	cmp AX, BX
-	jg R42
+	jg R48
 
 	; ============ Fim For ===========
 	mov AX, DS:[16446]
 	mov BX, 1
 	add AX, BX
 	mov DS:[16446], AX
-	jmp R41
-R42:
+	jmp R47
+R48:
 
 	mov ah, 4Ch		; Finalização do programa
 	int 21h			; Finalização do programa

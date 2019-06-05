@@ -600,16 +600,90 @@ namespace codegen {
         }
     }
 
+    void write_output(Type Exp_type, int Exp_addr, int Exp_length) {
+
+        if (Exp_length == 0) {
+            int buffer = new_tmp(Exp_type, Exp_length);
+            if (Exp_type == Type::Integer) {
+                writeln("\n\t; ============ Write(ln) Int ===========");
+                writeln("\tmov AX, DS:[" + std::to_string(Exp_addr)
+                        + "]");
+                writeln("\tmov DI, " + std::to_string(buffer));
+                writeln("\tmov CX, 0");
+                writeln("\tcmp AX, 0");
+
+                std::string label_pos = new_label();
+                writeln("\tjge " + label_pos);
+
+                writeln("\tmov BL, 2Dh");
+                writeln("\tmov DS:[DI], BL");
+                writeln("\tadd DI, 1");
+                writeln("\tneg AX");
+
+                writeln(label_pos + ":");
+                writeln("\tmov BX, 10");
+                
+                std::string label_nzero = new_label();
+                writeln(label_nzero + ":");
+
+                writeln("\tadd CX, 1");
+                writeln("\tmov DX, 0");
+                writeln("\tidiv BX");
+                writeln("\tpush DX");
+                writeln("\tcmp AX, 0");
+                writeln("\tjne " + label_nzero);
+
+                std::string label_st_empty = new_label();
+                writeln(label_st_empty + ":");
+
+                writeln("\tpop DX");
+                writeln("\tadd DX, 48");
+                writeln("\tmov DS:[DI], DL");
+                writeln("\tadd DI, 1");
+                writeln("\tadd CX, -1");
+                writeln("\tcmp CX, 0");
+                writeln("\tjne " + label_st_empty);
+
+                writeln("\tmov DL, 024h");
+                writeln("\tmov DS:[DI], DL");
+
+                writeln("\n\tmov DX, " + std::to_string(buffer));
+                writeln("\tmov AH, 09h");
+                writeln("\tint 21h");
+
+            } else {
+                writeln("\n\t; ============ Write(ln) Char ===========");
+                writeln("\tmov DX, " + std::to_string(buffer));
+                writeln("\tmov AL, DS:[" + std::to_string(Exp_addr)
+                        + "]");
+                writeln("\tmov DS:[" + std::to_string(buffer) +
+                        "], AL");
+                writeln("\tmov DI, " + std::to_string(buffer + 1));
+                writeln("\tmov DL, 024h");
+                writeln("\tmov DS:[DI], DL");
+
+                writeln("\n\tmov DX, " + std::to_string(buffer));
+                writeln("\tmov AH, 09h");
+                writeln("\tint 21h");
+            }
+        }
+
+        // String/Vector of char.
+        else {
+            writeln("\n\t; ============ Write(ln) Vetor/String ===========");
+            writeln("\tmov DX, " + std::to_string(Exp_addr));
+            writeln("\tmov AH, 09h");
+            writeln("\tint 21h");
+        }
+    } 
+
     void write_newline() {
-            writeln("\n\t; ============ Writeln (End) ===========");
-            writeln("\tmov AH, 02h");
-            writeln("\tmov DL, 0Dh");
-            writeln("\tint 21h");
+        writeln("\n\t; ============ Writeln (End) ===========");
+        writeln("\tmov AH, 02h");
+        writeln("\tmov DL, 0Dh");
+        writeln("\tint 21h");
 
-            writeln("\n\tmov DL, 0Ah");
-            writeln("\t int 21h");
-
-            writeln("\n\tmov AH, 09h");
-            writeln("\tint 21h");
+        writeln("\n\tmov DL, 0Ah");
+        writeln("\tint 21h");
     }
 }
