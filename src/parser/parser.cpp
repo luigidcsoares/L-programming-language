@@ -549,10 +549,14 @@ namespace parser {
 
             match_token(Token::RParen);
             match_token(Token::Semicolon);
+
+            write_input(id->type, id->addr, id->length);
         } else {
             if (g_lex_reg.token == Token::Write) {
+                cond = false;
                 match_token(Token::Write);
             } else {
+                cond = true;
                 match_token(Token::Writeln);
             }
 
@@ -594,6 +598,10 @@ namespace parser {
 
             match_token(Token::RParen);
             match_token(Token::Semicolon);
+            
+            if (cond) {
+                write_newline();
+            }
 
             reset_tmp();
         }

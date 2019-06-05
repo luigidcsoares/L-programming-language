@@ -16,6 +16,8 @@ Const d = -5;
 teste = "Tails e Sonic";
 luigi = "Lasanha eh Vida";
 
+readln(teste);
+
 compTeste[0] = 'A';
 compTeste[1] = 'B';
 compTeste[2] = 'C';

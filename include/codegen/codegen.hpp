@@ -178,6 +178,16 @@ namespace codegen {
      */
     void write_end_for(int id_addr, std::string step,
             std::string label_init, std::string label_end);
+
+    /**
+     * Code gen readln.
+     */
+    void write_input(Type id_type, int id_addr, int id_length);
+
+    /**
+     * Code gen for writeln.
+     */
+    void write_newline();
 }
 
 #endif

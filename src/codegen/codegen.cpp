@@ -283,9 +283,9 @@ namespace codegen {
             int Exp_addr, int ExpS1_addr,
             int Exp_length, int ExpS1_length
     ) {
-        writeln("\n\t; ============ Op. Exp ===========");
         // First we're doing non-vector comp.
         if (Exp_length == 0) {
+            writeln("\n\t; ============ Op. Exp ===========");
             std::string label_true;
             std::string label_end;
 
@@ -326,6 +326,7 @@ namespace codegen {
 
         // Comparing vector of char/string.
         else {
+            writeln("\n\t; ============ Op. Exp (Vetor) ===========");
             writeln("\tmov AX, " + std::to_string(Exp_length));
             writeln("\tmov BX, " + std::to_string(ExpS1_length));
             writeln("\tcmp AX, BX");
@@ -469,5 +470,146 @@ namespace codegen {
         writeln("\tmov DS:[" + std::to_string(id_addr) + "], AX");
         writeln("\tjmp " + label_init);
         writeln(label_end + ":");
+    }
+
+    void write_input(Type id_type, int id_addr, int id_length) {
+        int length = id_length;
+        if (id_length > 255) {
+            length = 255;
+        }
+
+        int buffer = new_tmp(id_type, length + 3);
+        writeln("\tmov DX, " + std::to_string(buffer));
+        
+        if (id_length == 0) {
+            if (id_type == Type::Char) {
+                writeln("\n\t; ============ Readln Char ===========");
+                writeln("\tmov AL, 3");
+                writeln("\tmov DS:[" + std::to_string(buffer) +
+                    "], AL");
+
+                writeln("\n\tmov AH, 0Ah");
+                writeln("\tint 21h");
+
+                writeln("\n\tmov AH, 02h");
+                writeln("\tmov DL, 0Dh");
+                writeln("\tint 21h");
+
+                writeln("\n\tmov DL, 0Ah");
+                writeln("\tint 21h");
+
+                writeln("\n\tmov DL, 024h");
+                writeln("\tmov DS:[3], DL");
+                writeln("\tmov DI, 2");
+                writeln("\tmov AL, DS:[DI]");
+                writeln("\tmov DS:[" + std::to_string(id_addr) + 
+                        "], AL");
+
+
+            } else {
+                writeln("\n\t; ============ Readln Int ===========");
+                writeln("\tmov AL, 255");
+                writeln("\tmov DS:[" + std::to_string(buffer) +
+                        "], AL");
+
+                writeln("\n\tmov AH, 0Ah");
+                writeln("\tint 21h");
+
+                writeln("\n\tmov AH, 02h");
+                writeln("\tmov DL, 0Dh");
+                writeln("\tint 21h");
+
+                writeln("\n\tmov DL, 0Ah");
+                writeln("\tint 21h");
+
+                writeln("\n\tmov DI, " + std::to_string(buffer + 2));
+                writeln("\tmov AX, 0");
+                writeln("\tmov CX, 10");
+                writeln("\tmov DX, 1");
+                writeln("\tmov DH, 0");
+                writeln("\tmov BL, DS:[DI]");
+                writeln("\tcmp BX, 2Dh");
+
+                std::string label_pos = new_label();
+                writeln("\tjne " + label_pos);
+
+                writeln("\tmov DX, -1");
+                writeln("\tadd DI, 1");
+                writeln("\tmov BL, DS:[DI]");
+                writeln(label_pos + ":");
+
+                writeln("\tpush DX");
+                writeln("\tmov DX, 0");
+                
+                std::string label_loop = new_label();
+                writeln(label_loop + ":");
+                writeln("\tcmp BX, 0Dh");
+
+                std::string label_end = new_label();
+                writeln("\tje " + label_end);
+
+                writeln("\timul CX");
+                writeln("\tadd BX, -48");
+                writeln("\tadd AX, BX");
+                writeln("\tadd DI, 1");
+                writeln("\tmov BH, 0");
+                writeln("\tmov BL, DS:[DI]");
+                writeln("\tjmp " + label_loop);
+
+                writeln(label_end + ":");
+                writeln("\tpop CX");
+                writeln("\timul CX");
+                writeln("\tmov DS:[" + std::to_string(id_addr) +
+                        "], AX");
+
+            }
+        } else {
+            writeln("\n\t; ============ Readln String ===========");
+            writeln("\tmov AL, " + std::to_string(length));
+            writeln("\tmov DS:[" + std::to_string(buffer) + "], AL");
+
+            writeln("\n\tmov AH, 0Ah");
+            writeln("\tint 21h");
+
+            writeln("\n\tmov AH, 02h");
+            writeln("\tmov DL, 0Dh");
+            writeln("\tint 21h");
+
+            writeln("\n\tmov DL, 0Ah");
+            writeln("\tint 21h");
+
+            writeln("\n\tmov DI, " + std::to_string(buffer + 2));
+            writeln("\tmov SI, " + std::to_string(id_addr));
+            writeln("\tmov AH, 0");
+
+            std::string label_init = new_label();
+            std::string label_end = new_label();
+
+            writeln(label_init + ":");
+            writeln("\tmov AL, DS:[DI]");
+            writeln("\tcmp AX, 0Dh");
+            writeln("\tje " + label_end);
+            writeln("\tmov DS:[SI], AL");
+            writeln("\tadd DI, 1");
+            writeln("\tadd SI, 1");
+            writeln("\tjmp " + label_init);
+
+            writeln(label_end + ":");
+            writeln("\tmov DL, 24h");
+            writeln("\tmov DS:[SI], DL");
+        }
+    }
+
+    void write_newline() {
+            writeln("\n\t; ============ Writeln (End) ===========");
+            writeln("\tmov AH, 02h");
+            writeln("\tmov DL, 0Dh");
+            writeln("\tint 21h");
+
+            writeln("\n\tmov DL, 0Ah");
+            writeln("\t int 21h");
+
+            writeln("\n\tmov AH, 09h");
+            writeln("\tint 21h");
     }
 }
