@@ -359,6 +359,8 @@ namespace parser {
 
             match_token(Token::EQ);
             Exp(Exp1_type, Exp1_length, Exp1_addr);
+
+            curr_line = g_source.curr_line;
             match_token(Token::Semicolon);
 
             bool error = false;
@@ -392,13 +394,14 @@ namespace parser {
 
             if (error) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
 
             write_assign_id(id->type, cond, Exp_addr, id->addr,
                     Exp1_addr);
+            reset_tmp();
 
         } else if (g_lex_reg.token == Token::For) {
             match_token(Token::For);
@@ -424,16 +427,21 @@ namespace parser {
             }
 
             match_token(Token::EQ);
+
+            curr_line = g_source.curr_line;
             Exp(Exp_type, Exp_length, Exp_addr);
+            match_token(Token::To);
 
             if (Exp_type != Type::Integer) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
 
-            match_token(Token::To);
+            std::string label_init = write_init_for(Exp_addr, 
+                    id->addr);
+
             Exp(Exp1_type, Exp1_length, Exp1_addr);
 
             if (Exp1_type != Type::Integer) {
@@ -443,39 +451,69 @@ namespace parser {
                 throw std::runtime_error(err.str());
             }
 
+            std::string label_end = write_test_for(Exp1_addr,
+                    id->addr);
+
+            std::string step = "1";
             if (g_lex_reg.token == Token::Step) {
                 match_token(Token::Step);
 
-                if (g_lex_reg.type != Type::Integer) {
+                int curr_line = g_source.curr_line;
+                Type const_type = g_lex_reg.type;
+                std::string const_lex = g_lex_reg.lexeme;
+
+                match_token(Token::Const);
+
+                if (const_type != Type::Integer) {
                     std::stringstream err;
-                    err << g_source.curr_line
+                    err << curr_line
                         << ":tipos incompatíveis.";
                     throw std::runtime_error(err.str());
                 }
 
-                match_token(Token::Const);
+                step = const_lex;
             }
 
             match_token(Token::Do);
             LC();
+
+            write_end_for(id->addr, step, label_init, label_end);
+            reset_tmp();
+
         } else if (g_lex_reg.token == Token::If) {
             match_token(Token::If);
             Exp(Exp_type, Exp_length, Exp_addr);
 
+            int curr_line = g_source.curr_line;
+            match_token(Token::Then);
+
             if (Exp_type != Type::Bool) {
                 std::stringstream err;
-                err << g_source.curr_line
+                err << curr_line
                     << ":tipos incompatíveis.";
                 throw std::runtime_error(err.str());
             }
 
-            match_token(Token::Then);
+            cond = false;
+            std::string label_false = write_if(Exp_addr);
+            std::string label_end;
+
             LC();
 
             if (g_lex_reg.token == Token::Else) {
+                cond = true;
                 match_token(Token::Else);
+
+                label_end = write_else(label_false);
                 LC();
             }
+
+            if (cond) {
+                write_end_else(label_end);
+            } else {
+                write_end_if(label_false);
+            }
+
         } else if (g_lex_reg.token == Token::Semicolon) {
             match_token(Token::Semicolon);
         } else if (g_lex_reg.token == Token::Readln) {
@@ -556,6 +594,8 @@ namespace parser {
 
             match_token(Token::RParen);
             match_token(Token::Semicolon);
+
+            reset_tmp();
         }
     }
 

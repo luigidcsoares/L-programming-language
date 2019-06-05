@@ -305,12 +305,12 @@ namespace codegen {
             label_end = new_label();
             writeln("\tjmp " + label_end);
 
-            writeln("\t" + label_true + ":");
-            writeln("\t\tmov AX, 1");
+            writeln(label_true + ":");
+            writeln("\tmov AX, 1");
 
-            writeln("\t" + label_end + ":");
+            writeln(label_end + ":");
             Exp_addr = new_tmp(Exp_type, 0);
-            writeln("\t\tmov DS:[" + std::to_string(Exp_addr) +
+            writeln("\tmov DS:[" + std::to_string(Exp_addr) +
                     "], AX");
         }
 
@@ -340,5 +340,73 @@ namespace codegen {
             writeln("\tmov DS:[" + std::to_string(id_addr) +
                     "], AX");
         }
+    }
+
+    std::string write_if(int Exp_addr) {
+        writeln("\n\t; ============ If ===========");
+
+        std::string label_false = new_label();
+        writeln("\tmov AX, DS:[" + std::to_string(Exp_addr) +
+                "]");
+        writeln("\tmov AH, 0");
+        writeln("\tcmp AX, 0");
+        writeln("\tje " + label_false);
+
+        return label_false;
+    }
+
+    std::string write_else(std::string label_false) {
+        std::string label_end = new_label();
+        writeln("\n\t; ============ Else ===========");
+        writeln("\tjmp " + label_end);
+        writeln(label_false + ":");
+
+        return label_end;
+    }
+
+    void write_end_if(std::string label_false) {
+        writeln("\n\t; ============ If sem Else ===========");
+        writeln(label_false + ":");
+    }
+
+    void write_end_else(std::string label_end) {
+        writeln("\n\t; ============ If com Else ===========");
+        writeln(label_end + ":");
+    }
+
+    std::string write_init_for(int Exp_addr, int id_addr) {
+        writeln("\n\t; ============ Inicio For ===========");
+        writeln("\tmov AX, DS:[" + std::to_string(Exp_addr) + "]");
+        writeln("\tmov DS:[" + std::to_string(id_addr) + "], AX");
+
+        std::string label_init = new_label();
+        writeln(label_init + ":");
+
+        return label_init;
+    }
+
+    std::string write_test_for(int Exp1_addr, int id_addr) {
+        writeln("\n\t; ============ Teste For ===========");
+        writeln("\tmov AX, DS:[" + std::to_string(id_addr) + "]");
+        writeln("\tmov BX, DS:[" + std::to_string(Exp1_addr) + "]");
+        writeln("\tcmp AX, BX");
+
+        std::string label_end = new_label();
+        writeln("\tjg " + label_end);
+
+        return label_end;
+    }
+
+    void write_end_for(
+            int id_addr, std::string step,
+            std::string label_init, std::string label_end
+    ) {
+        writeln("\n\t; ============ Fim For ===========");
+        writeln("\tmov AX, DS:[" + std::to_string(id_addr) + "]");
+        writeln("\tmov BX, " + step);
+        writeln("\tadd AX, BX");
+        writeln("\tmov DS:[" + std::to_string(id_addr) + "], AX");
+        writeln("\tjmp " + label_init);
+        writeln(label_end + ":");
     }
 }

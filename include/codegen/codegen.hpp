@@ -142,6 +142,42 @@ namespace codegen {
      */
     void write_assign_id(Type id_type, bool cond, 
             int Exp_addr, int id_addr, int Exp1_addr);
+
+    /**
+     * Code gen for if test.
+     */
+    std::string write_if(int Exp_addr);
+
+    /**
+     * Code gen for else.
+     */
+    std::string write_else(std::string label_false);
+
+    /**
+     * Code gen for if without else.
+     */
+    void write_end_if(std::string label_false);
+
+    /**
+     * Code gen for if with else.
+     */
+    void write_end_else(std::string label_end);
+
+    /**
+     * Code gen for init for.
+     */
+    std::string write_init_for(int Exp_addr, int id_addr);
+
+    /**
+     * Code gen test for.
+     */
+    std::string write_test_for(int Exp1_addr, int id_addr);
+
+    /**
+     * Code gen end for.
+     */
+    void write_end_for(int id_addr, std::string step,
+            std::string label_init, std::string label_end);
 }
 
 #endif
