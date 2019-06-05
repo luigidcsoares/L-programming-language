@@ -159,8 +159,14 @@ namespace codegen {
 
             writeln("\n\t; ============ Temp. Const. (" +
                     const_lex + ") ===========");
-            writeln("\tmov AX, " + std::to_string(val));
-            writeln("\tmov DS:[" + std::to_string(F_addr) + "], AX");
+
+            std::string reg = const_type == Type::Integer
+                ? "AX"
+                : "AL";
+
+            writeln("\tmov " + reg + ", " + std::to_string(val));
+            writeln("\tmov DS:[" + std::to_string(F_addr) + "], " +
+                    reg);
         }
 
         return F_addr;
@@ -322,10 +328,14 @@ namespace codegen {
             int Exp_addr, int id_addr,
             int Exp1_addr
     ) {
+        std::string reg = id_type == Type::Integer
+            ? "AX"
+            : "AL";
+
         writeln("\n\t; ============ Atrib. id ===========");
-        writeln("\tmov AX, DS:[" + std::to_string(Exp1_addr) +
-                "]");
-        
+        writeln("\tmov " + reg + 
+                ", DS:[" + std::to_string(Exp1_addr) + "]");
+
         if (cond) {
             writeln("\tmov DI, DS:[" + std::to_string(Exp_addr) +
                     "]");
@@ -335,10 +345,10 @@ namespace codegen {
             }
 
             writeln("\tadd DI, " + std::to_string(id_addr));
-            writeln("\tmov DS:[DI], AX");
+            writeln("\tmov DS:[DI], " + reg);
         } else {
             writeln("\tmov DS:[" + std::to_string(id_addr) +
-                    "], AX");
+                    "], " + reg);
         }
     }
 
